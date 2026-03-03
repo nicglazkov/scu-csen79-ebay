@@ -12,7 +12,7 @@ fetch("data/listings.json")
         <div class="item-image"></div>
         <div class="item-info">
           <h2>${item.title}</h2>
-          <p class="item-price">$${item.price.toFixed(2)}</p>
+          <p class="item-price">$${item.currentBid.toFixed(2)}</p>
           <p class="item-bids">${item.bids} bid${item.bids !== 1 ? "s" : ""}</p>
         </div>
       `;

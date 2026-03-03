@@ -1,5 +1,5 @@
 #dashboard {
-  padding: 2rem;
+  padding: 2rem 3rem;
 }
 
 #dashboard h1 {
@@ -8,8 +8,8 @@
 
 #listings-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
 }
 
 .item-card {

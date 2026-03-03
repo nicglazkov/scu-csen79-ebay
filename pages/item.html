@@ -14,8 +14,43 @@
   </nav>
 
   <main id="item-detail">
-    <h1>Item Title</h1>
-    <p>Placeholder — item details and bid form will go here.</p>
+    <div id="item-image-col">
+      <div id="item-image"></div>
+    </div>
+    <div id="item-info-col">
+      <h1 id="item-title"></h1>
+      <p id="item-condition"></p>
+
+      <div id="bid-section">
+        <p id="current-bid-label">Current bid</p>
+        <p id="current-bid"></p>
+        <p id="bid-count"></p>
+        <p id="time-left"></p>
+
+        <div id="bid-controls">
+          <button id="bid-increment-btn">Bid +minimum</button>
+          <div id="custom-bid">
+            <input type="number" id="custom-bid-input" placeholder="Custom amount" step="0.01" min="0">
+            <button id="custom-bid-btn">Place Bid</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="buyout-section">
+        <p id="buyout-label">Buy It Now</p>
+        <p id="buyout-price"></p>
+        <button id="buyout-btn">Buy It Now</button>
+      </div>
+
+      <div id="seller-section">
+        <p>Seller: <span id="seller-name"></span></p>
+      </div>
+
+      <div id="description-section">
+        <h2>Description</h2>
+        <p id="item-description"></p>
+      </div>
+    </div>
   </main>
 
   <script src="../js/main.js"></script>
