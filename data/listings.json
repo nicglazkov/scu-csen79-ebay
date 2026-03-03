@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "title": "Sample Item 1",
+    "price": 25.00,
+    "bids": 3,
+    "image": "../assets/images/placeholder.png"
+  },
+  {
+    "id": 2,
+    "title": "Sample Item 2",
+    "price": 49.99,
+    "bids": 7,
+    "image": "../assets/images/placeholder.png"
+  },
+  {
+    "id": 3,
+    "title": "Sample Item 3",
+    "price": 12.50,
+    "bids": 1,
+    "image": "../assets/images/placeholder.png"
+  },
+  {
+    "id": 4,
+    "title": "Sample Item 4",
+    "price": 99.00,
+    "bids": 12,
+    "image": "../assets/images/placeholder.png"
+  },
+  {
+    "id": 5,
+    "title": "Sample Item 5",
+    "price": 8.75,
+    "bids": 0,
+    "image": "../assets/images/placeholder.png"
+  },
+  {
+    "id": 6,
+    "title": "Sample Item 6",
+    "price": 35.00,
+    "bids": 5,
+    "image": "../assets/images/placeholder.png"
+  }
+]
