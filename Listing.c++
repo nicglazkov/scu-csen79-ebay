@@ -1,4 +1,5 @@
-#include "listings.h"
+#include "Listing.h"
+#include "Bid.h"
 
 using namespace std;
 namespace CSEN79{
