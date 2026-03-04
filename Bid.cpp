@@ -1,5 +1,5 @@
 #include "Bid.h"
-#include "listings.h"
+#include "Listing.h"
 namespace CSEN79 {
 
     Bid::Bid() {

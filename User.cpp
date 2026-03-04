@@ -21,7 +21,7 @@ namespace CSEN79 {
     }
 
     void User::placeBid(Listing* listing, double amount) {
-        // Implementation for placing a bid on a listing
+        listing->makeBid(amount);
     }
 
     void User::print() {

@@ -1,7 +1,8 @@
 #include <iostream>
 #include "User.h"
 #include "Bid.h"
-#include "listings.h"
+#include "Listing.h"
+#include "Listings.h"
 
 namespace CSEN79 {
 
