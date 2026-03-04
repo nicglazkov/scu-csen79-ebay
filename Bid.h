@@ -2,6 +2,8 @@
 #pragma once
 
 #include <string>
+#include "User.h"
+#include "Listing.h"
 
 namespace CSEN79 {
     class Bid {
