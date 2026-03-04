@@ -27,16 +27,20 @@ namespace CSEN79{
         log[log.size()] = "New Listing Created by " + currentUser->getName() + " for item: "+ name;
     }
 
-    void Listing::setLog(vector<string> newLog){
+    void Listing::setLog(vector<string> &newLog){
         log = newLog;
-    }
-
-    string Listing::getName(){
-        return name;
     }
 
     void Listing::setUser(User* newUser){
         currentUser = newUser;
+    }
+
+    void Listing::setListings(Listings* newListings){
+        listings = newListings;
+    }
+
+    string Listing::getName(){
+        return name;
     }
 
     string Listing::getDescription(){ 

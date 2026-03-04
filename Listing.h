@@ -3,6 +3,7 @@
 #include <ctime>
 #include "Bid.h"
 #include "User.h"
+#include "Listings.h"
 
 using namespace std;
 namespace CSEN79{
@@ -20,6 +21,7 @@ namespace CSEN79{
             bool sold;
             static User* currentUser;
             static vector<string> log;
+            static Listings* listings;
 
         public:
         Listing(){};
@@ -44,7 +46,9 @@ namespace CSEN79{
 
         User* getUser() {};
 
-        void setLog(vector<string> newLog){};
+        void setLog(vector<string> &newLog){};
+
+        void setListings(Listings* newListings){};
     };
 
 };
