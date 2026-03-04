@@ -36,9 +36,13 @@ namespace CSEN79{
 
     double Listing::checkTime(){ return (double)(clock() - startTime)/CLOCKS_PER_SEC; }
 
+    User* getUser() const{ 
+        return currentUser;
+    }
+
     void Listing::makeBid(double bidAmount){
         if(bidAmount<=currentPrice) return;
 
-        bids[bids.size()] = new Bid(bidAmount, this, );
+        bids[bids.size()] = new Bid(bidAmount, this, getUser());
     }
 };

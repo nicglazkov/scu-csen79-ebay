@@ -18,6 +18,7 @@ namespace CSEN79{
             int sellTime;
             time_t startTime;
             bool sold;
+            static User* currentUser;
 
         public:
         Listing(){};
@@ -37,6 +38,8 @@ namespace CSEN79{
         double checkTime(){};
 
         void makeBid(double bidPrice){};
+
+        User* getUser(){};
     };
 
 };
