@@ -19,6 +19,7 @@ namespace CSEN79{
             time_t startTime;
             bool sold;
             static User* currentUser;
+            static vector<string> log;
 
         public:
         Listing(){};
@@ -39,7 +40,11 @@ namespace CSEN79{
 
         void makeBid(double bidPrice){};
 
-        User* getUser(){};
+        void setUser(User* newUser){};
+
+        User* getUser() {};
+
+        void setLog(vector<string> newLog){};
     };
 
 };

@@ -24,19 +24,38 @@ namespace CSEN79{
         this->sellTime = sellTime;
         startTime = clock();
         sold = false;
+        log[log.size()] = "New Listing Created by " + currentUser->getName() + " for item: "+ name;
     }
 
-    string Listing::getName(){ return name; }
+    void Listing::setLog(vector<string> newLog){
+        log = newLog;
+    }
 
-    string Listing::getDescription(){ return description; }
+    string Listing::getName(){
+        return name;
+    }
 
-    double Listing::getPrice(){ return currentPrice; }
+    void Listing::setUser(User* newUser){
+        currentUser = newUser;
+    }
 
-    double Listing::getBuyOutrightPrice(){ return buyOutrightPrice; }
+    string Listing::getDescription(){ 
+        return description;
+    }
 
-    double Listing::checkTime(){ return (double)(clock() - startTime)/CLOCKS_PER_SEC; }
+    double Listing::getPrice(){ 
+        return currentPrice; 
+    }
 
-    User* getUser() const{ 
+    double Listing::getBuyOutrightPrice(){ 
+        return buyOutrightPrice; 
+    }
+
+    double Listing::checkTime(){ 
+        return (double)(clock() - startTime)/CLOCKS_PER_SEC; 
+    }
+
+    User* Listing::getUser(){ 
         return currentUser;
     }
 
@@ -44,5 +63,6 @@ namespace CSEN79{
         if(bidAmount<=currentPrice) return;
 
         bids[bids.size()] = new Bid(bidAmount, this, getUser());
+        log[log.size()] = "Bid on " + name + " placed by " + getUser()->getName(); 
     }
 };
