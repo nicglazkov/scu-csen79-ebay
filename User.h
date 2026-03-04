@@ -3,23 +3,24 @@
 
 #include <string>
 #include <vector>
+#include "listings.h"
 
-class Listing;
+namespace CSEN79 {
+    class User {
+    public:
+        User();
+        User(std::string name);
 
-class User {
-public:
-    User();
-    User(std::string name);
+    private:
+        std::string name;
+        std::vector<Listing*> selling;
+        std::vector<Listing*> purchased;
+        std::vector<Listing*> interested;
+        std::vector<Listing*> lost;
 
-private:
-    std::string name;
-    std::vector<Listing*> selling;
-    std::vector<Listing*> purchased;
-    std::vector<Listing*> interested;
-    std::vector<Listing*> lost;
+        std::string getName();
+        void makeListing(string name, string description, double startingPrice, double buyOutrightPrice, int sellTime);
+        void placeBid(Listing* listing, double amount);
 
-    std::string getName();
-    void makeListing(User* owner);
-    void placeBid(Listing* listing, double amount);
-
-};
+    };
+}
