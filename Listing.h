@@ -49,6 +49,10 @@ namespace CSEN79{
             void setLog(vector<string> &newLog){};
 
             void setListings(Listings* newListings){};
+
+            Bid* getHighestBid(){
+                return ;
+            }
     };
 
 };

@@ -3,6 +3,7 @@
 using namespace std;
 
 namespace CSEN79{
+
     void Listings::addListing(Listing* newListing){
         allListings[allListings.size()] = newListing;
     }
@@ -10,8 +11,8 @@ namespace CSEN79{
     void Listings::removeListing(Listing* delListing){
         for(int i = 0; i < allListings.size(); i++){
             if(allListings[i] == delListing){
+                log[log.size()] = allListings[i]->getName() + " has been sold to " ;
                 allListings.erase(allListings.begin()+i);
-                log[log.size()] = "";
             }
         }
     }
@@ -47,4 +48,20 @@ namespace CSEN79{
     void Listings::checkCloseAuction(){
 
     }
+    void sortAlphaRev(){
+
+    }
+
+    void sortBuyOutrightRev(){
+
+    }
+
+    void sortCurrPriceRev(){
+
+    }
+
+    void sortTimeLeftRev(){
+
+    }
+
 }

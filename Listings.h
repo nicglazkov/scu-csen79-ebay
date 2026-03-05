@@ -18,6 +18,10 @@ namespace CSEN79{
             void sortBuyOutright(){};
             void sortCurrPrice(){};
             void sortTimeLeft(){};
+            void sortAlphaRev(){};
+            void sortBuyOutrightRev(){};
+            void sortCurrPriceRev(){};
+            void sortTimeLeftRev(){};
             void checkCloseAuction(){};
     };
 }
