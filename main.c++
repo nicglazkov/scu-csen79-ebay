@@ -8,7 +8,7 @@
 using namespace std;
 namespace CSEN79{
     int main(){
-        vector<string> globalLog;
+        vector<string>* globalLog = new vector<string>;
         User* users[10];
         int currentUserNumber;
         Listings* allListings = new Listings();
@@ -19,10 +19,6 @@ namespace CSEN79{
         for(int i = 0; i < 10; i++){
             users[i] = new User("user"+i);
         }
-        cout << "What User Number are you 0-9?" << endl;
-        cin >> currentUserNumber;
-        garbage->setUser(users[currentUserNumber]);
-        allListings->setUser(users[currentUserNumber]);
         delete garbage;
     }
 }

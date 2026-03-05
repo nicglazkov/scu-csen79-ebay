@@ -19,40 +19,25 @@ namespace CSEN79{
             int sellTime;
             time_t startTime;
             bool sold;
-            static User* currentUser;
-            static vector<string> log;
+            User* seller;
+            static vector<string>* log;
             static Listings* listings;
 
         public:
             Listing(){};
+            Listing(string name, string description, double startingPrice, double buyOutrightPrice, int sellTime, User* seller){};
             
-            Listing(string name, string description, double startingPrice, double buyOutrightPrice, int sellTime){};
-
             string getName(){};
-
             string getDescription(){};
-
             double getPrice(){};
-
             double getBuyOutrightPrice(){};
-
-            void buyOutright(){};
-
+            void buyOutright(User* buyer){};
             double checkTime(){};
-
-            void makeBid(double bidPrice){};
-
-            void setUser(User* newUser){};
-
-            User* getUser() {};
-
-            void setLog(vector<string> &newLog){};
-
+            void makeBid(double bidPrice, User* userBidding){};
+            User* getSeller() {};
+            void setLog(vector<string>* newLog){};
             void setListings(Listings* newListings){};
-
-            Bid* getHighestBid(){
-                return ;
-            }
+            Bid* getHighestBid(){};
     };
 
 };

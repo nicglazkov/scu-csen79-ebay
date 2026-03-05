@@ -11,7 +11,7 @@ namespace CSEN79{
     void Listings::removeListing(Listing* delListing){
         for(int i = 0; i < allListings.size(); i++){
             if(allListings[i] == delListing){
-                log[log.size()] = allListings[i]->getName() + " has been sold to " ;
+                log->push_back(allListings[i]->getName() + " has been sold to " + allListings[i]->getSeller()->getName());
                 allListings.erase(allListings.begin()+i);
             }
         }
@@ -21,12 +21,8 @@ namespace CSEN79{
         return allListings.size();
     }
 
-    void Listings::setLog(vector<string> &newLog){
+    void Listings::setLog(vector<string>* newLog){
         log = newLog;
-    }
-
-    void Listings::setUser(User* newUser){
-        user = newUser;
     }
 
     void Listings::sortAlpha(){

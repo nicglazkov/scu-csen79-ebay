@@ -14,6 +14,11 @@ namespace CSEN79 {
         std::string getName();
         void makeListing(string name, string description, double startingPrice, double buyOutrightPrice, int sellTime);
         void placeBid(Listing* listing, double amount);
+        void User::buyOutright(Listing* listing);
+        std::vector<Listing*>* getSelling();
+        std::vector<Listing*>* getPurchased();
+        std::vector<Listing*>*  getInterested();
+        std::vector<Listing*>* getLost();
         void print();
     private:
         std::string name;
