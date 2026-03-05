@@ -5,15 +5,19 @@ namespace CSEN79{
     class Listings{
         private:
             vector<Listing*> allListings;
+            vector<Listing*> sold;
             static vector<string>* log;
-            static User* user;
 
         public:
+            Listings(){
+                log = nullptr;
+            }
             void addListing(Listing* newListing){};
-            void removeListing(Listing* delListing){};
+            void sellListing(Listing* soldListing){};
             int getNumListings(){};
             void setLog(vector<string>* newLog){};
-            
+
+            //Sorting Functions
             void sortAlpha(){};
             void sortBuyOutright(){};
             void sortCurrPrice(){};
@@ -22,6 +26,8 @@ namespace CSEN79{
             void sortBuyOutrightRev(){};
             void sortCurrPriceRev(){};
             void sortTimeLeftRev(){};
+
+        //Multithreaded function, constantly running
             void checkCloseAuction(){};
     };
 }

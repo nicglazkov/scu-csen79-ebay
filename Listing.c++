@@ -62,7 +62,7 @@ namespace CSEN79{
     }
 
     void Listing::makeBid(double bidAmount, User* userBidding){
-        if(bidAmount<=currentPrice) return;
+        if(bidAmount<=currentPrice || !userBidding || !log) return;
         Bid* newBid = new Bid(bidAmount, this, userBidding);
         bids.push_back(newBid);
         currentPrice = bidAmount;
@@ -81,7 +81,7 @@ namespace CSEN79{
     void Listing::buyOutright(User* buyer){
         if(buyOutrightPrice > currentPrice){
             log->push_back(name + " purchased by " + buyer->getName() + " for $" + to_string(buyOutrightPrice));
-            listings->removeListing(this);
+            listings->sellListing(this);
         }
     }
 

@@ -5,14 +5,18 @@ using namespace std;
 namespace CSEN79{
 
     void Listings::addListing(Listing* newListing){
-        allListings[allListings.size()] = newListing;
+        allListings.push_back(newListing);
     }
 
-    void Listings::removeListing(Listing* delListing){
+    void Listings::sellListing(Listing* soldListing){
+        if(!soldListing || !log) return;
+        
         for(int i = 0; i < allListings.size(); i++){
-            if(allListings[i] == delListing){
+            if(allListings[i] == soldListing){
                 log->push_back(allListings[i]->getName() + " has been sold to " + allListings[i]->getSeller()->getName());
-                allListings.erase(allListings.begin()+i);
+                sold.push_back(soldListing);
+                allListings.erase(allListings.begin() + i);
+                break;
             }
         }
     }
