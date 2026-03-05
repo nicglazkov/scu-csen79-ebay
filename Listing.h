@@ -24,31 +24,31 @@ namespace CSEN79{
             static Listings* listings;
 
         public:
-        Listing(){};
-        
-        Listing(string name, string description, double startingPrice, double buyOutrightPrice, int sellTime){};
+            Listing(){};
+            
+            Listing(string name, string description, double startingPrice, double buyOutrightPrice, int sellTime){};
 
-        string getName(){};
+            string getName(){};
 
-        string getDescription(){};
+            string getDescription(){};
 
-        double getPrice(){};
+            double getPrice(){};
 
-        double getBuyOutrightPrice(){};
+            double getBuyOutrightPrice(){};
 
-        void buyOutright(){};
+            void buyOutright(){};
 
-        double checkTime(){};
+            double checkTime(){};
 
-        void makeBid(double bidPrice){};
+            void makeBid(double bidPrice){};
 
-        void setUser(User* newUser){};
+            void setUser(User* newUser){};
 
-        User* getUser() {};
+            User* getUser() {};
 
-        void setLog(vector<string> &newLog){};
+            void setLog(vector<string> &newLog){};
 
-        void setListings(Listings* newListings){};
+            void setListings(Listings* newListings){};
     };
 
 };

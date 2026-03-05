@@ -69,4 +69,8 @@ namespace CSEN79{
         bids[bids.size()] = new Bid(bidAmount, this, getUser());
         log[log.size()] = "Bid on " + name + " placed by " + getUser()->getName(); 
     }
+
+    void Listing::buyOutright(){
+        sold = true;
+    }
 };

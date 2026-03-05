@@ -27,4 +27,24 @@ namespace CSEN79{
     void Listings::setUser(User* newUser){
         user = newUser;
     }
+
+    void Listings::sortAlpha(){
+
+    }
+
+    void Listings::sortBuyOutright(){
+
+    }
+
+    void Listings::sortCurrPrice(){
+
+    }
+
+    void Listings::sortTimeLeft(){
+
+    }
+
+    void Listings::checkCloseAuction(){
+
+    }
 }
