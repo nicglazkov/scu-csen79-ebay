@@ -15,6 +15,7 @@ namespace CSEN79{
             void addListing(Listing* newListing){};
             void sellListing(Listing* soldListing){};
             int getNumListings(){};
+            int getNumSoldListings(){};
             void setLog(vector<string>* newLog){};
 
             //Sorting Functions
@@ -27,7 +28,7 @@ namespace CSEN79{
             void sortCurrPriceRev(){};
             void sortTimeLeftRev(){};
 
-        //Multithreaded function, constantly running
+            //Multithreaded function, constantly running
             void checkCloseAuction(){};
     };
 }

@@ -12,7 +12,6 @@ namespace CSEN79{
         currentPrice = startingPrice;
         sellTime = 0;
         startTime = clock();
-        sold = false;
         seller = nullptr;
     }
 
@@ -24,7 +23,6 @@ namespace CSEN79{
         currentPrice = startingPrice;
         this->sellTime = sellTime;
         startTime = clock();
-        sold = false;
         log->push_back("New Listing Created by " + seller->getName() + " for item: "+ name);
         this->seller = seller;
     }
@@ -61,6 +59,10 @@ namespace CSEN79{
         return seller;
     }
 
+    Bid* Listing::getHighestBid(){
+        return bids.back();
+    }
+
     void Listing::makeBid(double bidAmount, User* userBidding){
         if(bidAmount<=currentPrice || !userBidding || !log) return;
         Bid* newBid = new Bid(bidAmount, this, userBidding);
@@ -82,11 +84,33 @@ namespace CSEN79{
         if(buyOutrightPrice > currentPrice){
             log->push_back(name + " purchased by " + buyer->getName() + " for $" + to_string(buyOutrightPrice));
             listings->sellListing(this);
+            bool found = false;
+            for(int i = 0; i<buyer->getInterested()->size(); i++){
+                if((*(buyer->getInterested()))[i] == this){
+                    found = true;
+                    buyer->getPurchased()->push_back(this);
+                    buyer->getInterested()->erase(buyer->getInterested()->begin() + i);
+                }
+            }
+            if(found == false){
+                buyer->getPurchased()->push_back(this);
+            }
         }
     }
 
-    Bid* Listing::getHighestBid(){
-        return bids.back();
+    void Listing::checkCloseAuction(){
+        if(this->checkTime()<=0){
+            listings->sellListing(this);
+            log->push_back(this->getHighestBid()->getBidder()->getName() + " has won the auction for " + name + 
+            " at the price of: $" + to_string(currentPrice));
+            this->getHighestBid()->getBidder()->getPurchased()->push_back(this);
+            for(int i = 0; i<this->getHighestBid()->getBidder()->getInterested()->size(); i++){
+                if((*(this->getHighestBid()->getBidder()->getInterested()))[i] == this){
+                    this->getHighestBid()->getBidder()->getPurchased()->push_back(this);
+                    this->getHighestBid()->getBidder()->getInterested()->
+                    erase(this->getHighestBid()->getBidder()->getInterested()->begin() + i);
+                }
+            }
+        }
     }
-
 };

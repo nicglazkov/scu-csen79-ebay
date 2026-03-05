@@ -10,7 +10,7 @@ namespace CSEN79{
 
     void Listings::sellListing(Listing* soldListing){
         if(!soldListing || !log) return;
-        
+
         for(int i = 0; i < allListings.size(); i++){
             if(allListings[i] == soldListing){
                 log->push_back(allListings[i]->getName() + " has been sold to " + allListings[i]->getSeller()->getName());
@@ -23,6 +23,10 @@ namespace CSEN79{
 
     int Listings::getNumListings(){
         return allListings.size();
+    }
+
+    int Listings::getNumSoldListings(){
+        return sold.size();
     }
 
     void Listings::setLog(vector<string>* newLog){
@@ -45,23 +49,25 @@ namespace CSEN79{
 
     }
 
+    void Listings::sortAlphaRev(){
+
+    }
+
+    void Listings::sortBuyOutrightRev(){
+
+    }
+
+    void Listings::sortCurrPriceRev(){
+
+    }
+
+    void Listings::sortTimeLeftRev(){
+
+    }
+
     void Listings::checkCloseAuction(){
-
+        for(int i = 0; i < allListings.size(); i++){
+            allListings[i]->checkCloseAuction();
+        }
     }
-    void sortAlphaRev(){
-
-    }
-
-    void sortBuyOutrightRev(){
-
-    }
-
-    void sortCurrPriceRev(){
-
-    }
-
-    void sortTimeLeftRev(){
-
-    }
-
 }

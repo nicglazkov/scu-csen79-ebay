@@ -18,7 +18,6 @@ namespace CSEN79{
             vector<Bid*> bids;
             int sellTime;
             time_t startTime;
-            bool sold;
             User* seller;
             static vector<string>* log;
             static Listings* listings;
@@ -31,13 +30,15 @@ namespace CSEN79{
             string getDescription(){};
             double getPrice(){};
             double getBuyOutrightPrice(){};
+            User* getSeller() {};
             void buyOutright(User* buyer){};
             double checkTime(){};
             void makeBid(double bidPrice, User* userBidding){};
-            User* getSeller() {};
             void setLog(vector<string>* newLog){};
             void setListings(Listings* newListings){};
             Bid* getHighestBid(){};
+            //Multithreaded function, constantly running
+            void checkCloseAuction(){};
     };
 
 };
