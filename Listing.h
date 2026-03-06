@@ -1,3 +1,4 @@
+//Listing Class Implemented by Benjamin Castillo III
 #include <string>
 #include <vector>
 #include <ctime>
@@ -37,8 +38,10 @@ namespace CSEN79{
             void setLog(vector<string>* newLog){};
             void setListings(Listings* newListings){};
             Bid* getHighestBid(){};
+            void losers(User* winner){};
             //Multithreaded function, constantly running
             void checkCloseAuction(){};
+            void sell();
     };
 
 };

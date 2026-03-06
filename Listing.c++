@@ -1,3 +1,4 @@
+// Listing Class Implemented by Benjamin Castillo III
 #include "Listing.h"
 #include "Bid.h"
 
@@ -63,12 +64,38 @@ namespace CSEN79{
         return bids.back();
     }
 
+    void Listing::sell(){
+        seller->getSold()->push_back(this);
+        for(int i = 0; i < seller->getSelling()->size(); i++){
+            if((*(seller->getSelling()))[i] == this){
+                seller->getSelling()->erase(seller->getSelling()->begin() + i);
+            }
+        }
+    }
+
+    void Listing::losers(User* winner){
+        for(int i = 0; i < bids.size(); i++){
+            if(bids[i]->getBidder() != winner){
+                winner->getLost()->push_back(this);
+                for(int j = 0; j < winner->getInterested()->size(); j++){
+                    if((*(bids[i]->getBidder()->getInterested()))[i] == this){
+                        bids[i]->getBidder()->getInterested()->erase(bids[i]->
+                            getBidder()->getInterested()->begin() + j);
+                    }
+                }
+            }
+        }
+    }
+
     void Listing::makeBid(double bidAmount, User* userBidding){
         if(bidAmount<=currentPrice || !userBidding || !log) return;
         Bid* newBid = new Bid(bidAmount, this, userBidding);
         bids.push_back(newBid);
         currentPrice = bidAmount;
-        log->push_back("Bid on " + name + " placed by " + userBidding->getName() + " for $"+ to_string(bidAmount));
+
+        log->push_back("Bid on " + name + " placed by " + userBidding->getName()
+        + " for: $" + to_string(bidAmount));
+
         bool found = false;
         for(int i = 0; i<userBidding->getInterested()->size(); i++){
             if((*(userBidding->getInterested()))[i] == this){
@@ -82,7 +109,8 @@ namespace CSEN79{
 
     void Listing::buyOutright(User* buyer){
         if(buyOutrightPrice > currentPrice){
-            log->push_back(name + " purchased by " + buyer->getName() + " for $" + to_string(buyOutrightPrice));
+            log->push_back(name + " purchased outright by " + buyer->getName() +
+            " for: $" + to_string(buyOutrightPrice));
             listings->sellListing(this);
             bool found = false;
             for(int i = 0; i<buyer->getInterested()->size(); i++){
@@ -95,22 +123,29 @@ namespace CSEN79{
             if(found == false){
                 buyer->getPurchased()->push_back(this);
             }
+            this->losers(buyer);
+            this->sell();
         }
     }
 
     void Listing::checkCloseAuction(){
-        if(this->checkTime()<=0){
+        if(this->checkTime() <= 0){
             listings->sellListing(this);
-            log->push_back(this->getHighestBid()->getBidder()->getName() + " has won the auction for " + name + 
-            " at the price of: $" + to_string(currentPrice));
+            log->push_back(this->getHighestBid()->getBidder()->getName() +
+            " has won the auction for " + name + " at the price of: $" +
+            to_string(currentPrice));
+
             this->getHighestBid()->getBidder()->getPurchased()->push_back(this);
-            for(int i = 0; i<this->getHighestBid()->getBidder()->getInterested()->size(); i++){
+            for(int i = 0; i < this->getHighestBid()->getBidder()->getInterested()->size(); i++){
                 if((*(this->getHighestBid()->getBidder()->getInterested()))[i] == this){
                     this->getHighestBid()->getBidder()->getPurchased()->push_back(this);
+
                     this->getHighestBid()->getBidder()->getInterested()->
                     erase(this->getHighestBid()->getBidder()->getInterested()->begin() + i);
                 }
             }
+            this->losers(this->getHighestBid()->getBidder());
+            this->sell();
         }
     }
 };

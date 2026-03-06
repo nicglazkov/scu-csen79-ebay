@@ -1,3 +1,4 @@
+//Listings Class Implemented by Benjamin Castillo III
 #include "Listing.h"
 
 using namespace std;

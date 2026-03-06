@@ -15,7 +15,9 @@ namespace CSEN79 {
         void makeListing(string name, string description, double startingPrice, double buyOutrightPrice, int sellTime);
         void placeBid(Listing* listing, double amount);
         void User::buyOutright(Listing* listing);
+        //Ben Added Getters
         std::vector<Listing*>* getSelling();
+        std::vector<Listing*>* getSold();
         std::vector<Listing*>* getPurchased();
         std::vector<Listing*>*  getInterested();
         std::vector<Listing*>* getLost();
@@ -23,6 +25,7 @@ namespace CSEN79 {
     private:
         std::string name;
         std::vector<Listing*> selling;
+        std::vector<Listing*> sold;
         std::vector<Listing*> purchased;
         std::vector<Listing*> interested;
         std::vector<Listing*> lost;

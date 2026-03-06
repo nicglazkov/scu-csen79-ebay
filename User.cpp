@@ -44,6 +44,10 @@ namespace CSEN79 {
         return &selling;
     }
 
+    std::vector<Listing*>* User::getSold(){
+        return &sold;
+    }
+
 
     void User::print() {
         std::cout << "User: " << name << std::endl;
