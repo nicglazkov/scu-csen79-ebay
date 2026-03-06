@@ -6,6 +6,7 @@
 #include <vector>
 
 using namespace std;
+
 namespace CSEN79{
     int main(){
         vector<string>* globalLog = new vector<string>;

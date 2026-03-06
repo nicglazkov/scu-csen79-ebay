@@ -31,5 +31,6 @@ namespace CSEN79{
 
             //Multithreaded function, constantly running
             void checkCloseAuction(){};
+            void saveToFile(){};
     };
 }
