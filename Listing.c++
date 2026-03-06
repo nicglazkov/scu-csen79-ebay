@@ -28,6 +28,14 @@ namespace CSEN79{
         this->seller = seller;
     }
 
+    Listing::~Listing(){
+        lock_guard<mutex> lock(entryMutex);
+        for(int i = 0; i < bids.size(); i++){
+            delete bids[i];
+        }
+        bids.clear();
+    }
+
     void Listing::setLog(vector<string>* newLog){
         log = newLog;
     }
@@ -64,6 +72,11 @@ namespace CSEN79{
         return bids.back();
     }
 
+    const vector<Bid*>& Listing::getBids(){
+        lock_guard<mutex> lock(entryMutex);
+        return bids;
+    };
+
     void Listing::sell(){
         seller->getSold()->push_back(this);
         for(int i = 0; i < seller->getSelling()->size(); i++){
@@ -88,6 +101,8 @@ namespace CSEN79{
     }
 
     void Listing::makeBid(double bidAmount, User* userBidding){
+        lock_guard<mutex> lock(entryMutex);
+
         if(bidAmount<=currentPrice || !userBidding || !log) return;
         Bid* newBid = new Bid(bidAmount, this, userBidding);
         bids.push_back(newBid);
@@ -118,6 +133,7 @@ namespace CSEN79{
                     found = true;
                     buyer->getPurchased()->push_back(this);
                     buyer->getInterested()->erase(buyer->getInterested()->begin() + i);
+
                 }
             }
             if(found == false){
@@ -129,6 +145,8 @@ namespace CSEN79{
     }
 
     void Listing::checkCloseAuction(){
+        lock_guard<mutex> lock(entryMutex);
+
         if(this->checkTime() <= 0){
             listings->sellListing(this);
             log->push_back(this->getHighestBid()->getBidder()->getName() +

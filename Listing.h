@@ -2,6 +2,10 @@
 #include <string>
 #include <vector>
 #include <ctime>
+#include <atomic>
+#include <thread>
+#include <chrono>
+#include <mutex>
 #include "Bid.h"
 #include "User.h"
 #include "Listings.h"
@@ -22,10 +26,12 @@ namespace CSEN79{
             User* seller;
             static vector<string>* log;
             static Listings* listings;
+            mutex entryMutex;
 
         public:
             Listing(){};
             Listing(string name, string description, double startingPrice, double buyOutrightPrice, int sellTime, User* seller){};
+            ~Listing(){};
             
             string getName(){};
             string getDescription(){};
@@ -39,6 +45,7 @@ namespace CSEN79{
             void setListings(Listings* newListings){};
             Bid* getHighestBid(){};
             void losers(User* winner){};
+            const vector<Bid*>& getBids(){};
             //Multithreaded function, constantly running
             void checkCloseAuction(){};
             void sell();

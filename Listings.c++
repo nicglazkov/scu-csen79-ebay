@@ -4,14 +4,32 @@
 using namespace std;
 
 namespace CSEN79{
+    
+    Listings::Listings(){
+        log = nullptr;
+    }
 
+    Listings::~Listings(){
+        lock_guard<mutex> lock(listMutex);
+
+        for(int i = 0; i < allListings.size(); i++){
+            delete allListings[i];
+        }
+        allListings.clear();
+        for(int i = 0; i < sold.size(); i++){
+            delete sold[i];
+        }
+        sold.clear();
+    }
     void Listings::addListing(Listing* newListing){
+        lock_guard<mutex> lock(listMutex);
         allListings.push_back(newListing);
     }
 
     void Listings::sellListing(Listing* soldListing){
         if(!soldListing || !log) return;
 
+        lock_guard<mutex> lock(listMutex);
         for(int i = 0; i < allListings.size(); i++){
             if(allListings[i] == soldListing){
                 log->push_back(allListings[i]->getName() + " has been sold to " + allListings[i]->getSeller()->getName());
@@ -171,12 +189,38 @@ namespace CSEN79{
     }
 
     void Listings::checkCloseAuction(){
+        lock_guard<mutex> lock(listMutex);
         for(int i = 0; i < allListings.size(); i++){
             allListings[i]->checkCloseAuction();
         }
     }
 
     void Listings::saveToFile(){
+        lock_guard<mutex> lock(listMutex);
 
+        ofstream outFile("listings_backup.txt", ios::trunc);
+        if(!outFile){
+            if(log){
+                log->push_back("Error: Could Not Open Backup File");
+            }
+        }
+        outFile << "Active Listings" << endl << endl;
+        
+        for(int i = 0; i < allListings.size(); i++){
+            Listing* traversal = allListings[i];
+
+            outFile << "Item: " << traversal->getName() << endl; 
+            outFile << "Description: " << traversal->getDescription() << endl; 
+            outFile << "Current Price: $" << fixed << setprecision(2) << traversal->getPrice() << endl; 
+            outFile << "Buy Outright Price: $" << fixed << setprecision(2) << traversal->getBuyOutrightPrice() << endl; 
+            outFile << "Time Left: " << traversal->getName() << " seconds" << endl;
+            outFile << "Bid History:" << endl;
+            for(auto bid : traversal->getBids()){
+                outFile << "$" << bid->getAmount() << " by " << bid->getBidder()->getName() << endl;
+            }
+
+            outFile << "---------------------------------" << endl;
+        }
+        outFile.close();
     }
 }

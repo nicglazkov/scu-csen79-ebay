@@ -1,5 +1,11 @@
 //Listings Class Implemented by Benjamin Castillo III
 #include <vector>
+#include <atomic>
+#include <thread>
+#include <chrono>
+#include <mutex>
+#include <fstream>
+#include <iomanip>
 
 using namespace std;
 namespace CSEN79{
@@ -8,11 +14,11 @@ namespace CSEN79{
             vector<Listing*> allListings;
             vector<Listing*> sold;
             static vector<string>* log;
+            mutex listMutex;
 
         public:
-            Listings(){
-                log = nullptr;
-            }
+            Listings(){}
+            ~Listings(){};
             void addListing(Listing* newListing){};
             void sellListing(Listing* soldListing){};
             int getNumListings(){};
