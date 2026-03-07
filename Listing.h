@@ -29,25 +29,25 @@ namespace CSEN79{
             mutex entryMutex;
 
         public:
-            Listing(){};
-            Listing(string name, string description, double startingPrice, double buyOutrightPrice, int sellTime, User* seller){};
-            ~Listing(){};
+            Listing();
+            Listing(string name, string description, double startingPrice, double buyOutrightPrice, int sellTime, User* seller);
+            ~Listing();
             
-            string getName(){};
-            string getDescription(){};
+            string getName();
+            string getDescription();
             double getPrice(){};
-            double getBuyOutrightPrice(){};
-            User* getSeller() {};
-            void buyOutright(User* buyer){};
+            double getBuyOutrightPrice();
+            User* getSeller();
+            void buyOutright(User* buyer);
             double checkTime(){};
-            void makeBid(double bidPrice, User* userBidding){};
-            void setLog(vector<string>* newLog){};
-            void setListings(Listings* newListings){};
-            Bid* getHighestBid(){};
-            void losers(User* winner){};
-            const vector<Bid*>& getBids(){};
+            void makeBid(double bidPrice, User* userBidding);
+            void setLog(vector<string>* newLog);
+            void setListings(Listings* newListings);
+            Bid* getHighestBid();
+            void losers(User* winner);
+            const vector<Bid*>& getBids();
             //Multithreaded function, constantly running
-            void checkCloseAuction(){};
+            void checkCloseAuction();
             void sell();
     };
 
