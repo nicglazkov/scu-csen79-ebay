@@ -26,16 +26,20 @@ namespace CSEN79
         }
         sold.clear();
     }
-    void Listings::addListing(Listing *newListing)
-    {
+
+    /**
+    Adds a new listing to the listings vector.
+    */
+    void Listings::addListing(Listing* newListing){
         lock_guard<mutex> lock(listMutex);
         allListings.push_back(newListing);
     }
 
-    void Listings::sellListing(Listing *soldListing)
-    {
-        if (!soldListing || !log)
-            return;
+    /**
+    Moves a listing from the allListings vector to the sold vector.
+    */
+    void Listings::sellListing(Listing* soldListing){
+        if(!soldListing || !log) return;
 
         lock_guard<mutex> lock(listMutex);
         for (int i = 0; i < allListings.size(); i++)
@@ -65,8 +69,10 @@ namespace CSEN79
         log = newLog;
     }
 
-    void Listings::sortAlpha()
-    {
+    /**
+    Sorts the listings alphabetically by selection sort.
+    */
+    void Listings::sortAlpha(){
         int size = allListings.size();
         for (int i = 0; i < size - 1; i++)
         {
@@ -88,8 +94,10 @@ namespace CSEN79
         this->saveToFile();
     }
 
-    void Listings::sortBuyOutright()
-    {
+    /*
+    Sorts the listings by buy-outright price in descending order, using selection sort.
+    */
+    void Listings::sortBuyOutright(){
         int size = allListings.size();
         for (int i = 0; i < size - 1; i++)
         {
@@ -111,8 +119,10 @@ namespace CSEN79
         this->saveToFile();
     }
 
-    void Listings::sortCurrPrice()
-    {
+    /*
+    Sorts the listings by current price in descending order, using selection sort.
+    */
+    void Listings::sortCurrPrice(){
         int size = allListings.size();
         for (int i = 0; i < size - 1; i++)
         {
@@ -134,8 +144,10 @@ namespace CSEN79
         this->saveToFile();
     }
 
-    void Listings::sortTimeLeft()
-    {
+    /*
+    Sorts the listings by time left in descending order, using selection sort.
+    */
+    void Listings::sortTimeLeft(){
         int size = allListings.size();
         for (int i = 0; i < size - 1; i++)
         {
@@ -157,8 +169,10 @@ namespace CSEN79
         this->saveToFile();
     }
 
-    void Listings::sortAlphaRev()
-    {
+    /*
+    Sorts the listings alphabetically in reverse order, using selection sort.
+    */
+    void Listings::sortAlphaRev(){
         int size = allListings.size();
         for (int i = 0; i < size - 1; i++)
         {
@@ -180,8 +194,10 @@ namespace CSEN79
         this->saveToFile();
     }
 
-    void Listings::sortBuyOutrightRev()
-    {
+    /**
+    Sorts the listings by buy-outright price in ascending order, using selection sort.
+    */
+    void Listings::sortBuyOutrightRev(){
         int size = allListings.size();
         for (int i = 0; i < size - 1; i++)
         {
@@ -203,8 +219,10 @@ namespace CSEN79
         this->saveToFile();
     }
 
-    void Listings::sortCurrPriceRev()
-    {
+    /**
+    Sorts the listings by current price in ascending order, using selection sort.
+    */
+    void Listings::sortCurrPriceRev(){
         int size = allListings.size();
         for (int i = 0; i < size - 1; i++)
         {
@@ -226,8 +244,10 @@ namespace CSEN79
         this->saveToFile();
     }
 
-    void Listings::sortTimeLeftRev()
-    {
+    /**
+    Sorts the listings by time left in ascending order, using selection sort.
+    */
+    void Listings::sortTimeLeftRev(){
         int size = allListings.size();
         for (int i = 0; i < size - 1; i++)
         {
@@ -249,8 +269,10 @@ namespace CSEN79
         this->saveToFile();
     }
 
-    void Listings::checkCloseAuction()
-    {
+    /**
+    Checks if any auctions should be closed and updates the status of the listings accordingly.
+    */
+    void Listings::checkCloseAuction(){
         lock_guard<mutex> lock(listMutex);
         for (int i = 0; i < allListings.size(); i++)
         {
@@ -258,8 +280,11 @@ namespace CSEN79
         }
     }
 
-    void Listings::saveToFile()
-    {
+    /**
+    Saves the listings to a file. The file is overwritten each time this function is called, 
+        and contains the current state of all active listings.
+    */
+    void Listings::saveToFile(){
         lock_guard<mutex> lock(listMutex);
 
         ofstream outFile("data/listings.json", ios::trunc);
