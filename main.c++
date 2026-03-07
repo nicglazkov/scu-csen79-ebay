@@ -19,7 +19,7 @@ namespace CSEN79{
         while(keepRunning){
             listings->checkCloseAuction();
 
-            if(counter >= 15){
+            if(counter >= 7){
                 listings->saveToFile();
                 counter = 0;
             }

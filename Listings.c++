@@ -67,6 +67,7 @@ namespace CSEN79{
                 allListings[max] = temp;
             }
         }
+        this->saveToFile();
     }
 
     void Listings::sortBuyOutright(){
@@ -84,6 +85,7 @@ namespace CSEN79{
                 allListings[max] = temp;
             }
         }
+        this->saveToFile();
     }
 
     void Listings::sortCurrPrice(){
@@ -101,6 +103,7 @@ namespace CSEN79{
                 allListings[max] = temp;
             }
         }
+        this->saveToFile();
     }
 
     void Listings::sortTimeLeft(){
@@ -118,6 +121,7 @@ namespace CSEN79{
                 allListings[max] = temp;
             }
         }
+        this->saveToFile();
     }
 
     void Listings::sortAlphaRev(){
@@ -135,6 +139,7 @@ namespace CSEN79{
                 allListings[min] = temp;
             }
         }
+        this->saveToFile();
     }
 
     void Listings::sortBuyOutrightRev(){
@@ -152,6 +157,7 @@ namespace CSEN79{
                 allListings[min] = temp;
             }
         }
+        this->saveToFile();
     }
 
     void Listings::sortCurrPriceRev(){
@@ -169,6 +175,7 @@ namespace CSEN79{
                 allListings[min] = temp;
             }
         }
+        this->saveToFile();
     }
 
     void Listings::sortTimeLeftRev(){
@@ -186,6 +193,7 @@ namespace CSEN79{
                 allListings[min] = temp;
             }
         }
+        this->saveToFile();
     }
 
     void Listings::checkCloseAuction(){
