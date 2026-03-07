@@ -14,6 +14,9 @@ using namespace std;
 namespace CSEN79{
     atomic<bool> keepRunning(true);
 
+    /**
+    Monitors the status of auctions in the background. Every 7 seconds, it checks each auction to see if it is closed. 
+    */
     void backgroundAuctionMonitor(Listings* listings){
         int counter = 0;
         while(keepRunning){

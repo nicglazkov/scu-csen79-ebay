@@ -77,6 +77,9 @@ namespace CSEN79{
         return bids;
     };
 
+    /*
+    Sells the listing to the winning bidder. The listing is added to the seller's sold vector and removed from their selling vector.
+    */
     void Listing::sell(){
         seller->getSold()->push_back(this);
         for(int i = 0; i < seller->getSelling()->size(); i++){
@@ -86,6 +89,9 @@ namespace CSEN79{
         }
     }
 
+    /*
+    Move the listing from the interested vector to the won or lost vector based on if the user won or lost the auction
+    */
     void Listing::losers(User* winner){
         for(int i = 0; i < bids.size(); i++){
             if(bids[i]->getBidder() != winner){
@@ -100,6 +106,10 @@ namespace CSEN79{
         }
     }
 
+    /*
+    Places a new bid on the listing. The bid is added to the listing's bids vector (if not already there),
+    and the current price is updated.
+    */
     void Listing::makeBid(double bidAmount, User* userBidding){
         lock_guard<mutex> lock(entryMutex);
 
@@ -122,6 +132,10 @@ namespace CSEN79{
         }
     }
 
+    /*
+    Buys the listing outright from the seller. The listing is added to the buyer's purchased vector and removed from the seller's selling vector.
+    Updates the losers of the auction and sells the listing.
+    */
     void Listing::buyOutright(User* buyer){
         if(buyOutrightPrice > currentPrice){
             log->push_back(name + " purchased outright by " + buyer->getName() +
@@ -143,7 +157,9 @@ namespace CSEN79{
             this->sell();
         }
     }
-
+    /**
+    Checks if the auction should be closed based on the time remaining and updates the status of the listing accordingly.
+    */
     void Listing::checkCloseAuction(){
         lock_guard<mutex> lock(entryMutex);
 

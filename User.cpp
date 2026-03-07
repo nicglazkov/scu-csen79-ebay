@@ -15,6 +15,9 @@ namespace CSEN79 {
         return name;
     }
 
+    /*
+    Creates a new listing for the user. The listing is created with the provided parameters and added to the user's selling vector.
+    */
     void User::makeListing(string name, string description, double startingPrice, double buyOutrightPrice, int sellTime) {
         Listing* newListing = new Listing(name, description, startingPrice, buyOutrightPrice, sellTime, this);
         selling.push_back(newListing);
