@@ -1,96 +1,110 @@
 // item.js — Loads a single item's details and handles bidding actions
 
-// Wait for the page to fully load before running our code
 document.addEventListener("DOMContentLoaded", async function () {
-  // Step 1: Get the item ID from the URL (e.g., ?id=3 means item 3)
+  // Get the item name from the URL (e.g., ?name=Widget)
   var params = new URLSearchParams(window.location.search);
-  var itemId = params.get("id");
+  var itemName = params.get("name");
 
-  // Step 2: Fetch all listings and find the one that matches our ID
-  var response = await fetch("../data/listings.json");
+  // Fetch all listings and find the one that matches
+  var response = await fetch("http://localhost:8080/listings");
   var listings = await response.json();
-  var item = findItemById(listings, itemId);
+  var item = findItemByName(listings, itemName);
 
-  // Step 3: If the item doesn't exist, show an error and stop
   if (!item) {
     document.getElementById("item-detail").innerHTML = "<p>Item not found.</p>";
     return;
   }
 
-  // Step 4: Fill the page with the item's details
   fillItemDetails(item);
-
-  // Step 5: Set up the bidding buttons
-  var minNextBid = item.currentBid + item.bidIncrement;
-  setupBidButtons(item, minNextBid);
+  setupBidButtons(item);
 });
-
 
 // --- Helper Functions ---
 
-
-// Searches the listings array for an item with the matching ID
-function findItemById(listings, id) {
+function findItemByName(listings, name) {
   for (var i = 0; i < listings.length; i++) {
-    if (listings[i].id === Number(id)) {
+    if (listings[i].name === name) {
       return listings[i];
     }
   }
   return null;
 }
 
-
-// Puts all the item info into the HTML elements on the page
 function fillItemDetails(item) {
-  var minNextBid = item.currentBid + item.bidIncrement;
-  var bidWord = item.bids !== 1 ? "bids" : "bid";
+  var bidCount = item.bids ? item.bids.length : 0;
+  var bidWord = bidCount !== 1 ? "bids" : "bid";
 
-  // Update the page title in the browser tab
-  document.title = "eBay Lite - " + item.title;
+  document.title = "eBay Lite - " + item.name;
 
-  // Fill in the item details
-  document.getElementById("item-title").textContent = item.title;
-  document.getElementById("item-condition").textContent = item.condition;
-  document.getElementById("current-bid").textContent = "$" + item.currentBid.toFixed(2);
-  document.getElementById("bid-count").textContent = item.bids + " " + bidWord;
-  document.getElementById("time-left").textContent = "Time left: " + item.timeLeft;
-  document.getElementById("buyout-price").textContent = "$" + item.buyout.toFixed(2);
+  document.getElementById("item-title").textContent = item.name;
+  document.getElementById("item-condition").textContent = "";
+  document.getElementById("current-bid").textContent =
+    "$" + item.currentPrice.toFixed(2);
+  document.getElementById("bid-count").textContent = bidCount + " " + bidWord;
+  document.getElementById("time-left").textContent =
+    "Time left: " + item.timeLeft.toFixed(0) + "s";
+  document.getElementById("buyout-price").textContent =
+    "$" + item.buyOutrightPrice.toFixed(2);
   document.getElementById("seller-name").textContent = item.seller;
   document.getElementById("item-description").textContent = item.description;
 
-  // Set up the bid input with the minimum allowed bid
-  document.getElementById("bid-increment-btn").textContent = "Bid $" + minNextBid.toFixed(2);
+  var minNextBid = item.currentPrice + 0.01;
+  document.getElementById("bid-increment-btn").textContent =
+    "Bid $" + minNextBid.toFixed(2);
   document.getElementById("custom-bid-input").min = minNextBid.toFixed(2);
-  document.getElementById("custom-bid-input").placeholder = "$" + minNextBid.toFixed(2) + " or more";
+  document.getElementById("custom-bid-input").placeholder =
+    "$" + minNextBid.toFixed(2) + " or more";
 }
 
+function setupBidButtons(item) {
+  var minNextBid = item.currentPrice + 0.01;
 
-// Attaches click handlers to the three bid/buy buttons
-function setupBidButtons(item, minNextBid) {
-  // "Bid +minimum" button — places a bid at the lowest allowed amount
-  var incrementBtn = document.getElementById("bid-increment-btn");
-  incrementBtn.addEventListener("click", function () {
-    alert("Bid placed: $" + minNextBid.toFixed(2));
-  });
+  // "Bid +minimum" button
+  document
+    .getElementById("bid-increment-btn")
+    .addEventListener("click", async function () {
+      await fetch("http://localhost:8080/bid", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: item.name,
+          user: "user1",
+          amount: minNextBid,
+        }),
+      });
+    });
 
-  // "Place Bid" button — validates and places a custom bid amount
-  var customBidBtn = document.getElementById("custom-bid-btn");
-  customBidBtn.addEventListener("click", function () {
-    var input = document.getElementById("custom-bid-input");
-    var bidAmount = parseFloat(input.value);
+  // "Place Bid" button
+  document
+    .getElementById("custom-bid-btn")
+    .addEventListener("click", async function () {
+      var input = document.getElementById("custom-bid-input");
+      var bidAmount = parseFloat(input.value);
 
-    // Check that the bid is a valid number and meets the minimum
-    if (isNaN(bidAmount) || bidAmount < minNextBid) {
-      alert("Bid must be at least $" + minNextBid.toFixed(2));
-      return;
-    }
+      if (isNaN(bidAmount) || bidAmount < minNextBid) {
+        alert("Bid must be at least $" + minNextBid.toFixed(2));
+        return;
+      }
 
-    alert("Bid placed: $" + bidAmount.toFixed(2));
-  });
+      await fetch("http://localhost:8080/bid", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: item.name,
+          user: "user1",
+          amount: bidAmount,
+        }),
+      });
+    });
 
-  // "Buy It Now" button — instantly purchases the item
-  var buyoutBtn = document.getElementById("buyout-btn");
-  buyoutBtn.addEventListener("click", function () {
-    alert('Purchased "' + item.title + '" for $' + item.buyout.toFixed(2));
-  });
+  // "Buy It Now" button
+  document
+    .getElementById("buyout-btn")
+    .addEventListener("click", async function () {
+      await fetch("http://localhost:8080/buyout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: item.name, user: "user1" }),
+      });
+    });
 }
