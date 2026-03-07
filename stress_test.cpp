@@ -97,7 +97,7 @@ int main() {
     cout << "Listings in system: " << allListings->getNumListings() << endl;
     cout << "----------------------------" << endl;
 
-    // Cleanup
+    
     delete allListings;
     delete globalLog;
     for (int i = 0; i < 10; i++) delete users[i];
