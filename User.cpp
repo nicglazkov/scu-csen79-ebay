@@ -48,15 +48,4 @@ namespace CSEN79 {
         return &sold;
     }
 
-
-    void User::print() {
-        std::cout << "User: " << name << std::endl;
-        /*
-        std::cout << "Selling Listings: " << selling.size() << std::endl;
-        std::cout << "Purchased Listings: " << purchased.size() << std::endl;
-        std::cout << "Interested Listings: " << interested.size() << std::endl;
-        std::cout << "Lost Listings: " << lost.size() << std::endl;
-        */
-    }
-
 }

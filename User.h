@@ -21,7 +21,6 @@ namespace CSEN79 {
         std::vector<Listing*>* getPurchased();
         std::vector<Listing*>*  getInterested();
         std::vector<Listing*>* getLost();
-        void print();
     private:
         std::string name;
         std::vector<Listing*> selling;
