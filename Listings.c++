@@ -57,7 +57,7 @@ namespace CSEN79{
         for(int i = 0; i < size-1; i++){
             int max = i;
             for(int j = i+1; j < size; j++){
-                if(allListings[j]->getName() > allListings[max]->getName()){
+                if(allListings[j]->getName() < allListings[max]->getName()){
                     max = j;
                 }
             }
@@ -125,7 +125,7 @@ namespace CSEN79{
         for(int i = 0; i < size-1; i++){
             int min = i;
             for(int j = i+1; j < size; j++){
-                if(allListings[j]->getName() < allListings[min]->getName()){
+                if(allListings[j]->getName() > allListings[min]->getName()){
                     min = j;
                 }
             }
