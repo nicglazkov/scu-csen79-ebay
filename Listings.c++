@@ -109,22 +109,25 @@ namespace CSEN79
     */
     void Listings::sortAlpha()
     {
-        int size = allListings.size();
-        for (int i = 0; i < size - 1; i++)
         {
-            int max = i;
-            for (int j = i + 1; j < size; j++)
+            lock_guard<mutex> lock(listMutex);
+            int size = allListings.size();
+            for (int i = 0; i < size - 1; i++)
             {
-                if (allListings[j]->getName() < allListings[max]->getName())
+                int max = i;
+                for (int j = i + 1; j < size; j++)
                 {
-                    max = j;
+                    if (allListings[j]->getName() < allListings[max]->getName())
+                    {
+                        max = j;
+                    }
                 }
-            }
-            if (max != i)
-            {
-                Listing *temp = allListings[i];
-                allListings[i] = allListings[max];
-                allListings[max] = temp;
+                if (max != i)
+                {
+                    Listing *temp = allListings[i];
+                    allListings[i] = allListings[max];
+                    allListings[max] = temp;
+                }
             }
         }
         this->saveToFile();
@@ -135,22 +138,25 @@ namespace CSEN79
     */
     void Listings::sortBuyOutright()
     {
-        int size = allListings.size();
-        for (int i = 0; i < size - 1; i++)
         {
-            int max = i;
-            for (int j = i + 1; j < size; j++)
+            lock_guard<mutex> lock(listMutex);
+            int size = allListings.size();
+            for (int i = 0; i < size - 1; i++)
             {
-                if (allListings[j]->getBuyOutrightPrice() > allListings[max]->getBuyOutrightPrice())
+                int max = i;
+                for (int j = i + 1; j < size; j++)
                 {
-                    max = j;
+                    if (allListings[j]->getBuyOutrightPrice() > allListings[max]->getBuyOutrightPrice())
+                    {
+                        max = j;
+                    }
                 }
-            }
-            if (max != i)
-            {
-                Listing *temp = allListings[i];
-                allListings[i] = allListings[max];
-                allListings[max] = temp;
+                if (max != i)
+                {
+                    Listing *temp = allListings[i];
+                    allListings[i] = allListings[max];
+                    allListings[max] = temp;
+                }
             }
         }
         this->saveToFile();
@@ -161,22 +167,25 @@ namespace CSEN79
     */
     void Listings::sortCurrPrice()
     {
-        int size = allListings.size();
-        for (int i = 0; i < size - 1; i++)
         {
-            int max = i;
-            for (int j = i + 1; j < size; j++)
+            lock_guard<mutex> lock(listMutex);
+            int size = allListings.size();
+            for (int i = 0; i < size - 1; i++)
             {
-                if (allListings[j]->getPrice() > allListings[max]->getPrice())
+                int max = i;
+                for (int j = i + 1; j < size; j++)
                 {
-                    max = j;
+                    if (allListings[j]->getPrice() > allListings[max]->getPrice())
+                    {
+                        max = j;
+                    }
                 }
-            }
-            if (max != i)
-            {
-                Listing *temp = allListings[i];
-                allListings[i] = allListings[max];
-                allListings[max] = temp;
+                if (max != i)
+                {
+                    Listing *temp = allListings[i];
+                    allListings[i] = allListings[max];
+                    allListings[max] = temp;
+                }
             }
         }
         this->saveToFile();
@@ -187,22 +196,25 @@ namespace CSEN79
     */
     void Listings::sortTimeLeft()
     {
-        int size = allListings.size();
-        for (int i = 0; i < size - 1; i++)
         {
-            int max = i;
-            for (int j = i + 1; j < size; j++)
+            lock_guard<mutex> lock(listMutex);
+            int size = allListings.size();
+            for (int i = 0; i < size - 1; i++)
             {
-                if (allListings[j]->checkTime() > allListings[max]->checkTime())
+                int max = i;
+                for (int j = i + 1; j < size; j++)
                 {
-                    max = j;
+                    if (allListings[j]->checkTime() > allListings[max]->checkTime())
+                    {
+                        max = j;
+                    }
                 }
-            }
-            if (max != i)
-            {
-                Listing *temp = allListings[i];
-                allListings[i] = allListings[max];
-                allListings[max] = temp;
+                if (max != i)
+                {
+                    Listing *temp = allListings[i];
+                    allListings[i] = allListings[max];
+                    allListings[max] = temp;
+                }
             }
         }
         this->saveToFile();
@@ -213,22 +225,25 @@ namespace CSEN79
     */
     void Listings::sortAlphaRev()
     {
-        int size = allListings.size();
-        for (int i = 0; i < size - 1; i++)
         {
-            int min = i;
-            for (int j = i + 1; j < size; j++)
+            lock_guard<mutex> lock(listMutex);
+            int size = allListings.size();
+            for (int i = 0; i < size - 1; i++)
             {
-                if (allListings[j]->getName() > allListings[min]->getName())
+                int min = i;
+                for (int j = i + 1; j < size; j++)
                 {
-                    min = j;
+                    if (allListings[j]->getName() > allListings[min]->getName())
+                    {
+                        min = j;
+                    }
                 }
-            }
-            if (min != i)
-            {
-                Listing *temp = allListings[i];
-                allListings[i] = allListings[min];
-                allListings[min] = temp;
+                if (min != i)
+                {
+                    Listing *temp = allListings[i];
+                    allListings[i] = allListings[min];
+                    allListings[min] = temp;
+                }
             }
         }
         this->saveToFile();
@@ -239,22 +254,25 @@ namespace CSEN79
     */
     void Listings::sortBuyOutrightRev()
     {
-        int size = allListings.size();
-        for (int i = 0; i < size - 1; i++)
         {
-            int min = i;
-            for (int j = i + 1; j < size; j++)
+            lock_guard<mutex> lock(listMutex);
+            int size = allListings.size();
+            for (int i = 0; i < size - 1; i++)
             {
-                if (allListings[j]->getBuyOutrightPrice() < allListings[min]->getBuyOutrightPrice())
+                int min = i;
+                for (int j = i + 1; j < size; j++)
                 {
-                    min = j;
+                    if (allListings[j]->getBuyOutrightPrice() < allListings[min]->getBuyOutrightPrice())
+                    {
+                        min = j;
+                    }
                 }
-            }
-            if (min != i)
-            {
-                Listing *temp = allListings[i];
-                allListings[i] = allListings[min];
-                allListings[min] = temp;
+                if (min != i)
+                {
+                    Listing *temp = allListings[i];
+                    allListings[i] = allListings[min];
+                    allListings[min] = temp;
+                }
             }
         }
         this->saveToFile();
@@ -265,22 +283,25 @@ namespace CSEN79
     */
     void Listings::sortCurrPriceRev()
     {
-        int size = allListings.size();
-        for (int i = 0; i < size - 1; i++)
         {
-            int min = i;
-            for (int j = i + 1; j < size; j++)
+            lock_guard<mutex> lock(listMutex);
+            int size = allListings.size();
+            for (int i = 0; i < size - 1; i++)
             {
-                if (allListings[j]->getPrice() < allListings[min]->getPrice())
+                int min = i;
+                for (int j = i + 1; j < size; j++)
                 {
-                    min = j;
+                    if (allListings[j]->getPrice() < allListings[min]->getPrice())
+                    {
+                        min = j;
+                    }
                 }
-            }
-            if (min != i)
-            {
-                Listing *temp = allListings[i];
-                allListings[i] = allListings[min];
-                allListings[min] = temp;
+                if (min != i)
+                {
+                    Listing *temp = allListings[i];
+                    allListings[i] = allListings[min];
+                    allListings[min] = temp;
+                }
             }
         }
         this->saveToFile();
@@ -291,22 +312,25 @@ namespace CSEN79
     */
     void Listings::sortTimeLeftRev()
     {
-        int size = allListings.size();
-        for (int i = 0; i < size - 1; i++)
         {
-            int min = i;
-            for (int j = i + 1; j < size; j++)
+            lock_guard<mutex> lock(listMutex);
+            int size = allListings.size();
+            for (int i = 0; i < size - 1; i++)
             {
-                if (allListings[j]->checkTime() < allListings[min]->checkTime())
+                int min = i;
+                for (int j = i + 1; j < size; j++)
                 {
-                    min = j;
+                    if (allListings[j]->checkTime() < allListings[min]->checkTime())
+                    {
+                        min = j;
+                    }
                 }
-            }
-            if (min != i)
-            {
-                Listing *temp = allListings[i];
-                allListings[i] = allListings[min];
-                allListings[min] = temp;
+                if (min != i)
+                {
+                    Listing *temp = allListings[i];
+                    allListings[i] = allListings[min];
+                    allListings[min] = temp;
+                }
             }
         }
         this->saveToFile();
