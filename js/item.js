@@ -86,7 +86,7 @@ function setupBidButtons(item) {
     .addEventListener("click", async function () {
       await fetch("http://localhost:8080/bid", {
         method: "POST",
-        body: new URLSearchParams({ name: item.name, user: "user1", amount: minNextBid }),
+        body: new URLSearchParams({ name: item.name, user: getActiveUser(), amount: minNextBid }),
       });
       location.reload();
     });
@@ -105,7 +105,7 @@ function setupBidButtons(item) {
 
       await fetch("http://localhost:8080/bid", {
         method: "POST",
-        body: new URLSearchParams({ name: item.name, user: "user1", amount: bidAmount }),
+        body: new URLSearchParams({ name: item.name, user: getActiveUser(), amount: bidAmount }),
       });
       location.reload();
     });
@@ -116,7 +116,7 @@ function setupBidButtons(item) {
     .addEventListener("click", async function () {
       await fetch("http://localhost:8080/buyout", {
         method: "POST",
-        body: new URLSearchParams({ name: item.name, user: "user1" }),
+        body: new URLSearchParams({ name: item.name, user: getActiveUser() }),
       });
       window.location.href = "../index.html";
     });

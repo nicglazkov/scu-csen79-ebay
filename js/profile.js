@@ -1,7 +1,7 @@
 // profile.js — Loads the current user's profile data and displays it
 
 document.addEventListener("DOMContentLoaded", async function () {
-  var response = await fetch("http://localhost:8080/user?name=user1");
+  var response = await fetch("http://localhost:8080/user?name=" + getActiveUser());
 
   if (!response.ok) {
     document.getElementById("profile-name").textContent = "not found";
