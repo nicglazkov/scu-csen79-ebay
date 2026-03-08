@@ -100,6 +100,7 @@ namespace CSEN79
 
     Bid *Listing::getHighestBid()
     {
+        if (bids.empty()) return nullptr;
         return bids.back();
     }
 
