@@ -68,6 +68,18 @@ int main()
     for (int i = 0; i < NUM_USERS; i++)
         users[i] = new User("user" + to_string(i));
 
+    // --- Seed Listings ---
+    users[0]->makeListing("Vintage Camera",    "A classic 35mm film camera in great condition.",  25.00,  120.00, 300);
+    users[1]->makeListing("Gaming Chair",      "Ergonomic chair with lumbar support.",            80.00,  350.00, 300);
+    users[2]->makeListing("Electric Keyboard", "61-key beginner keyboard with built-in sounds.",  40.00,  180.00, 300);
+    users[3]->makeListing("Old Laptop",        "Used but functional. Good for basic tasks.",      50.00,  200.00, 300);
+    users[4]->makeListing("Desk Lamp",         "Adjustable LED lamp, barely used.",                8.00,   35.00, 300);
+
+    for (int i = 0; i < 5; i++)
+        allListings->addListing(users[i]->getSelling()->back());
+
+    allListings->saveToFile();
+
     // Start the background auction monitor on a separate thread
     thread auctionThread(backgroundAuctionMonitor, allListings);
 
