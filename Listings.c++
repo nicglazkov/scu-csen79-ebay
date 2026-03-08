@@ -1,10 +1,14 @@
 // Listings Class Implemented by Benjamin Castillo III
 #include "Listing.h"
+#include "Listings.h"
+#include "Bid.h"
+#include "User.h"
 
 using namespace std;
 
 namespace CSEN79
 {
+    vector<string> *Listings::log = nullptr;
 
     Listings::Listings()
     {
@@ -30,7 +34,8 @@ namespace CSEN79
     /**
     Adds a new listing to the listings vector.
     */
-    void Listings::addListing(Listing* newListing){
+    void Listings::addListing(Listing *newListing)
+    {
         lock_guard<mutex> lock(listMutex);
         allListings.push_back(newListing);
     }
@@ -38,8 +43,10 @@ namespace CSEN79
     /**
     Moves a listing from the allListings vector to the sold vector.
     */
-    void Listings::sellListing(Listing* soldListing){
-        if(!soldListing || !log) return;
+    void Listings::sellListing(Listing *soldListing)
+    {
+        if (!soldListing || !log)
+            return;
 
         lock_guard<mutex> lock(listMutex);
         for (int i = 0; i < allListings.size(); i++)
@@ -69,10 +76,22 @@ namespace CSEN79
         log = newLog;
     }
 
+    Listing* Listings::getListing(string name)
+    {
+        lock_guard<mutex> lock(listMutex);
+        for (int i = 0; i < allListings.size(); i++)
+        {
+            if (allListings[i]->getName() == name)
+                return allListings[i];
+        }
+        return nullptr;
+    }
+
     /**
     Sorts the listings alphabetically by selection sort.
     */
-    void Listings::sortAlpha(){
+    void Listings::sortAlpha()
+    {
         int size = allListings.size();
         for (int i = 0; i < size - 1; i++)
         {
@@ -97,7 +116,8 @@ namespace CSEN79
     /*
     Sorts the listings by buy-outright price in descending order, using selection sort.
     */
-    void Listings::sortBuyOutright(){
+    void Listings::sortBuyOutright()
+    {
         int size = allListings.size();
         for (int i = 0; i < size - 1; i++)
         {
@@ -122,7 +142,8 @@ namespace CSEN79
     /*
     Sorts the listings by current price in descending order, using selection sort.
     */
-    void Listings::sortCurrPrice(){
+    void Listings::sortCurrPrice()
+    {
         int size = allListings.size();
         for (int i = 0; i < size - 1; i++)
         {
@@ -147,7 +168,8 @@ namespace CSEN79
     /*
     Sorts the listings by time left in descending order, using selection sort.
     */
-    void Listings::sortTimeLeft(){
+    void Listings::sortTimeLeft()
+    {
         int size = allListings.size();
         for (int i = 0; i < size - 1; i++)
         {
@@ -172,7 +194,8 @@ namespace CSEN79
     /*
     Sorts the listings alphabetically in reverse order, using selection sort.
     */
-    void Listings::sortAlphaRev(){
+    void Listings::sortAlphaRev()
+    {
         int size = allListings.size();
         for (int i = 0; i < size - 1; i++)
         {
@@ -197,7 +220,8 @@ namespace CSEN79
     /**
     Sorts the listings by buy-outright price in ascending order, using selection sort.
     */
-    void Listings::sortBuyOutrightRev(){
+    void Listings::sortBuyOutrightRev()
+    {
         int size = allListings.size();
         for (int i = 0; i < size - 1; i++)
         {
@@ -222,7 +246,8 @@ namespace CSEN79
     /**
     Sorts the listings by current price in ascending order, using selection sort.
     */
-    void Listings::sortCurrPriceRev(){
+    void Listings::sortCurrPriceRev()
+    {
         int size = allListings.size();
         for (int i = 0; i < size - 1; i++)
         {
@@ -247,7 +272,8 @@ namespace CSEN79
     /**
     Sorts the listings by time left in ascending order, using selection sort.
     */
-    void Listings::sortTimeLeftRev(){
+    void Listings::sortTimeLeftRev()
+    {
         int size = allListings.size();
         for (int i = 0; i < size - 1; i++)
         {
@@ -272,19 +298,25 @@ namespace CSEN79
     /**
     Checks if any auctions should be closed and updates the status of the listings accordingly.
     */
-    void Listings::checkCloseAuction(){
-        lock_guard<mutex> lock(listMutex);
-        for (int i = 0; i < allListings.size(); i++)
+    void Listings::checkCloseAuction()
+    {
+        vector<Listing *> snapshot;
         {
-            allListings[i]->checkCloseAuction();
+            lock_guard<mutex> lock(listMutex);
+            snapshot = allListings;
+        }
+        for (int i = 0; i < snapshot.size(); i++)
+        {
+            snapshot[i]->checkCloseAuction();
         }
     }
 
     /**
-    Saves the listings to a file. The file is overwritten each time this function is called, 
+    Saves the listings to a file. The file is overwritten each time this function is called,
         and contains the current state of all active listings.
     */
-    void Listings::saveToFile(){
+    void Listings::saveToFile()
+    {
         lock_guard<mutex> lock(listMutex);
 
         ofstream outFile("data/listings.json", ios::trunc);
@@ -309,7 +341,7 @@ namespace CSEN79
             outFile << "    \"currentPrice\": " << fixed << setprecision(2) << t->getPrice() << ",\n";
             outFile << "    \"buyOutrightPrice\": " << fixed << setprecision(2) << t->getBuyOutrightPrice() << ",\n";
             outFile << "    \"seller\": \"" << t->getSeller()->getName() << "\",\n";
-            outFile << "    \"timeLeft\": " << fixed << setprecision(2) << t->checkTime() << ",\n";
+            outFile << "    \"timeLeft\": " << fixed << setprecision(2) << (t->getSellTime() - t->checkTime()) << ",\n";
             outFile << "    \"bids\": [\n";
 
             const vector<Bid *> &bids = t->getBids();
@@ -317,13 +349,15 @@ namespace CSEN79
             {
                 outFile << "      { \"amount\": " << fixed << setprecision(2) << bids[j]->getAmount();
                 outFile << ", \"bidder\": \"" << bids[j]->getBidder()->getName() << "\" }";
-                if (j < (int)bids.size() - 1) outFile << ",";
+                if (j < (int)bids.size() - 1)
+                    outFile << ",";
                 outFile << "\n";
             }
 
             outFile << "    ]\n";
             outFile << "  }";
-            if (i < (int)allListings.size() - 1) outFile << ",";
+            if (i < (int)allListings.size() - 1)
+                outFile << ",";
             outFile << "\n";
         }
 

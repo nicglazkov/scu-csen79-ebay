@@ -65,13 +65,9 @@ function setupBidButtons(item) {
     .addEventListener("click", async function () {
       await fetch("http://localhost:8080/bid", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: item.name,
-          user: "user1",
-          amount: minNextBid,
-        }),
+        body: new URLSearchParams({ name: item.name, user: "user1", amount: minNextBid }),
       });
+      location.reload();
     });
 
   // "Place Bid" button
@@ -88,23 +84,19 @@ function setupBidButtons(item) {
 
       await fetch("http://localhost:8080/bid", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: item.name,
-          user: "user1",
-          amount: bidAmount,
-        }),
+        body: new URLSearchParams({ name: item.name, user: "user1", amount: bidAmount }),
       });
+      location.reload();
     });
 
-  // "Buy It Now" button
+  // "Buy It Now" button — redirect to dashboard since the listing is now sold
   document
     .getElementById("buyout-btn")
     .addEventListener("click", async function () {
       await fetch("http://localhost:8080/buyout", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: item.name, user: "user1" }),
+        body: new URLSearchParams({ name: item.name, user: "user1" }),
       });
+      window.location.href = "../index.html";
     });
 }

@@ -29,11 +29,9 @@ int main() {
     // Same setup as main.c++ so Listing/Listings statics are set
     vector<string>* globalLog = new vector<string>;
     CSEN79::Listings* allListings = new CSEN79::Listings();
-    CSEN79::Listing* temp = new CSEN79::Listing();
-    temp->setLog(globalLog);
+    CSEN79::Listing::setLog(globalLog);
+    CSEN79::Listing::setListings(allListings);
     allListings->setLog(globalLog);
-    temp->setListings(allListings);
-    delete temp;
 
     CSEN79::User* users[10];
     for (int i = 0; i < 10; i++) {
