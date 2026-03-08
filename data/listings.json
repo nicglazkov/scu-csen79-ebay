@@ -1,11 +1,29 @@
 [
   {
-    "name": "Desk Lamp",
-    "description": "Adjustable LED lamp, barely used.",
-    "currentPrice": 8.00,
-    "buyOutrightPrice": 35.00,
-    "seller": "user4",
-    "timeLeft": 254.00,
+    "name": "Vintage Camera",
+    "description": "A classic 35mm film camera in great condition.",
+    "currentPrice": 25.08,
+    "buyOutrightPrice": 120.00,
+    "seller": "user0",
+    "timeLeft": 243.00,
+    "bids": [
+      { "amount": 25.01, "bidder": "user1" },
+      { "amount": 25.02, "bidder": "user1" },
+      { "amount": 25.03, "bidder": "user1" },
+      { "amount": 25.04, "bidder": "user1" },
+      { "amount": 25.05, "bidder": "user1" },
+      { "amount": 25.06, "bidder": "user1" },
+      { "amount": 25.07, "bidder": "user1" },
+      { "amount": 25.08, "bidder": "user1" }
+    ]
+  },
+  {
+    "name": "Gaming Chair",
+    "description": "Ergonomic chair with lumbar support.",
+    "currentPrice": 80.00,
+    "buyOutrightPrice": 350.00,
+    "seller": "user1",
+    "timeLeft": 243.00,
     "bids": [
     ]
   },
@@ -15,7 +33,7 @@
     "currentPrice": 40.00,
     "buyOutrightPrice": 180.00,
     "seller": "user2",
-    "timeLeft": 254.00,
+    "timeLeft": 243.00,
     "bids": [
     ]
   },
@@ -25,58 +43,8 @@
     "currentPrice": 50.00,
     "buyOutrightPrice": 200.00,
     "seller": "user3",
-    "timeLeft": 254.00,
+    "timeLeft": 243.00,
     "bids": [
-    ]
-  },
-  {
-    "name": "Gaming Chair",
-    "description": "Ergonomic chair with lumbar support.",
-    "currentPrice": 80.40,
-    "buyOutrightPrice": 350.00,
-    "seller": "user1",
-    "timeLeft": 254.00,
-    "bids": [
-      { "amount": 80.01, "bidder": "user1" },
-      { "amount": 80.02, "bidder": "user1" },
-      { "amount": 80.03, "bidder": "user1" },
-      { "amount": 80.04, "bidder": "user1" },
-      { "amount": 80.05, "bidder": "user1" },
-      { "amount": 80.06, "bidder": "user1" },
-      { "amount": 80.07, "bidder": "user1" },
-      { "amount": 80.08, "bidder": "user1" },
-      { "amount": 80.09, "bidder": "user1" },
-      { "amount": 80.10, "bidder": "user1" },
-      { "amount": 80.11, "bidder": "user1" },
-      { "amount": 80.12, "bidder": "user1" },
-      { "amount": 80.13, "bidder": "user1" },
-      { "amount": 80.14, "bidder": "user1" },
-      { "amount": 80.15, "bidder": "user1" },
-      { "amount": 80.16, "bidder": "user1" },
-      { "amount": 80.17, "bidder": "user1" },
-      { "amount": 80.18, "bidder": "user1" },
-      { "amount": 80.19, "bidder": "user1" },
-      { "amount": 80.20, "bidder": "user1" },
-      { "amount": 80.21, "bidder": "user1" },
-      { "amount": 80.22, "bidder": "user1" },
-      { "amount": 80.23, "bidder": "user1" },
-      { "amount": 80.24, "bidder": "user1" },
-      { "amount": 80.25, "bidder": "user1" },
-      { "amount": 80.26, "bidder": "user1" },
-      { "amount": 80.27, "bidder": "user1" },
-      { "amount": 80.28, "bidder": "user1" },
-      { "amount": 80.29, "bidder": "user1" },
-      { "amount": 80.30, "bidder": "user1" },
-      { "amount": 80.31, "bidder": "user1" },
-      { "amount": 80.32, "bidder": "user1" },
-      { "amount": 80.33, "bidder": "user1" },
-      { "amount": 80.34, "bidder": "user1" },
-      { "amount": 80.35, "bidder": "user1" },
-      { "amount": 80.36, "bidder": "user1" },
-      { "amount": 80.37, "bidder": "user1" },
-      { "amount": 80.38, "bidder": "user1" },
-      { "amount": 80.39, "bidder": "user1" },
-      { "amount": 80.40, "bidder": "user1" }
     ]
   }
 ]
