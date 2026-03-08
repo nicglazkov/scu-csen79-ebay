@@ -9,20 +9,24 @@
 #include <chrono>
 #include <mutex>
 
-using namespace std; 
+using namespace std;
 
-namespace CSEN79{
+namespace CSEN79
+{
     atomic<bool> keepRunning(true);
 
     /**
-    Monitors the status of auctions in the background. Every 7 seconds, it checks each auction to see if it is closed. 
+    Monitors the status of auctions in the background. Every 7 seconds, it checks each auction to see if it is closed.
     */
-    void backgroundAuctionMonitor(Listings* listings){
+    void backgroundAuctionMonitor(Listings *listings)
+    {
         int counter = 0;
-        while(keepRunning){
+        while (keepRunning)
+        {
             listings->checkCloseAuction();
 
-            if(counter >= 7){
+            if (counter >= 7)
+            {
                 listings->saveToFile();
                 counter = 0;
             }
@@ -31,23 +35,22 @@ namespace CSEN79{
         }
     }
 
-    int main(){
-        vector<string>* globalLog = new vector<string>;
-        User* users[10];
+    int main()
+    {
+        vector<string> *globalLog = new vector<string>;
+        User *users[10];
         int currentUserNumber;
-        Listings* allListings = new Listings();
-        Listing* temp =  new Listing();
-        temp->setLog(globalLog);
+        Listings *allListings = new Listings();
+        Listing::setLog(globalLog);
+        Listing::setListings(allListings);
         allListings->setLog(globalLog);
-        temp->setListings(allListings);
-        delete temp;
-        for(int i = 0; i < 10; i++){
-            users[i] = new User("user"+i);
+        for (int i = 0; i < 10; i++)
+        {
+            users[i] = new User("user" + to_string(i));
         }
         thread auctionThread(backgroundAuctionMonitor, allListings);
         cout << "Auction system is running. Press Enter to quit: " << endl;
         cin.get();
-
 
         keepRunning = false;
         auctionThread.join();
