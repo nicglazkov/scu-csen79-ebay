@@ -87,6 +87,17 @@ namespace CSEN79
         return nullptr;
     }
 
+    Listing* Listings::getSoldListing(string name)
+    {
+        lock_guard<mutex> lock(listMutex);
+        for (int i = 0; i < sold.size(); i++)
+        {
+            if (sold[i]->getName() == name)
+                return sold[i];
+        }
+        return nullptr;
+    }
+
     /**
     Sorts the listings alphabetically by selection sort.
     */

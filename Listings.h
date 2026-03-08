@@ -31,6 +31,7 @@ namespace CSEN79
         int getNumSoldListings();
         void setLog(vector<string> *newLog);
         Listing *getListing(string name);
+        Listing *getSoldListing(string name);
 
         // Sorting Functions
         void sortAlpha();

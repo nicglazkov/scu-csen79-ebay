@@ -146,6 +146,14 @@ int main()
         res.set_content("ok", "text/plain");
     });
 
+    // When the browser checks if a specific item has been sold, return "true" or "false".
+    svr.Get("/sold", [&](const Request &req, Response &res)
+    {
+        string name = req.get_param_value("name");
+        Listing *listing = allListings->getSoldListing(name);
+        res.set_content(listing ? "true" : "false", "text/plain");
+    });
+
     // When the browser asks for a user's profile data (selling, purchased, bids, lost),
     // find the user and return their info as JSON.
     svr.Get("/user", [&](const Request &req, Response &res)
