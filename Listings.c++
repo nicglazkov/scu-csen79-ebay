@@ -53,7 +53,7 @@ namespace CSEN79
         {
             if (allListings[i] == soldListing)
             {
-                Listing::addLog(allListings[i]->getName() + " has been sold to " + allListings[i]->getSeller()->getName());
+                Listing::addLog(allListings[i]->getName() + " has been sold by " + allListings[i]->getSeller()->getName());
                 sold.push_back(soldListing);
                 allListings.erase(allListings.begin() + i);
                 break;
@@ -114,19 +114,19 @@ namespace CSEN79
             int size = allListings.size();
             for (int i = 0; i < size - 1; i++)
             {
-                int max = i;
+                int min = i;
                 for (int j = i + 1; j < size; j++)
                 {
-                    if (allListings[j]->getName() < allListings[max]->getName())
+                    if (allListings[j]->getName() < allListings[min]->getName())
                     {
-                        max = j;
+                        min = j;
                     }
                 }
-                if (max != i)
+                if (min != i)
                 {
                     Listing *temp = allListings[i];
-                    allListings[i] = allListings[max];
-                    allListings[max] = temp;
+                    allListings[i] = allListings[min];
+                    allListings[min] = temp;
                 }
             }
         }
@@ -230,19 +230,19 @@ namespace CSEN79
             int size = allListings.size();
             for (int i = 0; i < size - 1; i++)
             {
-                int min = i;
+                int max = i;
                 for (int j = i + 1; j < size; j++)
                 {
-                    if (allListings[j]->getName() > allListings[min]->getName())
+                    if (allListings[j]->getName() > allListings[max]->getName())
                     {
-                        min = j;
+                        max = j;
                     }
                 }
-                if (min != i)
+                if (max != i)
                 {
                     Listing *temp = allListings[i];
-                    allListings[i] = allListings[min];
-                    allListings[min] = temp;
+                    allListings[i] = allListings[max];
+                    allListings[max] = temp;
                 }
             }
         }
