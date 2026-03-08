@@ -1,44 +1,50 @@
-//Listings Class Implemented by Benjamin Castillo III
+// Listings Class Implemented by Benjamin Castillo III
+#ifndef LISTINGS_H
+#define LISTINGS_H
+
 #include <vector>
-#include <atomic>
-#include <thread>
-#include <chrono>
 #include <mutex>
 #include <fstream>
 #include <iomanip>
+#include <string>
 
 using namespace std;
-namespace CSEN79{
+namespace CSEN79
+{
+    // Forward declaration — full definition is in Listing.h
     class Listing;
-    class Listings{
-        private:
-            vector<Listing*> allListings;
-            vector<Listing*> sold;
-            static vector<string>* log;
-            mutex listMutex;
 
-        public:
-            Listings();
-            ~Listings();
-            void addListing(Listing* newListing);
-            void sellListing(Listing* soldListing);
-            int getNumListings();
-            int getNumSoldListings();
-            void setLog(vector<string>* newLog);
-            Listing* getListing(string name);
+    class Listings
+    {
+    private:
+        vector<Listing *> allListings;
+        vector<Listing *> sold;
+        static vector<string> *log;
+        mutex listMutex;
 
-            //Sorting Functions
-            void sortAlpha();
-            void sortBuyOutright();
-            void sortCurrPrice();
-            void sortTimeLeft();
-            void sortAlphaRev();
-            void sortBuyOutrightRev();
-            void sortCurrPriceRev();
-            void sortTimeLeftRev();
+    public:
+        Listings();
+        ~Listings();
+        void addListing(Listing *newListing);
+        void sellListing(Listing *soldListing);
+        int getNumListings();
+        int getNumSoldListings();
+        void setLog(vector<string> *newLog);
+        Listing *getListing(string name);
 
-            //Multithreaded function, constantly running
-            void checkCloseAuction();
-            void saveToFile();
+        // Sorting Functions
+        void sortAlpha();
+        void sortBuyOutright();
+        void sortCurrPrice();
+        void sortTimeLeft();
+        void sortAlphaRev();
+        void sortBuyOutrightRev();
+        void sortCurrPriceRev();
+        void sortTimeLeftRev();
+
+        void checkCloseAuction();
+        void saveToFile();
     };
 }
+
+#endif

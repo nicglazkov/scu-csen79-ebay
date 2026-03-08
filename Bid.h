@@ -1,24 +1,28 @@
 // Bid.h
-#pragma once
+#ifndef BID_H
+#define BID_H
 
-#include <string>
-#include "User.h"
-#include "Listing.h"
+namespace CSEN79
+{
+    // Forward declarations — full definitions are in their respective .h files
+    class Listing;
+    class User;
 
-namespace CSEN79 {
-    class Bid {
+    class Bid
+    {
     public:
         Bid();
-        Bid(double amount, Listing* listing, User* bidder);
+        Bid(double amount, Listing *listing, User *bidder);
 
         double getAmount();
-        Listing* getListing();
-        User* getBidder();
+        Listing *getListing();
+        User *getBidder();
 
     private:
         double amount;
-        Listing* listing;
-        User* bidder;
+        Listing *listing;
+        User *bidder;
     };
-
 }
+
+#endif

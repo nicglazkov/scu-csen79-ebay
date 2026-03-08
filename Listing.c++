@@ -1,6 +1,8 @@
 // Listing Class Implemented by Benjamin Castillo III
 #include "Listing.h"
 #include "Bid.h"
+#include "User.h"
+#include "Listings.h"
 
 using namespace std;
 namespace CSEN79

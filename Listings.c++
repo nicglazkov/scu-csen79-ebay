@@ -1,5 +1,8 @@
 // Listings Class Implemented by Benjamin Castillo III
 #include "Listing.h"
+#include "Listings.h"
+#include "Bid.h"
+#include "User.h"
 
 using namespace std;
 

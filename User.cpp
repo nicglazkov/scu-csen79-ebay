@@ -1,5 +1,7 @@
 #include "User.h"
+#include "Listing.h"
 #include <iostream>
+using namespace std;
 
 namespace CSEN79 {
 

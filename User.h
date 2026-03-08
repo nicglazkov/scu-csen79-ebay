@@ -1,12 +1,15 @@
 // User.h
-#pragma once
+#ifndef USER_H
+#define USER_H
 
 #include <string>
 #include <vector>
-#include "Listing.h"
 
 namespace CSEN79
 {
+    // Forward declaration — full definition is in Listing.h
+    class Listing;
+
     class User
     {
     public:
@@ -14,7 +17,7 @@ namespace CSEN79
         User(std::string name);
 
         std::string getName();
-        void makeListing(string name, string description, double startingPrice, double buyOutrightPrice, int sellTime);
+        void makeListing(std::string name, std::string description, double startingPrice, double buyOutrightPrice, int sellTime);
         void placeBid(Listing *listing, double amount);
         void buyOutright(Listing *listing);
         // Ben Added Getters
@@ -33,3 +36,5 @@ namespace CSEN79
         std::vector<Listing *> lost;
     };
 }
+
+#endif

@@ -1,18 +1,19 @@
 // Listing Class Implemented by Benjamin Castillo III
+#ifndef LISTING_H
+#define LISTING_H
+
 #include <string>
 #include <vector>
 #include <ctime>
-#include <atomic>
-#include <thread>
-#include <chrono>
 #include <mutex>
-#include "Bid.h"
-#include "User.h"
-#include "Listings.h"
 
 using namespace std;
 namespace CSEN79
 {
+    // Forward declarations — full definitions are in their respective .h files
+    class Bid;
+    class User;
+    class Listings;
 
     class Listing
     {
@@ -49,9 +50,9 @@ namespace CSEN79
         Bid *getHighestBid();
         void losers(User *winner);
         const vector<Bid *> &getBids();
-        // Multithreaded function, constantly running
         void checkCloseAuction();
         void sell();
     };
-
 };
+
+#endif
