@@ -97,7 +97,6 @@ namespace CSEN79
 
     const vector<Bid *> &Listing::getBids()
     {
-        lock_guard<mutex> lock(entryMutex);
         return bids;
     };
 
