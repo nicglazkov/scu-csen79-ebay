@@ -7,6 +7,11 @@
 using namespace std;
 namespace CSEN79
 {
+    bool BidComparator::operator()(const Bid *a, const Bid *b) const
+    {
+        return a->getAmount() < b->getAmount(); // max-heap: higher amount = higher priority
+    }
+
     vector<string> *Listing::log = nullptr;
     Listings *Listing::listings = nullptr;
     mutex Listing::logMutex;
@@ -105,8 +110,8 @@ namespace CSEN79
 
     Bid *Listing::getHighestBid()
     {
-        if (bids.empty()) return nullptr;
-        return bids.back();
+        if (bidHeap.empty()) return nullptr;
+        return bidHeap.top(); // O(1)
     }
 
     const vector<Bid *> &Listing::getBids()
@@ -163,7 +168,8 @@ namespace CSEN79
         if (bidAmount <= currentPrice || !userBidding || !log || userBidding == seller)
             return;
         Bid *newBid = new Bid(bidAmount, this, userBidding);
-        bids.push_back(newBid);
+        bidHeap.push(newBid);  // O(log n) insert into max-heap
+        bids.push_back(newBid); // keep parallel list for iteration
         currentPrice = bidAmount;
 
         addLog("Bid on " + name + " placed by " + userBidding->getName() + " for: $" + to_string(bidAmount));
@@ -236,8 +242,8 @@ namespace CSEN79
             if (this->checkTime() >= sellTime)
             {
                 shouldClose = true;
-                if (!bids.empty())
-                    winner = bids.back();
+                if (!bidHeap.empty())
+                    winner = bidHeap.top();
             }
         }
 

@@ -14,7 +14,7 @@ namespace CSEN79
         Bid();
         Bid(double amount, Listing *listing, User *bidder);
 
-        double getAmount();
+        double getAmount() const;
         Listing *getListing();
         User *getBidder();
 

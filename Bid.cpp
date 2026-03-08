@@ -14,7 +14,7 @@ namespace CSEN79 {
         this->bidder = bidder;
     }
 
-    double Bid::getAmount() {
+    double Bid::getAmount() const {
         return amount;
     }
 

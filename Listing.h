@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <queue>
 #include <ctime>
 #include <mutex>
 
@@ -15,6 +16,12 @@ namespace CSEN79
     class User;
     class Listings;
 
+    // Max-heap comparator: higher bid amount = higher priority
+    struct BidComparator
+    {
+        bool operator()(const Bid *a, const Bid *b) const;
+    };
+
     class Listing
     {
     private:
@@ -23,7 +30,8 @@ namespace CSEN79
         double startingPrice;
         double buyOutrightPrice;
         double currentPrice;
-        vector<Bid *> bids;
+        priority_queue<Bid *, vector<Bid *>, BidComparator> bidHeap;
+        vector<Bid *> bids; // parallel list for iteration (losers, getBids, destructor)
         int sellTime;
         time_t startTime;
         User *seller;
