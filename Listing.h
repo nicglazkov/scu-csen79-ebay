@@ -29,6 +29,7 @@ namespace CSEN79
         User *seller;
         static vector<string> *log;
         static Listings *listings;
+        static mutex logMutex;
         mutex entryMutex;
 
     public:
@@ -46,6 +47,7 @@ namespace CSEN79
         void makeBid(double bidPrice, User *userBidding);
         static void setLog(vector<string> *newLog);
         static void setListings(Listings *newListings);
+        static void addLog(const string &msg);
         int getSellTime();
         Bid *getHighestBid();
         void losers(User *winner);

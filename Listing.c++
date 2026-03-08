@@ -9,6 +9,14 @@ namespace CSEN79
 {
     vector<string> *Listing::log = nullptr;
     Listings *Listing::listings = nullptr;
+    mutex Listing::logMutex;
+
+    void Listing::addLog(const string &msg)
+    {
+        if (!log) return;
+        lock_guard<mutex> lock(logMutex);
+        log->push_back(msg);
+    }
 
     Listing::Listing()
     {
@@ -31,7 +39,7 @@ namespace CSEN79
         currentPrice = startingPrice;
         this->sellTime = sellTime;
         startTime = time(nullptr);
-        log->push_back("New Listing Created by " + seller->getName() + " for item: " + name);
+        addLog("New Listing Created by " + seller->getName() + " for item: " + name);
         this->seller = seller;
     }
 
@@ -105,6 +113,7 @@ namespace CSEN79
     */
     void Listing::sell()
     {
+        lock_guard<mutex> lock(seller->getMutex());
         seller->getSold()->push_back(this);
         for (int i = 0; i < seller->getSelling()->size(); i++)
         {
@@ -124,6 +133,7 @@ namespace CSEN79
         {
             if (bids[i]->getBidder() != winner)
             {
+                lock_guard<mutex> lock(bids[i]->getBidder()->getMutex());
                 bids[i]->getBidder()->getLost()->push_back(this);
                 for (int j = 0; j < bids[i]->getBidder()->getInterested()->size(); j++)
                 {
@@ -150,8 +160,9 @@ namespace CSEN79
         bids.push_back(newBid);
         currentPrice = bidAmount;
 
-        log->push_back("Bid on " + name + " placed by " + userBidding->getName() + " for: $" + to_string(bidAmount));
+        addLog("Bid on " + name + " placed by " + userBidding->getName() + " for: $" + to_string(bidAmount));
 
+        lock_guard<mutex> userLock(userBidding->getMutex());
         bool found = false;
         for (int i = 0; i < userBidding->getInterested()->size(); i++)
         {
@@ -179,22 +190,25 @@ namespace CSEN79
             currentPrice = buyOutrightPrice;
         }
 
-        log->push_back(name + " purchased outright by " + buyer->getName() +
+        addLog(name + " purchased outright by " + buyer->getName() +
                        " for: $" + to_string(buyOutrightPrice));
         listings->sellListing(this);
-        bool found = false;
-        for (int i = 0; i < buyer->getInterested()->size(); i++)
         {
-            if ((*(buyer->getInterested()))[i] == this)
+            lock_guard<mutex> userLock(buyer->getMutex());
+            bool found = false;
+            for (int i = 0; i < buyer->getInterested()->size(); i++)
             {
-                found = true;
-                buyer->getPurchased()->push_back(this);
-                buyer->getInterested()->erase(buyer->getInterested()->begin() + i);
+                if ((*(buyer->getInterested()))[i] == this)
+                {
+                    found = true;
+                    buyer->getPurchased()->push_back(this);
+                    buyer->getInterested()->erase(buyer->getInterested()->begin() + i);
+                }
             }
-        }
-        if (found == false)
-        {
-            buyer->getPurchased()->push_back(this);
+            if (found == false)
+            {
+                buyer->getPurchased()->push_back(this);
+            }
         }
         this->losers(buyer);
         this->sell();
@@ -229,19 +243,22 @@ namespace CSEN79
         if (winner == nullptr)
             return;
 
-        log->push_back(winner->getBidder()->getName() +
+        addLog(winner->getBidder()->getName() +
                        " has won the auction for " + name + " at the price of: $" +
                        to_string(currentPrice));
 
-        for (int i = 0; i < winner->getBidder()->getInterested()->size(); i++)
         {
-            if ((*(winner->getBidder()->getInterested()))[i] == this)
+            lock_guard<mutex> userLock(winner->getBidder()->getMutex());
+            for (int i = 0; i < winner->getBidder()->getInterested()->size(); i++)
             {
-                winner->getBidder()->getInterested()->erase(winner->getBidder()->getInterested()->begin() + i);
-                break;
+                if ((*(winner->getBidder()->getInterested()))[i] == this)
+                {
+                    winner->getBidder()->getInterested()->erase(winner->getBidder()->getInterested()->begin() + i);
+                    break;
+                }
             }
+            winner->getBidder()->getPurchased()->push_back(this);
         }
-        winner->getBidder()->getPurchased()->push_back(this);
         this->losers(winner->getBidder());
         this->sell();
     }

@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <mutex>
 
 namespace CSEN79
 {
@@ -26,8 +27,10 @@ namespace CSEN79
         std::vector<Listing *> *getPurchased();
         std::vector<Listing *> *getInterested();
         std::vector<Listing *> *getLost();
+        std::mutex &getMutex();
 
     private:
+        std::mutex userMutex;
         std::string name;
         std::vector<Listing *> selling;
         std::vector<Listing *> sold;

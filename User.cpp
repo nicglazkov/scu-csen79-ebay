@@ -53,4 +53,8 @@ namespace CSEN79 {
         return &sold;
     }
 
+    std::mutex& User::getMutex(){
+        return userMutex;
+    }
+
 }

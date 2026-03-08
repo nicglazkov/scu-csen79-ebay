@@ -53,7 +53,7 @@ namespace CSEN79
         {
             if (allListings[i] == soldListing)
             {
-                log->push_back(allListings[i]->getName() + " has been sold to " + allListings[i]->getSeller()->getName());
+                Listing::addLog(allListings[i]->getName() + " has been sold to " + allListings[i]->getSeller()->getName());
                 sold.push_back(soldListing);
                 allListings.erase(allListings.begin() + i);
                 break;
