@@ -3,6 +3,8 @@
 #define LISTINGS_H
 
 #include <vector>
+#include <map>
+#include <ctime>
 #include <mutex>
 #include <fstream>
 #include <iomanip>
@@ -17,10 +19,11 @@ namespace CSEN79
     class Listings
     {
     private:
-        vector<Listing *> allListings;
+        map<time_t, vector<Listing *>> allListings;
         vector<Listing *> sold;
         static vector<string> *log;
         mutex listMutex;
+        void writeJson(const vector<Listing *> &listings);
 
     public:
         Listings();

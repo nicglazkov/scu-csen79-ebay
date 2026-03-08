@@ -19,29 +19,25 @@ namespace CSEN79
     {
         lock_guard<mutex> lock(listMutex);
 
-        for (int i = 0; i < allListings.size(); i++)
-        {
-            delete allListings[i];
-        }
+        for (auto &[key, vec] : allListings)
+            for (Listing *L : vec) delete L;
         allListings.clear();
-        for (int i = 0; i < sold.size(); i++)
-        {
-            delete sold[i];
-        }
+
+        for (Listing *L : sold) delete L;
         sold.clear();
     }
 
     /**
-    Adds a new listing to the listings vector.
+    Adds a new listing to the map, keyed by its expiry time.
     */
     void Listings::addListing(Listing *newListing)
     {
         lock_guard<mutex> lock(listMutex);
-        allListings.push_back(newListing);
+        allListings[newListing->getExpiryTime()].push_back(newListing);
     }
 
     /**
-    Moves a listing from the allListings vector to the sold vector.
+    Moves a listing from the map to the sold vector.
     */
     void Listings::sellListing(Listing *soldListing)
     {
@@ -49,21 +45,27 @@ namespace CSEN79
             return;
 
         lock_guard<mutex> lock(listMutex);
-        for (int i = 0; i < allListings.size(); i++)
+        for (auto &[key, vec] : allListings)
         {
-            if (allListings[i] == soldListing)
+            for (auto it = vec.begin(); it != vec.end(); ++it)
             {
-                Listing::addLog(allListings[i]->getName() + " has been sold by " + allListings[i]->getSeller()->getName());
-                sold.push_back(soldListing);
-                allListings.erase(allListings.begin() + i);
-                break;
+                if (*it == soldListing)
+                {
+                    Listing::addLog((*it)->getName() + " has been sold by " + (*it)->getSeller()->getName());
+                    sold.push_back(soldListing);
+                    vec.erase(it);
+                    if (vec.empty()) allListings.erase(key);
+                    return;
+                }
             }
         }
     }
 
     int Listings::getNumListings()
     {
-        return allListings.size();
+        int count = 0;
+        for (auto &[key, vec] : allListings) count += vec.size();
+        return count;
     }
 
     int Listings::getNumSoldListings()
@@ -76,14 +78,12 @@ namespace CSEN79
         log = newLog;
     }
 
-    Listing* Listings::getListing(string name)
+    Listing *Listings::getListing(string name)
     {
         lock_guard<mutex> lock(listMutex);
-        for (int i = 0; i < allListings.size(); i++)
-        {
-            if (allListings[i]->getName() == name)
-                return allListings[i];
-        }
+        for (auto &[key, vec] : allListings)
+            for (Listing *L : vec)
+                if (L->getName() == name) return L;
         return nullptr;
     }
 
@@ -93,316 +93,199 @@ namespace CSEN79
         return sold;
     }
 
-    Listing* Listings::getSoldListing(string name)
+    Listing *Listings::getSoldListing(string name)
     {
         lock_guard<mutex> lock(listMutex);
-        for (int i = 0; i < sold.size(); i++)
-        {
-            if (sold[i]->getName() == name)
-                return sold[i];
-        }
+        for (Listing *L : sold)
+            if (L->getName() == name) return L;
         return nullptr;
     }
 
+    // --- Private helper: writes listings JSON to disk in the given order ---
+    void Listings::writeJson(const vector<Listing *> &listings)
+    {
+        ofstream outFile("data/listings.json", ios::trunc);
+        if (!outFile)
+        {
+            if (log) log->push_back("Error: Could Not Open Backup File");
+            return;
+        }
+
+        outFile << "[\n";
+        for (int i = 0; i < (int)listings.size(); i++)
+        {
+            Listing *t = listings[i];
+            outFile << "  {\n";
+            outFile << "    \"name\": \""           << t->getName()                                          << "\",\n";
+            outFile << "    \"description\": \""    << t->getDescription()                                   << "\",\n";
+            outFile << "    \"currentPrice\": "     << fixed << setprecision(2) << t->getPrice()             << ",\n";
+            outFile << "    \"buyOutrightPrice\": " << fixed << setprecision(2) << t->getBuyOutrightPrice()  << ",\n";
+            outFile << "    \"seller\": \""         << t->getSeller()->getName()                             << "\",\n";
+            outFile << "    \"timeLeft\": "         << fixed << setprecision(2) << (t->getSellTime() - t->checkTime()) << ",\n";
+            outFile << "    \"bids\": [\n";
+
+            const vector<Bid *> &bids = t->getBids();
+            for (int j = 0; j < (int)bids.size(); j++)
+            {
+                outFile << "      { \"amount\": " << fixed << setprecision(2) << bids[j]->getAmount();
+                outFile << ", \"bidder\": \"" << bids[j]->getBidder()->getName() << "\" }";
+                if (j < (int)bids.size() - 1) outFile << ",";
+                outFile << "\n";
+            }
+            outFile << "    ]\n";
+            outFile << "  }";
+            if (i < (int)listings.size() - 1) outFile << ",";
+            outFile << "\n";
+        }
+        outFile << "]\n";
+        outFile.close();
+    }
+
     /**
-    Sorts the listings alphabetically by selection sort.
+    Saves the active listings to disk in expiry-time order (map's natural order).
     */
+    void Listings::saveToFile()
+    {
+        vector<Listing *> flat;
+        {
+            lock_guard<mutex> lock(listMutex);
+            for (auto &[key, vec] : allListings)
+                for (Listing *L : vec) flat.push_back(L);
+        }
+        writeJson(flat);
+    }
+
+    // --- Sort helpers: collect flat vector, sort, write JSON ---
+
     void Listings::sortAlpha()
     {
+        vector<Listing *> flat;
         {
             lock_guard<mutex> lock(listMutex);
-            int size = allListings.size();
-            for (int i = 0; i < size - 1; i++)
-            {
-                int min = i;
-                for (int j = i + 1; j < size; j++)
-                {
-                    if (allListings[j]->getName() < allListings[min]->getName())
-                    {
-                        min = j;
-                    }
-                }
-                if (min != i)
-                {
-                    Listing *temp = allListings[i];
-                    allListings[i] = allListings[min];
-                    allListings[min] = temp;
-                }
-            }
+            for (auto &[key, vec] : allListings)
+                for (Listing *L : vec) flat.push_back(L);
         }
-        this->saveToFile();
+        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b) {
+            return a->getName() < b->getName();
+        });
+        writeJson(flat);
     }
 
-    /*
-    Sorts the listings by buy-outright price in descending order, using selection sort.
-    */
-    void Listings::sortBuyOutright()
+    void Listings::sortAlphaRev()
     {
+        vector<Listing *> flat;
         {
             lock_guard<mutex> lock(listMutex);
-            int size = allListings.size();
-            for (int i = 0; i < size - 1; i++)
-            {
-                int max = i;
-                for (int j = i + 1; j < size; j++)
-                {
-                    if (allListings[j]->getBuyOutrightPrice() > allListings[max]->getBuyOutrightPrice())
-                    {
-                        max = j;
-                    }
-                }
-                if (max != i)
-                {
-                    Listing *temp = allListings[i];
-                    allListings[i] = allListings[max];
-                    allListings[max] = temp;
-                }
-            }
+            for (auto &[key, vec] : allListings)
+                for (Listing *L : vec) flat.push_back(L);
         }
-        this->saveToFile();
+        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b) {
+            return a->getName() > b->getName();
+        });
+        writeJson(flat);
     }
 
-    /*
-    Sorts the listings by current price in descending order, using selection sort.
-    */
     void Listings::sortCurrPrice()
     {
+        vector<Listing *> flat;
         {
             lock_guard<mutex> lock(listMutex);
-            int size = allListings.size();
-            for (int i = 0; i < size - 1; i++)
-            {
-                int max = i;
-                for (int j = i + 1; j < size; j++)
-                {
-                    if (allListings[j]->getPrice() > allListings[max]->getPrice())
-                    {
-                        max = j;
-                    }
-                }
-                if (max != i)
-                {
-                    Listing *temp = allListings[i];
-                    allListings[i] = allListings[max];
-                    allListings[max] = temp;
-                }
-            }
+            for (auto &[key, vec] : allListings)
+                for (Listing *L : vec) flat.push_back(L);
         }
-        this->saveToFile();
+        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b) {
+            return a->getPrice() > b->getPrice();
+        });
+        writeJson(flat);
     }
 
-    /*
-    Sorts the listings by time left in descending order, using selection sort.
+    void Listings::sortCurrPriceRev()
+    {
+        vector<Listing *> flat;
+        {
+            lock_guard<mutex> lock(listMutex);
+            for (auto &[key, vec] : allListings)
+                for (Listing *L : vec) flat.push_back(L);
+        }
+        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b) {
+            return a->getPrice() < b->getPrice();
+        });
+        writeJson(flat);
+    }
+
+    void Listings::sortBuyOutright()
+    {
+        vector<Listing *> flat;
+        {
+            lock_guard<mutex> lock(listMutex);
+            for (auto &[key, vec] : allListings)
+                for (Listing *L : vec) flat.push_back(L);
+        }
+        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b) {
+            return a->getBuyOutrightPrice() > b->getBuyOutrightPrice();
+        });
+        writeJson(flat);
+    }
+
+    void Listings::sortBuyOutrightRev()
+    {
+        vector<Listing *> flat;
+        {
+            lock_guard<mutex> lock(listMutex);
+            for (auto &[key, vec] : allListings)
+                for (Listing *L : vec) flat.push_back(L);
+        }
+        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b) {
+            return a->getBuyOutrightPrice() < b->getBuyOutrightPrice();
+        });
+        writeJson(flat);
+    }
+
+    /**
+    sortTimeLeft / sortTimeLeftRev use the map's natural expiry-time ordering
+    directly — no re-sort needed, just flatten in map order (or reverse).
     */
     void Listings::sortTimeLeft()
     {
+        vector<Listing *> flat;
         {
             lock_guard<mutex> lock(listMutex);
-            int size = allListings.size();
-            for (int i = 0; i < size - 1; i++)
-            {
-                int max = i;
-                for (int j = i + 1; j < size; j++)
-                {
-                    if (allListings[j]->checkTime() > allListings[max]->checkTime())
-                    {
-                        max = j;
-                    }
-                }
-                if (max != i)
-                {
-                    Listing *temp = allListings[i];
-                    allListings[i] = allListings[max];
-                    allListings[max] = temp;
-                }
-            }
+            for (auto &[key, vec] : allListings)
+                for (Listing *L : vec) flat.push_back(L);
         }
-        this->saveToFile();
+        // map iterates earliest-expiry first → least time left first
+        // "sortTimeLeft" means most time left first, so reverse
+        reverse(flat.begin(), flat.end());
+        writeJson(flat);
     }
 
-    /*
-    Sorts the listings alphabetically in reverse order, using selection sort.
-    */
-    void Listings::sortAlphaRev()
-    {
-        {
-            lock_guard<mutex> lock(listMutex);
-            int size = allListings.size();
-            for (int i = 0; i < size - 1; i++)
-            {
-                int max = i;
-                for (int j = i + 1; j < size; j++)
-                {
-                    if (allListings[j]->getName() > allListings[max]->getName())
-                    {
-                        max = j;
-                    }
-                }
-                if (max != i)
-                {
-                    Listing *temp = allListings[i];
-                    allListings[i] = allListings[max];
-                    allListings[max] = temp;
-                }
-            }
-        }
-        this->saveToFile();
-    }
-
-    /**
-    Sorts the listings by buy-outright price in ascending order, using selection sort.
-    */
-    void Listings::sortBuyOutrightRev()
-    {
-        {
-            lock_guard<mutex> lock(listMutex);
-            int size = allListings.size();
-            for (int i = 0; i < size - 1; i++)
-            {
-                int min = i;
-                for (int j = i + 1; j < size; j++)
-                {
-                    if (allListings[j]->getBuyOutrightPrice() < allListings[min]->getBuyOutrightPrice())
-                    {
-                        min = j;
-                    }
-                }
-                if (min != i)
-                {
-                    Listing *temp = allListings[i];
-                    allListings[i] = allListings[min];
-                    allListings[min] = temp;
-                }
-            }
-        }
-        this->saveToFile();
-    }
-
-    /**
-    Sorts the listings by current price in ascending order, using selection sort.
-    */
-    void Listings::sortCurrPriceRev()
-    {
-        {
-            lock_guard<mutex> lock(listMutex);
-            int size = allListings.size();
-            for (int i = 0; i < size - 1; i++)
-            {
-                int min = i;
-                for (int j = i + 1; j < size; j++)
-                {
-                    if (allListings[j]->getPrice() < allListings[min]->getPrice())
-                    {
-                        min = j;
-                    }
-                }
-                if (min != i)
-                {
-                    Listing *temp = allListings[i];
-                    allListings[i] = allListings[min];
-                    allListings[min] = temp;
-                }
-            }
-        }
-        this->saveToFile();
-    }
-
-    /**
-    Sorts the listings by time left in ascending order, using selection sort.
-    */
     void Listings::sortTimeLeftRev()
     {
+        vector<Listing *> flat;
         {
             lock_guard<mutex> lock(listMutex);
-            int size = allListings.size();
-            for (int i = 0; i < size - 1; i++)
-            {
-                int min = i;
-                for (int j = i + 1; j < size; j++)
-                {
-                    if (allListings[j]->checkTime() < allListings[min]->checkTime())
-                    {
-                        min = j;
-                    }
-                }
-                if (min != i)
-                {
-                    Listing *temp = allListings[i];
-                    allListings[i] = allListings[min];
-                    allListings[min] = temp;
-                }
-            }
+            for (auto &[key, vec] : allListings)
+                for (Listing *L : vec) flat.push_back(L);
         }
-        this->saveToFile();
+        // map iterates earliest-expiry first → least time left first (ascending)
+        writeJson(flat);
     }
 
     /**
-    Checks if any auctions should be closed and updates the status of the listings accordingly.
+    Uses the map's range query to find all expired listings in O(log n + k)
+    instead of scanning the full vector.
     */
     void Listings::checkCloseAuction()
     {
         vector<Listing *> snapshot;
         {
             lock_guard<mutex> lock(listMutex);
-            snapshot = allListings;
+            // All entries with key <= now are expired
+            auto end = allListings.upper_bound(time(nullptr));
+            for (auto it = allListings.begin(); it != end; ++it)
+                for (Listing *L : it->second) snapshot.push_back(L);
         }
-        for (int i = 0; i < snapshot.size(); i++)
-        {
-            snapshot[i]->checkCloseAuction();
-        }
-    }
-
-    /**
-    Saves the listings to a file. The file is overwritten each time this function is called,
-        and contains the current state of all active listings.
-    */
-    void Listings::saveToFile()
-    {
-        lock_guard<mutex> lock(listMutex);
-
-        ofstream outFile("data/listings.json", ios::trunc);
-        if (!outFile)
-        {
-            if (log)
-            {
-                log->push_back("Error: Could Not Open Backup File");
-            }
-            return;
-        }
-
-        outFile << "[\n";
-
-        for (int i = 0; i < allListings.size(); i++)
-        {
-            Listing *t = allListings[i];
-
-            outFile << "  {\n";
-            outFile << "    \"name\": \"" << t->getName() << "\",\n";
-            outFile << "    \"description\": \"" << t->getDescription() << "\",\n";
-            outFile << "    \"currentPrice\": " << fixed << setprecision(2) << t->getPrice() << ",\n";
-            outFile << "    \"buyOutrightPrice\": " << fixed << setprecision(2) << t->getBuyOutrightPrice() << ",\n";
-            outFile << "    \"seller\": \"" << t->getSeller()->getName() << "\",\n";
-            outFile << "    \"timeLeft\": " << fixed << setprecision(2) << (t->getSellTime() - t->checkTime()) << ",\n";
-            outFile << "    \"bids\": [\n";
-
-            const vector<Bid *> &bids = t->getBids();
-            for (int j = 0; j < bids.size(); j++)
-            {
-                outFile << "      { \"amount\": " << fixed << setprecision(2) << bids[j]->getAmount();
-                outFile << ", \"bidder\": \"" << bids[j]->getBidder()->getName() << "\" }";
-                if (j < (int)bids.size() - 1)
-                    outFile << ",";
-                outFile << "\n";
-            }
-
-            outFile << "    ]\n";
-            outFile << "  }";
-            if (i < (int)allListings.size() - 1)
-                outFile << ",";
-            outFile << "\n";
-        }
-
-        outFile << "]\n";
-        outFile.close();
+        for (Listing *L : snapshot)
+            L->checkCloseAuction();
     }
 }

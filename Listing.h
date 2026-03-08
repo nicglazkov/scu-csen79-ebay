@@ -49,6 +49,7 @@ namespace CSEN79
         static void setListings(Listings *newListings);
         static void addLog(const string &msg);
         int getSellTime();
+        time_t getExpiryTime();
         Bid *getHighestBid();
         void losers(User *winner);
         const vector<Bid *> &getBids();

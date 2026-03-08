@@ -68,6 +68,11 @@ namespace CSEN79
         return sellTime;
     }
 
+    time_t Listing::getExpiryTime()
+    {
+        return startTime + sellTime;
+    }
+
     string Listing::getName()
     {
         return name;
