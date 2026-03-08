@@ -67,6 +67,7 @@ function setupBidButtons(item) {
         method: "POST",
         body: new URLSearchParams({ name: item.name, user: "user1", amount: minNextBid }),
       });
+      location.reload();
     });
 
   // "Place Bid" button
@@ -85,9 +86,10 @@ function setupBidButtons(item) {
         method: "POST",
         body: new URLSearchParams({ name: item.name, user: "user1", amount: bidAmount }),
       });
+      location.reload();
     });
 
-  // "Buy It Now" button
+  // "Buy It Now" button — redirect to dashboard since the listing is now sold
   document
     .getElementById("buyout-btn")
     .addEventListener("click", async function () {
@@ -95,5 +97,6 @@ function setupBidButtons(item) {
         method: "POST",
         body: new URLSearchParams({ name: item.name, user: "user1" }),
       });
+      window.location.href = "../index.html";
     });
 }

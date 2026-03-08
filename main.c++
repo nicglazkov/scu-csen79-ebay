@@ -146,6 +146,36 @@ int main()
         res.set_content("ok", "text/plain");
     });
 
+    // When the browser asks for a user's profile data (selling, purchased, bids, lost),
+    // find the user and return their info as JSON.
+    svr.Get("/user", [&](const Request &req, Response &res)
+    {
+        string userName = req.get_param_value("name");
+        User *user = findUser(users, NUM_USERS, userName);
+        if (!user) { res.status = 404; return; }
+
+        // Helper that turns a vector of Listing pointers into a JSON array of names
+        auto listingsToJson = [](vector<Listing *> *lst) {
+            string out = "[";
+            for (int i = 0; i < (int)lst->size(); i++) {
+                out += "\"" + (*lst)[i]->getName() + "\"";
+                if (i < (int)lst->size() - 1) out += ", ";
+            }
+            out += "]";
+            return out;
+        };
+
+        string json = "{\n";
+        json += "  \"name\": \""      + user->getName() + "\",\n";
+        json += "  \"selling\": "     + listingsToJson(user->getSelling())   + ",\n";
+        json += "  \"purchased\": "   + listingsToJson(user->getPurchased()) + ",\n";
+        json += "  \"interested\": "  + listingsToJson(user->getInterested()) + ",\n";
+        json += "  \"lost\": "        + listingsToJson(user->getLost())      + "\n";
+        json += "}";
+
+        res.set_content(json, "application/json");
+    });
+
     // Serve the frontend files (HTML, CSS, JS) from the project folder.
     // Opening http://localhost:8080 in a browser will load index.html.
     svr.set_mount_point("/", ".");

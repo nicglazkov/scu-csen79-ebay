@@ -1,21 +1,21 @@
 [
   {
+    "name": "Desk Lamp",
+    "description": "Adjustable LED lamp, barely used.",
+    "currentPrice": 8.00,
+    "buyOutrightPrice": 35.00,
+    "seller": "user4",
+    "timeLeft": 299.89,
+    "bids": [
+    ]
+  },
+  {
     "name": "Vintage Camera",
     "description": "A classic 35mm film camera in great condition.",
     "currentPrice": 25.00,
     "buyOutrightPrice": 120.00,
     "seller": "user0",
-    "timeLeft": 299.84,
-    "bids": [
-    ]
-  },
-  {
-    "name": "Gaming Chair",
-    "description": "Ergonomic chair with lumbar support.",
-    "currentPrice": 80.00,
-    "buyOutrightPrice": 350.00,
-    "seller": "user1",
-    "timeLeft": 299.84,
+    "timeLeft": 299.89,
     "bids": [
     ]
   },
@@ -25,7 +25,7 @@
     "currentPrice": 40.00,
     "buyOutrightPrice": 180.00,
     "seller": "user2",
-    "timeLeft": 299.84,
+    "timeLeft": 299.89,
     "bids": [
     ]
   },
@@ -35,20 +35,18 @@
     "currentPrice": 50.00,
     "buyOutrightPrice": 200.00,
     "seller": "user3",
-    "timeLeft": 299.84,
+    "timeLeft": 299.89,
     "bids": [
     ]
   },
   {
-    "name": "Desk Lamp",
-    "description": "Adjustable LED lamp, barely used.",
-    "currentPrice": 8.02,
-    "buyOutrightPrice": 35.00,
-    "seller": "user4",
-    "timeLeft": 299.84,
+    "name": "Gaming Chair",
+    "description": "Ergonomic chair with lumbar support.",
+    "currentPrice": 80.00,
+    "buyOutrightPrice": 350.00,
+    "seller": "user1",
+    "timeLeft": 299.89,
     "bids": [
-      { "amount": 8.01, "bidder": "user1" },
-      { "amount": 8.02, "bidder": "user1" }
     ]
   }
 ]
