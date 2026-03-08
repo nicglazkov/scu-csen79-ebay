@@ -154,7 +154,7 @@ namespace CSEN79
     {
         lock_guard<mutex> lock(entryMutex);
 
-        if (bidAmount <= currentPrice || !userBidding || !log)
+        if (bidAmount <= currentPrice || !userBidding || !log || userBidding == seller)
             return;
         Bid *newBid = new Bid(bidAmount, this, userBidding);
         bids.push_back(newBid);
