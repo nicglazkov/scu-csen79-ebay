@@ -215,16 +215,17 @@ namespace CSEN79
                            " has won the auction for " + name + " at the price of: $" +
                            to_string(currentPrice));
 
-            this->getHighestBid()->getBidder()->getPurchased()->push_back(this);
+            bool winnerFound = false;
             for (int i = 0; i < this->getHighestBid()->getBidder()->getInterested()->size(); i++)
             {
                 if ((*(this->getHighestBid()->getBidder()->getInterested()))[i] == this)
                 {
-                    this->getHighestBid()->getBidder()->getPurchased()->push_back(this);
-
+                    winnerFound = true;
                     this->getHighestBid()->getBidder()->getInterested()->erase(this->getHighestBid()->getBidder()->getInterested()->begin() + i);
+                    break;
                 }
             }
+            this->getHighestBid()->getBidder()->getPurchased()->push_back(this);
             this->losers(this->getHighestBid()->getBidder());
             this->sell();
         }
