@@ -18,6 +18,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -33,9 +34,12 @@ int main() {
     CSEN79::Listing::setListings(allListings);
     allListings->setLog(globalLog);
 
-    CSEN79::User* users[10];
+    map<string, CSEN79::User*> users;
+    vector<string> userNames;
     for (int i = 0; i < 10; i++) {
-        users[i] = new CSEN79::User("user" + to_string(i));
+        string name = "user" + to_string(i);
+        users[name] = new CSEN79::User(name);
+        userNames.push_back(name);
     }
 
     vector<CSEN79::Listing*> listings;
@@ -53,7 +57,7 @@ int main() {
         double startPrice = 5.0 + (rand() % 950) / 10.0;   // 5.0–99.5
         double buyout = startPrice * (1.5 + (rand() % 50) / 50.0);  // 1.5x–2.5x
         int sellTime = 3600 + (rand() % 86400);
-        CSEN79::User* seller = users[i % 10];
+        CSEN79::User* seller = users[userNames[i % 10]];
         seller->makeListing(name, desc, startPrice, buyout, sellTime);
         CSEN79::Listing* L = seller->getSelling()->back();
         allListings->addListing(L);
@@ -62,21 +66,16 @@ int main() {
 
     // 2. Add a couple of bids to each item (2 different users, not the seller)
     for (CSEN79::Listing* L : listings) {
-        CSEN79::User* seller = L->getSeller();
+        string sellerName = L->getSeller()->getName();
         double curr = L->getPrice();
-        int sellerIdx = -1;
-        for (int k = 0; k < 10; k++) {
-            if (users[k] == seller) { sellerIdx = k; break; }
-        }
         // First bid: pick a non-seller user
-        int u1 = 0;
-        while (u1 == sellerIdx) u1 = rand() % 10;
+        string u1;
+        do { u1 = userNames[rand() % 10]; } while (u1 == sellerName);
         users[u1]->placeBid(L, curr + 1.0);
         curr = L->getPrice();
-        // Second bid: pick another non-seller user
-        int u2 = (sellerIdx + 1) % 10;
-        if (u2 == u1) u2 = (u2 + 1) % 10;
-        if (u2 == sellerIdx) u2 = (u2 + 1) % 10;
+        // Second bid: pick another non-seller, non-u1 user
+        string u2;
+        do { u2 = userNames[rand() % 10]; } while (u2 == sellerName || u2 == u1);
         users[u2]->placeBid(L, curr + 1.0);
     }
 
@@ -98,7 +97,7 @@ int main() {
     
     delete allListings;
     delete globalLog;
-    for (int i = 0; i < 10; i++) delete users[i];
+    for (auto &[name, u] : users) delete u;
 
     return 0;
 }

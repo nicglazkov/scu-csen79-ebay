@@ -8,6 +8,7 @@
 #include <atomic>
 #include <thread>
 #include <chrono>
+#include <map>
 
 using namespace std;
 using namespace httplib;
@@ -33,17 +34,6 @@ void backgroundAuctionMonitor(Listings *listings)
     }
 }
 
-// Searches the users array for a user with the given name.
-User *findUser(User *users[], int numUsers, const string &name)
-{
-    for (int i = 0; i < numUsers; i++)
-    {
-        if (users[i]->getName() == name)
-            return users[i];
-    }
-    return nullptr;
-}
-
 // Reads listings.json and returns it as a string to send to the browser.
 string readListingsFile()
 {
@@ -58,7 +48,7 @@ int main()
     // --- Setup ---
     const int NUM_USERS = 10;
     vector<string> *globalLog = new vector<string>;
-    User *users[NUM_USERS];
+    map<string, User*> users;
     Listings *allListings = new Listings();
 
     Listing::setLog(globalLog);
@@ -66,17 +56,20 @@ int main()
     allListings->setLog(globalLog);
 
     for (int i = 0; i < NUM_USERS; i++)
-        users[i] = new User("user" + to_string(i));
+    {
+        string name = "user" + to_string(i);
+        users[name] = new User(name);
+    }
 
     // --- Seed Listings ---
-    users[0]->makeListing("Vintage Camera",    "A classic 35mm film camera in great condition.",  25.00,  120.00, 300);
-    users[1]->makeListing("Gaming Chair",      "Ergonomic chair with lumbar support.",            80.00,  350.00, 300);
-    users[2]->makeListing("Electric Keyboard", "61-key beginner keyboard with built-in sounds.",  40.00,  180.00, 300);
-    users[3]->makeListing("Old Laptop",        "Used but functional. Good for basic tasks.",      50.00,  200.00, 300);
-    users[4]->makeListing("Desk Lamp",         "Adjustable LED lamp, barely used.",                8.00,   35.00, 300);
+    users["user0"]->makeListing("Vintage Camera",    "A classic 35mm film camera in great condition.",  25.00,  120.00, 300);
+    users["user1"]->makeListing("Gaming Chair",      "Ergonomic chair with lumbar support.",            80.00,  350.00, 300);
+    users["user2"]->makeListing("Electric Keyboard", "61-key beginner keyboard with built-in sounds.",  40.00,  180.00, 300);
+    users["user3"]->makeListing("Old Laptop",        "Used but functional. Good for basic tasks.",      50.00,  200.00, 300);
+    users["user4"]->makeListing("Desk Lamp",         "Adjustable LED lamp, barely used.",                8.00,   35.00, 300);
 
     for (int i = 0; i < 5; i++)
-        allListings->addListing(users[i]->getSelling()->back());
+        allListings->addListing(users["user" + to_string(i)]->getSelling()->back());
 
     allListings->saveToFile();
 
@@ -123,7 +116,7 @@ int main()
         catch (...) { res.status = 400; return; }
 
         Listing *listing = allListings->getListing(listingName);
-        User *user = findUser(users, NUM_USERS, userName);
+        User *user = users.count(userName) ? users[userName] : nullptr;
 
         if (!listing || !user) { res.status = 404; return; }
 
@@ -140,7 +133,7 @@ int main()
         string userName    = req.get_param_value("user");
 
         Listing *listing = allListings->getListing(listingName);
-        User *user = findUser(users, NUM_USERS, userName);
+        User *user = users.count(userName) ? users[userName] : nullptr;
 
         if (!listing || !user) { res.status = 404; return; }
 
@@ -182,7 +175,7 @@ int main()
     svr.Get("/user", [&](const Request &req, Response &res)
     {
         string userName = req.get_param_value("name");
-        User *user = findUser(users, NUM_USERS, userName);
+        User *user = users.count(userName) ? users[userName] : nullptr;
         if (!user) { res.status = 404; return; }
 
         // Helper that turns a vector of Listing pointers into a JSON array of names
@@ -217,7 +210,7 @@ int main()
     // Cleanup when the server stops
     keepRunning = false;
     auctionThread.join();
-    for (int i = 0; i < NUM_USERS; i++) delete users[i];
+    for (auto &[name, u] : users) delete u;
     delete allListings;
     delete globalLog;
     return 0;
