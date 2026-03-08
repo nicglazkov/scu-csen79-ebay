@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   fillItemDetails(item);
   setupBidButtons(item);
+  startCountdown(item.timeLeft);
 });
 
 // --- Helper Functions ---
@@ -54,6 +55,21 @@ function fillItemDetails(item) {
   document.getElementById("custom-bid-input").min = minNextBid.toFixed(2);
   document.getElementById("custom-bid-input").placeholder =
     "$" + minNextBid.toFixed(2) + " or more";
+}
+
+function startCountdown(seconds) {
+  var timeLeft = Math.floor(seconds);
+  var el = document.getElementById("time-left");
+
+  var interval = setInterval(function () {
+    timeLeft--;
+    if (timeLeft <= 0) {
+      clearInterval(interval);
+      el.textContent = "Auction ended";
+    } else {
+      el.textContent = "Time left: " + timeLeft + "s";
+    }
+  }, 1000);
 }
 
 function setupBidButtons(item) {
