@@ -128,7 +128,7 @@ namespace CSEN79
                 bids[i]->getBidder()->getLost()->push_back(this);
                 for (int j = 0; j < bids[i]->getBidder()->getInterested()->size(); j++)
                 {
-                    if ((*(bids[i]->getBidder()->getInterested()))[i] == this)
+                    if ((*(bids[i]->getBidder()->getInterested()))[j] == this)
                     {
                         bids[i]->getBidder()->getInterested()->erase(bids[i]->getBidder()->getInterested()->begin() + j);
                     }
