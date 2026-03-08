@@ -18,7 +18,7 @@ namespace CSEN79
         buyOutrightPrice = 0.0;
         currentPrice = startingPrice;
         sellTime = 0;
-        startTime = clock();
+        startTime = time(nullptr);
         seller = nullptr;
     }
 
@@ -30,7 +30,7 @@ namespace CSEN79
         this->buyOutrightPrice = buyOutrightPrice;
         currentPrice = startingPrice;
         this->sellTime = sellTime;
-        startTime = clock();
+        startTime = time(nullptr);
         log->push_back("New Listing Created by " + seller->getName() + " for item: " + name);
         this->seller = seller;
     }
@@ -82,7 +82,7 @@ namespace CSEN79
 
     double Listing::checkTime()
     {
-        return (double)(clock() - startTime) / CLOCKS_PER_SEC;
+        return difftime(time(nullptr), startTime);
     }
 
     User *Listing::getSeller()
