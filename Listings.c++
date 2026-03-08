@@ -20,10 +20,12 @@ namespace CSEN79
         lock_guard<mutex> lock(listMutex);
 
         for (auto &[key, vec] : allListings)
-            for (Listing *L : vec) delete L;
+            for (Listing *L : vec)
+                delete L;
         allListings.clear();
 
-        for (Listing *L : sold) delete L;
+        for (Listing *L : sold)
+            delete L;
         sold.clear();
     }
 
@@ -54,7 +56,8 @@ namespace CSEN79
                     Listing::addLog((*it)->getName() + " has been sold by " + (*it)->getSeller()->getName());
                     sold.push_back(soldListing);
                     vec.erase(it);
-                    if (vec.empty()) allListings.erase(key);
+                    if (vec.empty())
+                        allListings.erase(key);
                     return;
                 }
             }
@@ -64,7 +67,8 @@ namespace CSEN79
     int Listings::getNumListings()
     {
         int count = 0;
-        for (auto &[key, vec] : allListings) count += vec.size();
+        for (auto &[key, vec] : allListings)
+            count += vec.size();
         return count;
     }
 
@@ -83,7 +87,8 @@ namespace CSEN79
         lock_guard<mutex> lock(listMutex);
         for (auto &[key, vec] : allListings)
             for (Listing *L : vec)
-                if (L->getName() == name) return L;
+                if (L->getName() == name)
+                    return L;
         return nullptr;
     }
 
@@ -97,17 +102,19 @@ namespace CSEN79
     {
         lock_guard<mutex> lock(listMutex);
         for (Listing *L : sold)
-            if (L->getName() == name) return L;
+            if (L->getName() == name)
+                return L;
         return nullptr;
     }
 
-    // --- Private helper: writes listings JSON to disk in the given order ---
+    // Private helper: writes listings JSON to disk in the given order
     void Listings::writeJson(const vector<Listing *> &listings)
     {
         ofstream outFile("data/listings.json", ios::trunc);
         if (!outFile)
         {
-            if (log) log->push_back("Error: Could Not Open Backup File");
+            if (log)
+                log->push_back("Error: Could Not Open Backup File");
             return;
         }
 
@@ -116,12 +123,12 @@ namespace CSEN79
         {
             Listing *t = listings[i];
             outFile << "  {\n";
-            outFile << "    \"name\": \""           << t->getName()                                          << "\",\n";
-            outFile << "    \"description\": \""    << t->getDescription()                                   << "\",\n";
-            outFile << "    \"currentPrice\": "     << fixed << setprecision(2) << t->getPrice()             << ",\n";
-            outFile << "    \"buyOutrightPrice\": " << fixed << setprecision(2) << t->getBuyOutrightPrice()  << ",\n";
-            outFile << "    \"seller\": \""         << t->getSeller()->getName()                             << "\",\n";
-            outFile << "    \"timeLeft\": "         << fixed << setprecision(2) << (t->getSellTime() - t->checkTime()) << ",\n";
+            outFile << "    \"name\": \"" << t->getName() << "\",\n";
+            outFile << "    \"description\": \"" << t->getDescription() << "\",\n";
+            outFile << "    \"currentPrice\": " << fixed << setprecision(2) << t->getPrice() << ",\n";
+            outFile << "    \"buyOutrightPrice\": " << fixed << setprecision(2) << t->getBuyOutrightPrice() << ",\n";
+            outFile << "    \"seller\": \"" << t->getSeller()->getName() << "\",\n";
+            outFile << "    \"timeLeft\": " << fixed << setprecision(2) << (t->getSellTime() - t->checkTime()) << ",\n";
             outFile << "    \"bids\": [\n";
 
             const vector<Bid *> &bids = t->getBids();
@@ -129,12 +136,14 @@ namespace CSEN79
             {
                 outFile << "      { \"amount\": " << fixed << setprecision(2) << bids[j]->getAmount();
                 outFile << ", \"bidder\": \"" << bids[j]->getBidder()->getName() << "\" }";
-                if (j < (int)bids.size() - 1) outFile << ",";
+                if (j < (int)bids.size() - 1)
+                    outFile << ",";
                 outFile << "\n";
             }
             outFile << "    ]\n";
             outFile << "  }";
-            if (i < (int)listings.size() - 1) outFile << ",";
+            if (i < (int)listings.size() - 1)
+                outFile << ",";
             outFile << "\n";
         }
         outFile << "]\n";
@@ -150,12 +159,13 @@ namespace CSEN79
         {
             lock_guard<mutex> lock(listMutex);
             for (auto &[key, vec] : allListings)
-                for (Listing *L : vec) flat.push_back(L);
+                for (Listing *L : vec)
+                    flat.push_back(L);
         }
         writeJson(flat);
     }
 
-    // --- Sort helpers: collect flat vector, sort, write JSON ---
+    // Sort helpers: collect flat vector, sort, write JSON
 
     void Listings::sortAlpha()
     {
@@ -163,11 +173,11 @@ namespace CSEN79
         {
             lock_guard<mutex> lock(listMutex);
             for (auto &[key, vec] : allListings)
-                for (Listing *L : vec) flat.push_back(L);
+                for (Listing *L : vec)
+                    flat.push_back(L);
         }
-        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b) {
-            return a->getName() < b->getName();
-        });
+        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b)
+             { return a->getName() < b->getName(); });
         writeJson(flat);
     }
 
@@ -177,11 +187,11 @@ namespace CSEN79
         {
             lock_guard<mutex> lock(listMutex);
             for (auto &[key, vec] : allListings)
-                for (Listing *L : vec) flat.push_back(L);
+                for (Listing *L : vec)
+                    flat.push_back(L);
         }
-        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b) {
-            return a->getName() > b->getName();
-        });
+        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b)
+             { return a->getName() > b->getName(); });
         writeJson(flat);
     }
 
@@ -191,11 +201,11 @@ namespace CSEN79
         {
             lock_guard<mutex> lock(listMutex);
             for (auto &[key, vec] : allListings)
-                for (Listing *L : vec) flat.push_back(L);
+                for (Listing *L : vec)
+                    flat.push_back(L);
         }
-        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b) {
-            return a->getPrice() > b->getPrice();
-        });
+        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b)
+             { return a->getPrice() > b->getPrice(); });
         writeJson(flat);
     }
 
@@ -205,11 +215,11 @@ namespace CSEN79
         {
             lock_guard<mutex> lock(listMutex);
             for (auto &[key, vec] : allListings)
-                for (Listing *L : vec) flat.push_back(L);
+                for (Listing *L : vec)
+                    flat.push_back(L);
         }
-        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b) {
-            return a->getPrice() < b->getPrice();
-        });
+        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b)
+             { return a->getPrice() < b->getPrice(); });
         writeJson(flat);
     }
 
@@ -219,11 +229,11 @@ namespace CSEN79
         {
             lock_guard<mutex> lock(listMutex);
             for (auto &[key, vec] : allListings)
-                for (Listing *L : vec) flat.push_back(L);
+                for (Listing *L : vec)
+                    flat.push_back(L);
         }
-        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b) {
-            return a->getBuyOutrightPrice() > b->getBuyOutrightPrice();
-        });
+        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b)
+             { return a->getBuyOutrightPrice() > b->getBuyOutrightPrice(); });
         writeJson(flat);
     }
 
@@ -233,11 +243,11 @@ namespace CSEN79
         {
             lock_guard<mutex> lock(listMutex);
             for (auto &[key, vec] : allListings)
-                for (Listing *L : vec) flat.push_back(L);
+                for (Listing *L : vec)
+                    flat.push_back(L);
         }
-        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b) {
-            return a->getBuyOutrightPrice() < b->getBuyOutrightPrice();
-        });
+        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b)
+             { return a->getBuyOutrightPrice() < b->getBuyOutrightPrice(); });
         writeJson(flat);
     }
 
@@ -251,7 +261,8 @@ namespace CSEN79
         {
             lock_guard<mutex> lock(listMutex);
             for (auto &[key, vec] : allListings)
-                for (Listing *L : vec) flat.push_back(L);
+                for (Listing *L : vec)
+                    flat.push_back(L);
         }
         // map iterates earliest-expiry first → least time left first
         // "sortTimeLeft" means most time left first, so reverse
@@ -265,7 +276,8 @@ namespace CSEN79
         {
             lock_guard<mutex> lock(listMutex);
             for (auto &[key, vec] : allListings)
-                for (Listing *L : vec) flat.push_back(L);
+                for (Listing *L : vec)
+                    flat.push_back(L);
         }
         // map iterates earliest-expiry first → least time left first (ascending)
         writeJson(flat);
@@ -283,7 +295,8 @@ namespace CSEN79
             // All entries with key <= now are expired
             auto end = allListings.upper_bound(time(nullptr));
             for (auto it = allListings.begin(); it != end; ++it)
-                for (Listing *L : it->second) snapshot.push_back(L);
+                for (Listing *L : it->second)
+                    snapshot.push_back(L);
         }
         for (Listing *L : snapshot)
             L->checkCloseAuction();

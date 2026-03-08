@@ -11,11 +11,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   var item = findItemByName(listings, itemName);
 
   if (!item) {
-    var soldResponse = await fetch("http://localhost:8080/sold?name=" + encodeURIComponent(itemName));
+    var soldResponse = await fetch(
+      "http://localhost:8080/sold?name=" + encodeURIComponent(itemName),
+    );
     var wasSold = await soldResponse.text();
-    var message = wasSold === "true"
-      ? "This item has been sold."
-      : "Item not found.";
+    var message =
+      wasSold === "true" ? "This item has been sold." : "Item not found.";
     document.getElementById("item-detail").innerHTML = "<p>" + message + "</p>";
     return;
   }
@@ -25,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   startCountdown(item.timeLeft);
 });
 
-// --- Helper Functions ---
+// Helper Functions
 
 function findItemByName(listings, name) {
   for (var i = 0; i < listings.length; i++) {
@@ -86,7 +87,11 @@ function setupBidButtons(item) {
     .addEventListener("click", async function () {
       await fetch("http://localhost:8080/bid", {
         method: "POST",
-        body: new URLSearchParams({ name: item.name, user: getActiveUser(), amount: minNextBid }),
+        body: new URLSearchParams({
+          name: item.name,
+          user: getActiveUser(),
+          amount: minNextBid,
+        }),
       });
       location.reload();
     });
@@ -105,7 +110,11 @@ function setupBidButtons(item) {
 
       await fetch("http://localhost:8080/bid", {
         method: "POST",
-        body: new URLSearchParams({ name: item.name, user: getActiveUser(), amount: bidAmount }),
+        body: new URLSearchParams({
+          name: item.name,
+          user: getActiveUser(),
+          amount: bidAmount,
+        }),
       });
       location.reload();
     });

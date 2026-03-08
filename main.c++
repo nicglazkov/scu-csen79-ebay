@@ -38,17 +38,18 @@ void backgroundAuctionMonitor(Listings *listings)
 string readListingsFile()
 {
     ifstream f("data/listings.json");
-    if (!f) return "[]";
+    if (!f)
+        return "[]";
     string contents((istreambuf_iterator<char>(f)), istreambuf_iterator<char>());
     return contents;
 }
 
 int main()
 {
-    // --- Setup ---
+    // Setup
     const int NUM_USERS = 10;
     vector<string> *globalLog = new vector<string>;
-    map<string, User*> users;
+    map<string, User *> users;
     Listings *allListings = new Listings();
 
     Listing::setLog(globalLog);
@@ -61,12 +62,12 @@ int main()
         users[name] = new User(name);
     }
 
-    // --- Seed Listings ---
-    users["user0"]->makeListing("Vintage Camera",    "A classic 35mm film camera in great condition.",  25.00,  120.00, 300);
-    users["user1"]->makeListing("Gaming Chair",      "Ergonomic chair with lumbar support.",            80.00,  350.00, 300);
-    users["user2"]->makeListing("Electric Keyboard", "61-key beginner keyboard with built-in sounds.",  40.00,  180.00, 300);
-    users["user3"]->makeListing("Old Laptop",        "Used but functional. Good for basic tasks.",      50.00,  200.00, 300);
-    users["user4"]->makeListing("Desk Lamp",         "Adjustable LED lamp, barely used.",                8.00,   35.00, 300);
+    // Seed Listings
+    users["user0"]->makeListing("Vintage Camera", "A classic 35mm film camera in great condition.", 25.00, 120.00, 300);
+    users["user1"]->makeListing("Gaming Chair", "Ergonomic chair with lumbar support.", 80.00, 350.00, 300);
+    users["user2"]->makeListing("Electric Keyboard", "61-key beginner keyboard with built-in sounds.", 40.00, 180.00, 300);
+    users["user3"]->makeListing("Old Laptop", "Used but functional. Good for basic tasks.", 50.00, 200.00, 300);
+    users["user4"]->makeListing("Desk Lamp", "Adjustable LED lamp, barely used.", 8.00, 35.00, 300);
 
     for (int i = 0; i < 5; i++)
         allListings->addListing(users["user" + to_string(i)]->getSelling()->back());
@@ -76,15 +77,14 @@ int main()
     // Start the background auction monitor on a separate thread
     thread auctionThread(backgroundAuctionMonitor, allListings);
 
-    // --- Web Server ---
+    // Web Server
     // svr handles requests from the browser.
-    // Think of each svr.Get / svr.Post as "when the browser asks for X, do Y".
     Server svr;
 
     // When the browser asks for the list of listings (optionally sorted),
     // save the current state and send back listings.json.
     svr.Get("/listings", [&](const Request &req, Response &res)
-    {
+            {
         if (req.has_param("sort"))
         {
             string sort = req.get_param_value("sort");
@@ -101,13 +101,12 @@ int main()
         {
             allListings->saveToFile();
         }
-        res.set_content(readListingsFile(), "application/json");
-    });
+        res.set_content(readListingsFile(), "application/json"); });
 
     // When the browser submits a bid (item name + username + bid amount),
     // find the listing and user, place the bid, then save.
     svr.Post("/bid", [&](const Request &req, Response &res)
-    {
+             {
         string listingName = req.get_param_value("name");
         string userName    = req.get_param_value("user");
 
@@ -122,13 +121,12 @@ int main()
 
         user->placeBid(listing, amount);
         allListings->saveToFile();
-        res.set_content("ok", "text/plain");
-    });
+        res.set_content("ok", "text/plain"); });
 
     // When the browser submits a buy-outright request (item name + username),
     // find the listing and user and complete the purchase.
     svr.Post("/buyout", [&](const Request &req, Response &res)
-    {
+             {
         string listingName = req.get_param_value("name");
         string userName    = req.get_param_value("user");
 
@@ -139,12 +137,11 @@ int main()
 
         user->buyOutright(listing);
         allListings->saveToFile();
-        res.set_content("ok", "text/plain");
-    });
+        res.set_content("ok", "text/plain"); });
 
     // Returns all sold listings as JSON so the dashboard can show them greyed out at the bottom.
     svr.Get("/sold-listings", [&](const Request &req, Response &res)
-    {
+            {
         vector<Listing *> soldItems = allListings->getSoldSnapshot();
         string json = "[\n";
         for (int i = 0; i < (int)soldItems.size(); i++)
@@ -159,21 +156,19 @@ int main()
             json += "\n";
         }
         json += "]";
-        res.set_content(json, "application/json");
-    });
+        res.set_content(json, "application/json"); });
 
     // When the browser checks if a specific item has been sold, return "true" or "false".
     svr.Get("/sold", [&](const Request &req, Response &res)
-    {
+            {
         string name = req.get_param_value("name");
         Listing *listing = allListings->getSoldListing(name);
-        res.set_content(listing ? "true" : "false", "text/plain");
-    });
+        res.set_content(listing ? "true" : "false", "text/plain"); });
 
     // When the browser asks for a user's profile data (selling, purchased, bids, lost),
     // find the user and return their info as JSON.
     svr.Get("/user", [&](const Request &req, Response &res)
-    {
+            {
         string userName = req.get_param_value("name");
         User *user = users.count(userName) ? users[userName] : nullptr;
         if (!user) { res.status = 404; return; }
@@ -197,8 +192,7 @@ int main()
         json += "  \"lost\": "        + listingsToJson(user->getLost())      + "\n";
         json += "}";
 
-        res.set_content(json, "application/json");
-    });
+        res.set_content(json, "application/json"); });
 
     // Serve the frontend files (HTML, CSS, JS) from the project folder.
     // Opening http://localhost:8080 in a browser will load index.html.
@@ -210,7 +204,8 @@ int main()
     // Cleanup when the server stops
     keepRunning = false;
     auctionThread.join();
-    for (auto &[name, u] : users) delete u;
+    for (auto &[name, u] : users)
+        delete u;
     delete allListings;
     delete globalLog;
     return 0;
