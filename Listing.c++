@@ -201,33 +201,45 @@ namespace CSEN79
     */
     void Listing::checkCloseAuction()
     {
-        lock_guard<mutex> lock(entryMutex);
-
-        if (this->checkTime() >= sellTime)
+        // Determine whether the auction has expired and who the winner is,
+        // then release entryMutex before calling sellListing() to avoid a
+        // deadlock: saveToFile() holds listMutex and calls getBids() which
+        // tries to acquire entryMutex, while this path held entryMutex and
+        // called sellListing() which tries to acquire listMutex.
+        bool shouldClose = false;
+        Bid *winner = nullptr;
         {
-            if (bids.empty())
+            lock_guard<mutex> lock(entryMutex);
+            if (this->checkTime() >= sellTime)
             {
-                listings->sellListing(this);
-                return;
+                shouldClose = true;
+                if (!bids.empty())
+                    winner = bids.back();
             }
-            listings->sellListing(this);
-            log->push_back(this->getHighestBid()->getBidder()->getName() +
-                           " has won the auction for " + name + " at the price of: $" +
-                           to_string(currentPrice));
-
-            bool winnerFound = false;
-            for (int i = 0; i < this->getHighestBid()->getBidder()->getInterested()->size(); i++)
-            {
-                if ((*(this->getHighestBid()->getBidder()->getInterested()))[i] == this)
-                {
-                    winnerFound = true;
-                    this->getHighestBid()->getBidder()->getInterested()->erase(this->getHighestBid()->getBidder()->getInterested()->begin() + i);
-                    break;
-                }
-            }
-            this->getHighestBid()->getBidder()->getPurchased()->push_back(this);
-            this->losers(this->getHighestBid()->getBidder());
-            this->sell();
         }
+
+        if (!shouldClose)
+            return;
+
+        listings->sellListing(this);
+
+        if (winner == nullptr)
+            return;
+
+        log->push_back(winner->getBidder()->getName() +
+                       " has won the auction for " + name + " at the price of: $" +
+                       to_string(currentPrice));
+
+        for (int i = 0; i < winner->getBidder()->getInterested()->size(); i++)
+        {
+            if ((*(winner->getBidder()->getInterested()))[i] == this)
+            {
+                winner->getBidder()->getInterested()->erase(winner->getBidder()->getInterested()->begin() + i);
+                break;
+            }
+        }
+        winner->getBidder()->getPurchased()->push_back(this);
+        this->losers(winner->getBidder());
+        this->sell();
     }
 };
