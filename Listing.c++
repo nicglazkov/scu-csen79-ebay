@@ -174,6 +174,7 @@ namespace CSEN79
     {
         if (buyOutrightPrice > currentPrice)
         {
+            currentPrice = buyOutrightPrice;
             log->push_back(name + " purchased outright by " + buyer->getName() +
                            " for: $" + to_string(buyOutrightPrice));
             listings->sellListing(this);
