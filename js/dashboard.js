@@ -40,11 +40,19 @@ async function loadListings(sort) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  loadListings();
+  var currentSort = null;
+
+  loadListings(currentSort);
 
   document
     .getElementById("sort-select")
     .addEventListener("change", function () {
-      loadListings(this.value);
+      currentSort = this.value;
+      loadListings(currentSort);
     });
+
+  // Refresh the listings every 5 seconds so new bids and sold items show up automatically
+  setInterval(function () {
+    loadListings(currentSort);
+  }, 5000);
 });
