@@ -9,6 +9,7 @@
 
 using namespace std;
 namespace CSEN79{
+    class Listing;
     class Listings{
         private:
             vector<Listing*> allListings;
@@ -24,6 +25,7 @@ namespace CSEN79{
             int getNumListings();
             int getNumSoldListings();
             void setLog(vector<string>* newLog);
+            Listing* getListing(string name);
 
             //Sorting Functions
             void sortAlpha();

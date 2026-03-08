@@ -73,6 +73,17 @@ namespace CSEN79
         log = newLog;
     }
 
+    Listing* Listings::getListing(string name)
+    {
+        lock_guard<mutex> lock(listMutex);
+        for (int i = 0; i < allListings.size(); i++)
+        {
+            if (allListings[i]->getName() == name)
+                return allListings[i];
+        }
+        return nullptr;
+    }
+
     /**
     Sorts the listings alphabetically by selection sort.
     */
