@@ -87,6 +87,12 @@ namespace CSEN79
         return nullptr;
     }
 
+    vector<Listing *> Listings::getSoldSnapshot()
+    {
+        lock_guard<mutex> lock(listMutex);
+        return sold;
+    }
+
     Listing* Listings::getSoldListing(string name)
     {
         lock_guard<mutex> lock(listMutex);

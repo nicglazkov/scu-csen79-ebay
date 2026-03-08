@@ -146,6 +146,26 @@ int main()
         res.set_content("ok", "text/plain");
     });
 
+    // Returns all sold listings as JSON so the dashboard can show them greyed out at the bottom.
+    svr.Get("/sold-listings", [&](const Request &req, Response &res)
+    {
+        vector<Listing *> soldItems = allListings->getSoldSnapshot();
+        string json = "[\n";
+        for (int i = 0; i < (int)soldItems.size(); i++)
+        {
+            Listing *t = soldItems[i];
+            json += "  {\n";
+            json += "    \"name\": \""        + t->getName()              + "\",\n";
+            json += "    \"seller\": \""      + t->getSeller()->getName() + "\",\n";
+            json += "    \"currentPrice\": "  + to_string(t->getPrice())  + "\n";
+            json += "  }";
+            if (i < (int)soldItems.size() - 1) json += ",";
+            json += "\n";
+        }
+        json += "]";
+        res.set_content(json, "application/json");
+    });
+
     // When the browser checks if a specific item has been sold, return "true" or "false".
     svr.Get("/sold", [&](const Request &req, Response &res)
     {

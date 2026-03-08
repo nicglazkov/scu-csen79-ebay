@@ -7,9 +7,13 @@ async function loadListings(sort) {
   var response = await fetch(url);
   var listings = await response.json();
 
+  var soldResponse = await fetch("http://localhost:8080/sold-listings");
+  var soldListings = await soldResponse.json();
+
   var grid = document.getElementById("listings-grid");
   grid.innerHTML = "";
 
+  // Active listings
   for (var i = 0; i < listings.length; i++) {
     var item = listings[i];
 
@@ -22,20 +26,30 @@ async function loadListings(sort) {
     card.innerHTML =
       '<div class="item-image"></div>' +
       '<div class="item-info">' +
-      "  <h2>" +
-      item.name +
-      "</h2>" +
-      '  <p class="item-price">$' +
-      item.currentPrice.toFixed(2) +
-      "</p>" +
-      '  <p class="item-bids">' +
-      bidCount +
-      " " +
-      bidWord +
-      "</p>" +
+      "  <h2>" + item.name + "</h2>" +
+      '  <p class="item-price">$' + item.currentPrice.toFixed(2) + "</p>" +
+      '  <p class="item-bids">' + bidCount + " " + bidWord + "</p>" +
       "</div>";
 
     grid.appendChild(card);
+  }
+
+  // Sold listings — greyed out at the bottom
+  for (var j = 0; j < soldListings.length; j++) {
+    var sold = soldListings[j];
+
+    var soldCard = document.createElement("div");
+    soldCard.className = "item-card item-card--sold";
+
+    soldCard.innerHTML =
+      '<div class="item-image"></div>' +
+      '<div class="item-info">' +
+      "  <h2>" + sold.name + "</h2>" +
+      '  <p class="item-price">$' + parseFloat(sold.currentPrice).toFixed(2) + "</p>" +
+      '  <p class="item-sold-badge">SOLD</p>' +
+      "</div>";
+
+    grid.appendChild(soldCard);
   }
 }
 

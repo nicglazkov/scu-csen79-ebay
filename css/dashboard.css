@@ -75,3 +75,17 @@
   font-size: 0.85rem;
   color: #555;
 }
+
+.item-card--sold {
+  opacity: 0.5;
+  filter: grayscale(100%);
+  cursor: default;
+  pointer-events: none;
+}
+
+.item-sold-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #888;
+  letter-spacing: 0.05em;
+}
