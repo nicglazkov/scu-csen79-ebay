@@ -172,29 +172,32 @@ namespace CSEN79
     */
     void Listing::buyOutright(User *buyer)
     {
-        if (buyOutrightPrice > currentPrice)
         {
+            lock_guard<mutex> lock(entryMutex);
+            if (buyOutrightPrice <= currentPrice)
+                return;
             currentPrice = buyOutrightPrice;
-            log->push_back(name + " purchased outright by " + buyer->getName() +
-                           " for: $" + to_string(buyOutrightPrice));
-            listings->sellListing(this);
-            bool found = false;
-            for (int i = 0; i < buyer->getInterested()->size(); i++)
-            {
-                if ((*(buyer->getInterested()))[i] == this)
-                {
-                    found = true;
-                    buyer->getPurchased()->push_back(this);
-                    buyer->getInterested()->erase(buyer->getInterested()->begin() + i);
-                }
-            }
-            if (found == false)
-            {
-                buyer->getPurchased()->push_back(this);
-            }
-            this->losers(buyer);
-            this->sell();
         }
+
+        log->push_back(name + " purchased outright by " + buyer->getName() +
+                       " for: $" + to_string(buyOutrightPrice));
+        listings->sellListing(this);
+        bool found = false;
+        for (int i = 0; i < buyer->getInterested()->size(); i++)
+        {
+            if ((*(buyer->getInterested()))[i] == this)
+            {
+                found = true;
+                buyer->getPurchased()->push_back(this);
+                buyer->getInterested()->erase(buyer->getInterested()->begin() + i);
+            }
+        }
+        if (found == false)
+        {
+            buyer->getPurchased()->push_back(this);
+        }
+        this->losers(buyer);
+        this->sell();
     }
     /**
     Checks if the auction should be closed based on the time remaining and updates the status of the listing accordingly.
