@@ -17,26 +17,26 @@ namespace CSEN79{
             mutex listMutex;
 
         public:
-            Listings(){}
-            ~Listings(){};
-            void addListing(Listing* newListing){};
-            void sellListing(Listing* soldListing){};
-            int getNumListings(){};
-            int getNumSoldListings(){};
-            void setLog(vector<string>* newLog){};
+            Listings();
+            ~Listings();
+            void addListing(Listing* newListing);
+            void sellListing(Listing* soldListing);
+            int getNumListings();
+            int getNumSoldListings();
+            void setLog(vector<string>* newLog);
 
             //Sorting Functions
-            void sortAlpha(){};
-            void sortBuyOutright(){};
-            void sortCurrPrice(){};
-            void sortTimeLeft(){};
-            void sortAlphaRev(){};
-            void sortBuyOutrightRev(){};
-            void sortCurrPriceRev(){};
-            void sortTimeLeftRev(){};
+            void sortAlpha();
+            void sortBuyOutright();
+            void sortCurrPrice();
+            void sortTimeLeft();
+            void sortAlphaRev();
+            void sortBuyOutrightRev();
+            void sortCurrPriceRev();
+            void sortTimeLeftRev();
 
             //Multithreaded function, constantly running
-            void checkCloseAuction(){};
-            void saveToFile(){};
+            void checkCloseAuction();
+            void saveToFile();
     };
 }
