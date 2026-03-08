@@ -117,7 +117,10 @@ int main()
     {
         string listingName = req.get_param_value("name");
         string userName    = req.get_param_value("user");
-        double amount      = stod(req.get_param_value("amount"));
+
+        double amount;
+        try { amount = stod(req.get_param_value("amount")); }
+        catch (...) { res.status = 400; return; }
 
         Listing *listing = allListings->getListing(listingName);
         User *user = findUser(users, NUM_USERS, userName);
