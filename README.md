@@ -28,7 +28,7 @@ File layout
 - js/profile.js - loads user profile data
 - css/ - styles for each page
 
-- third_party/httplib/ - cpp-httplib, a single-header HTTP server library (not our code)
+- third_party/httplib/ - cpp-httplib, a single-header HTTP server library (not our code, need this for the frontend to work)
 - data/ - listings.json is written here at runtime
 
 notes:
