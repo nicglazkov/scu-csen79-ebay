@@ -82,10 +82,87 @@
   font-size: 0.9rem;
 }
 
+#view-toggle {
+  display: flex;
+  gap: 0.25rem;
+}
+
+#view-toggle button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #888;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+#view-toggle button.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
 #listings-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
+}
+
+/* List view */
+#listings-grid.list-view {
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+#listings-grid.list-view .item-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 6px;
+}
+
+#listings-grid.list-view .item-image {
+  width: 64px;
+  min-width: 64px;
+  aspect-ratio: 1;
+  border-radius: 4px 0 0 4px;
+}
+
+#listings-grid.list-view .item-info {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.6rem 1rem;
+  flex-wrap: wrap;
+}
+
+#listings-grid.list-view .item-info h2 {
+  margin: 0;
+  min-width: 140px;
+  flex: 1;
+}
+
+#listings-grid.list-view .item-price-row {
+  margin: 0;
+}
+
+#listings-grid.list-view .item-buyout {
+  margin: 0;
+}
+
+#listings-grid.list-view .item-meta {
+  margin: 0;
+  gap: 1rem;
+}
+
+#listings-grid.list-view .item-own-badge {
+  margin: 0;
 }
 
 .item-card {

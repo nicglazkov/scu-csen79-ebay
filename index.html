@@ -37,6 +37,20 @@
       <h1>Dashboard</h1>
       <div id="sort-controls">
         <button id="add-listing-btn">+ Add Listing</button>
+        <div id="view-toggle">
+          <button id="view-card-btn" title="Card view">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <rect x="0" y="0" width="7" height="7" rx="1"/><rect x="9" y="0" width="7" height="7" rx="1"/>
+              <rect x="0" y="9" width="7" height="7" rx="1"/><rect x="9" y="9" width="7" height="7" rx="1"/>
+            </svg>
+          </button>
+          <button id="view-list-btn" title="List view">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <rect x="0" y="1" width="16" height="3" rx="1"/><rect x="0" y="6" width="16" height="3" rx="1"/>
+              <rect x="0" y="11" width="16" height="3" rx="1"/>
+            </svg>
+          </button>
+        </div>
         <label for="sort-select">Sort by:</label>
         <select id="sort-select">
           <option value="sortAlpha">Name (A to Z)</option>

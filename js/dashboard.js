@@ -71,8 +71,28 @@ async function loadListings(sort) {
   }
 }
 
+function setView(view) {
+  var grid = document.getElementById("listings-grid");
+  var cardBtn = document.getElementById("view-card-btn");
+  var listBtn = document.getElementById("view-list-btn");
+  if (view === "list") {
+    grid.classList.add("list-view");
+    listBtn.classList.add("active");
+    cardBtn.classList.remove("active");
+  } else {
+    grid.classList.remove("list-view");
+    cardBtn.classList.add("active");
+    listBtn.classList.remove("active");
+  }
+  localStorage.setItem("listingsView", view);
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   var currentSort = null;
+
+  setView(localStorage.getItem("listingsView") || "card");
+  document.getElementById("view-card-btn").addEventListener("click", function () { setView("card"); });
+  document.getElementById("view-list-btn").addEventListener("click", function () { setView("list"); });
 
   loadListings(currentSort);
 

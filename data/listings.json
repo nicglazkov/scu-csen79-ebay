@@ -2,54 +2,21 @@
   {
     "name": "Vintage Camera",
     "description": "A classic 35mm film camera in great condition.",
-    "currentPrice": 25.29,
+    "currentPrice": 25.00,
     "buyOutrightPrice": 120.00,
     "seller": "user0",
-    "timeLeft": 187.00,
+    "timeLeft": 40.00,
     "bids": [
-      { "amount": 25.01, "bidder": "user2" },
-      { "amount": 25.02, "bidder": "user2" },
-      { "amount": 25.03, "bidder": "user2" },
-      { "amount": 25.04, "bidder": "user2" },
-      { "amount": 25.05, "bidder": "user2" },
-      { "amount": 25.06, "bidder": "user2" },
-      { "amount": 25.07, "bidder": "user2" },
-      { "amount": 25.08, "bidder": "user2" },
-      { "amount": 25.09, "bidder": "user2" },
-      { "amount": 25.10, "bidder": "user2" },
-      { "amount": 25.11, "bidder": "user2" },
-      { "amount": 25.12, "bidder": "user2" },
-      { "amount": 25.13, "bidder": "user2" },
-      { "amount": 25.14, "bidder": "user2" },
-      { "amount": 25.15, "bidder": "user2" },
-      { "amount": 25.16, "bidder": "user2" },
-      { "amount": 25.17, "bidder": "user2" },
-      { "amount": 25.18, "bidder": "user2" },
-      { "amount": 25.19, "bidder": "user2" },
-      { "amount": 25.20, "bidder": "user2" },
-      { "amount": 25.21, "bidder": "user2" },
-      { "amount": 25.22, "bidder": "user2" },
-      { "amount": 25.23, "bidder": "user2" },
-      { "amount": 25.24, "bidder": "user2" },
-      { "amount": 25.25, "bidder": "user2" },
-      { "amount": 25.26, "bidder": "user2" },
-      { "amount": 25.27, "bidder": "user2" },
-      { "amount": 25.28, "bidder": "user2" },
-      { "amount": 25.29, "bidder": "user2" }
     ]
   },
   {
     "name": "Desk Lamp",
     "description": "Adjustable LED lamp, barely used.",
-    "currentPrice": 8.04,
+    "currentPrice": 8.00,
     "buyOutrightPrice": 35.00,
     "seller": "user4",
-    "timeLeft": 237.00,
+    "timeLeft": 90.00,
     "bids": [
-      { "amount": 8.01, "bidder": "user2" },
-      { "amount": 8.02, "bidder": "user2" },
-      { "amount": 8.03, "bidder": "user2" },
-      { "amount": 8.04, "bidder": "user2" }
     ]
   },
   {
@@ -58,7 +25,7 @@
     "currentPrice": 40.00,
     "buyOutrightPrice": 180.00,
     "seller": "user2",
-    "timeLeft": 587.00,
+    "timeLeft": 440.00,
     "bids": [
     ]
   }
