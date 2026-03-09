@@ -263,6 +263,13 @@ int main()
         json += "]";
         res.set_content(json, "application/json"); });
 
+    // Clears all transaction logs.
+    svr.Delete("/logs", [&](const Request &, Response &res)
+            {
+        lock_guard<mutex> lock(Listing::getLogMutex());
+        globalLog->clear();
+        res.set_content("ok", "text/plain"); });
+
     // Runs a self-contained stress test for 3 seconds and returns timing stats.
     // Each iteration creates 1000 listings and places 2 bids on each (3000 ops).
     svr.Post("/stress-test", [](const Request &, Response &res)

@@ -1,11 +1,21 @@
 [
   {
+    "name": "Old Laptop",
+    "description": "Used but functional. Good for basic tasks.",
+    "currentPrice": 50.00,
+    "buyOutrightPrice": 200.00,
+    "seller": "user3",
+    "timeLeft": 100.00,
+    "bids": [
+    ]
+  },
+  {
     "name": "Gaming Chair",
     "description": "Ergonomic chair with lumbar support.",
     "currentPrice": 80.00,
     "buyOutrightPrice": 350.00,
     "seller": "user1",
-    "timeLeft": 95.00,
+    "timeLeft": 200.00,
     "bids": [
     ]
   },
@@ -15,7 +25,7 @@
     "currentPrice": 25.00,
     "buyOutrightPrice": 120.00,
     "seller": "user0",
-    "timeLeft": 195.00,
+    "timeLeft": 300.00,
     "bids": [
     ]
   },
@@ -25,7 +35,7 @@
     "currentPrice": 8.00,
     "buyOutrightPrice": 35.00,
     "seller": "user4",
-    "timeLeft": 245.00,
+    "timeLeft": 350.00,
     "bids": [
     ]
   },
@@ -35,7 +45,7 @@
     "currentPrice": 40.00,
     "buyOutrightPrice": 180.00,
     "seller": "user2",
-    "timeLeft": 595.00,
+    "timeLeft": 700.00,
     "bids": [
     ]
   }

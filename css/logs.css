@@ -11,7 +11,13 @@
   margin-bottom: 1.5rem;
 }
 
-#refresh-btn {
+#logs-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#refresh-btn,
+#clear-btn {
   padding: 0.4rem 1rem;
   background: var(--color-primary);
   color: #fff;
@@ -21,8 +27,13 @@
   font-size: 0.9rem;
 }
 
-#refresh-btn:hover {
+#refresh-btn:hover,
+#clear-btn:hover {
   opacity: 0.85;
+}
+
+#clear-btn {
+  background: #c0392b;
 }
 
 #log-list {

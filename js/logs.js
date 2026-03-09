@@ -19,7 +19,13 @@ async function loadLogs() {
   }
 }
 
+async function clearLogs() {
+  await fetch("http://localhost:8080/logs", { method: "DELETE" });
+  loadLogs();
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   loadLogs();
   document.getElementById("refresh-btn").addEventListener("click", loadLogs);
+  document.getElementById("clear-btn").addEventListener("click", clearLogs);
 });
