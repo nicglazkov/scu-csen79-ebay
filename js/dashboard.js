@@ -56,8 +56,9 @@ async function loadListings(sort) {
   for (var j = 0; j < soldListings.length; j++) {
     var sold = soldListings[j];
 
-    var soldCard = document.createElement("div");
+    var soldCard = document.createElement("a");
     soldCard.className = "item-card item-card--sold";
+    soldCard.href = "pages/item.html?name=" + encodeURIComponent(sold.name);
 
     soldCard.innerHTML =
       '<div class="item-image"></div>' +

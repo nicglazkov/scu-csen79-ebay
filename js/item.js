@@ -11,13 +11,17 @@ document.addEventListener("DOMContentLoaded", async function () {
   var item = findItemByName(listings, itemName);
 
   if (!item) {
-    var soldResponse = await fetch(
-      "http://localhost:8080/sold?name=" + encodeURIComponent(itemName),
-    );
-    var wasSold = await soldResponse.text();
-    var message =
-      wasSold === "true" ? "This item has been sold." : "Item not found.";
-    document.getElementById("item-detail").innerHTML = "<p>" + message + "</p>";
+    var soldRes = await fetch("http://localhost:8080/sold-listings");
+    var soldList = await soldRes.json();
+    var soldItem = null;
+    for (var s = 0; s < soldList.length; s++) {
+      if (soldList[s].name === itemName) { soldItem = soldList[s]; break; }
+    }
+    if (!soldItem) {
+      document.getElementById("item-detail").innerHTML = "<p>Item not found.</p>";
+      return;
+    }
+    showSoldDetail(soldItem);
     return;
   }
 
@@ -36,6 +40,35 @@ document.addEventListener("DOMContentLoaded", async function () {
   setupBidButtons(item);
   startCountdown(item.timeLeft);
 });
+
+function showSoldDetail(sold) {
+  document.title = "eBay Lite - " + sold.name;
+  var activeUser = getActiveUser();
+  var isWinner = sold.winner && sold.winner === activeUser;
+  var isSeller = sold.seller === activeUser;
+  var bidWord = sold.bidCount !== 1 ? "bids" : "bid";
+
+  var outcome = "";
+  if (isWinner)       outcome = '<p class="sold-outcome sold-outcome--won">You won this auction!</p>';
+  else if (isSeller)  outcome = '<p class="sold-outcome sold-outcome--sold">You sold this item.</p>';
+  else if (sold.winner === "") outcome = '<p class="sold-outcome">No bids — item expired unsold.</p>';
+  else                outcome = '<p class="sold-outcome sold-outcome--lost">You did not win this auction.</p>';
+
+  document.getElementById("item-detail").innerHTML =
+    '<div id="item-image-col"><div id="item-image"></div></div>' +
+    '<div id="item-info-col">' +
+    '  <p class="sold-badge-large">SOLD</p>' +
+    '  <h1>' + sold.name + '</h1>' +
+    outcome +
+    '  <div class="sold-stats">' +
+    '    <div class="sold-stat"><span class="sold-stat-label">Final price</span><span class="sold-stat-value">$' + parseFloat(sold.finalPrice).toFixed(2) + '</span></div>' +
+    '    <div class="sold-stat"><span class="sold-stat-label">Total bids</span><span class="sold-stat-value">' + sold.bidCount + ' ' + bidWord + '</span></div>' +
+    '    <div class="sold-stat"><span class="sold-stat-label">Winner</span><span class="sold-stat-value">' + (sold.winner || '—') + '</span></div>' +
+    '    <div class="sold-stat"><span class="sold-stat-label">Seller</span><span class="sold-stat-value">' + sold.seller + '</span></div>' +
+    '  </div>' +
+    (sold.description ? '<p class="sold-description">' + sold.description + '</p>' : '') +
+    '</div>';
+}
 
 // Helper Functions
 

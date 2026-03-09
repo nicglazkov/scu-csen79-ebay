@@ -1,11 +1,21 @@
 [
   {
-    "name": "Vintage Camera",
-    "description": "A classic 35mm film camera in great condition.",
-    "currentPrice": 25.00,
-    "buyOutrightPrice": 120.00,
-    "seller": "user0",
-    "timeLeft": 40.00,
+    "name": "Old Laptop",
+    "description": "Used but functional. Good for basic tasks.",
+    "currentPrice": 50.00,
+    "buyOutrightPrice": 200.00,
+    "seller": "user3",
+    "timeLeft": 36.00,
+    "bids": [
+    ]
+  },
+  {
+    "name": "Gaming Chair",
+    "description": "Ergonomic chair with lumbar support.",
+    "currentPrice": 80.00,
+    "buyOutrightPrice": 350.00,
+    "seller": "user1",
+    "timeLeft": 136.00,
     "bids": [
     ]
   },
@@ -15,7 +25,7 @@
     "currentPrice": 8.00,
     "buyOutrightPrice": 35.00,
     "seller": "user4",
-    "timeLeft": 90.00,
+    "timeLeft": 286.00,
     "bids": [
     ]
   },
@@ -25,7 +35,7 @@
     "currentPrice": 40.00,
     "buyOutrightPrice": 180.00,
     "seller": "user2",
-    "timeLeft": 440.00,
+    "timeLeft": 636.00,
     "bids": [
     ]
   }

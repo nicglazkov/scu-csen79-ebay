@@ -160,6 +160,78 @@
 }
 
 
+/* Sold detail view */
+.sold-badge-large {
+  display: inline-block;
+  background: #888;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
+
+.sold-outcome {
+  font-size: 1rem;
+  margin-bottom: 1.25rem;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  background: #f5f5f5;
+  color: #555;
+}
+
+.sold-outcome--won {
+  background: #e6f4ea;
+  color: #1e7e34;
+  font-weight: 600;
+}
+
+.sold-outcome--sold {
+  background: #e8f0fe;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.sold-outcome--lost {
+  background: #fdecea;
+  color: #c0392b;
+}
+
+.sold-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.sold-stat {
+  background: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+}
+
+.sold-stat-label {
+  display: block;
+  font-size: 0.75rem;
+  color: #888;
+  margin-bottom: 0.2rem;
+}
+
+.sold-stat-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.sold-description {
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
 @media (max-width: 640px) {
   #item-detail {
     grid-template-columns: 1fr;

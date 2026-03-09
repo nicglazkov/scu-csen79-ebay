@@ -148,9 +148,16 @@ int main()
         {
             Listing *t = soldItems[i];
             json += "  {\n";
-            json += "    \"name\": \""        + t->getName()              + "\",\n";
-            json += "    \"seller\": \""      + t->getSeller()->getName() + "\",\n";
-            json += "    \"currentPrice\": "  + to_string(t->getPrice())  + "\n";
+            Bid *top = t->getHighestBid();
+            string winner = top ? top->getBidder()->getName() : "";
+            int bidCount  = (int)t->getBids().size();
+            json += "    \"name\": \""         + t->getName()               + "\",\n";
+            json += "    \"seller\": \""       + t->getSeller()->getName()  + "\",\n";
+            json += "    \"description\": \""  + t->getDescription()        + "\",\n";
+            json += "    \"finalPrice\": "     + to_string(t->getPrice())   + ",\n";
+            json += "    \"currentPrice\": "   + to_string(t->getPrice())   + ",\n";
+            json += "    \"winner\": \""       + winner                     + "\",\n";
+            json += "    \"bidCount\": "       + to_string(bidCount)        + "\n";
             json += "  }";
             if (i < (int)soldItems.size() - 1) json += ",";
             json += "\n";
