@@ -54,3 +54,32 @@
   font-size: 0.85rem;
   color: #555;
 }
+
+#ds-table {
+  margin-top: 2.5rem;
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 600px;
+}
+
+#ds-table th,
+#ds-table td {
+  text-align: left;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 0.95rem;
+}
+
+#ds-table th {
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.bigo {
+  font-family: monospace;
+  color: var(--color-primary);
+  font-weight: 600;
+}

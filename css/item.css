@@ -144,6 +144,20 @@
   margin-bottom: 1rem;
   font-weight: 600;
   font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#remove-listing-btn {
+  padding: 0.3rem 0.8rem;
+  background: #fff;
+  color: #c00;
+  border: 1px solid #c00;
+  border-radius: 24px;
+  font-size: 0.85rem;
+  font-weight: 400;
+  cursor: pointer;
 }
 
 

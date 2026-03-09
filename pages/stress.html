@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/stress.css">
 </head>
+
 <body>
   <nav id="main-nav">
     <a href="../index.html">Dashboard</a>
@@ -31,7 +33,7 @@
 
   <main id="stress-page">
     <h1>Stress Test</h1>
-    <p id="stress-desc">Runs 1,000 listings + 2,000 bids per cycle for 3 seconds. Reports total throughput.</p>
+    <p id="stress-desc">Runs listings and bids nonstop for 3 seconds.</p>
     <button id="run-btn">Run Stress Test</button>
 
     <div id="stats-section" style="display:none">
@@ -52,9 +54,42 @@
         <div class="stat-label">Avg Time per Op</div>
       </div>
     </div>
+
+    <table id="ds-table">
+      <thead>
+        <tr>
+          <th>Data Structure</th>
+          <th>Operation</th>
+          <th>Big O</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Hash Table</td>
+          <td>User lookup</td>
+          <td class="bigo">O(1) avg</td>
+        </tr>
+        <tr>
+          <td>map&lt;time_t, vector&gt;</td>
+          <td>Insert listing</td>
+          <td class="bigo">O(log n)</td>
+        </tr>
+        <tr>
+          <td>vector&lt;Bid*&gt;</td>
+          <td>Place bid</td>
+          <td class="bigo">O(1) amortized</td>
+        </tr>
+        <tr>
+          <td>Heap Sort</td>
+          <td>Sort listings</td>
+          <td class="bigo">O(n log n)</td>
+        </tr>
+      </tbody>
+    </table>
   </main>
 
   <script src="../js/main.js"></script>
   <script src="../js/stress.js"></script>
 </body>
+
 </html>

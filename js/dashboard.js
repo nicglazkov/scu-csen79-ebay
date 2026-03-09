@@ -83,8 +83,36 @@ document.addEventListener("DOMContentLoaded", function () {
       loadListings(currentSort);
     });
 
-  // Refresh the listings every 5 seconds so new bids and sold items show up automatically
   setInterval(function () {
     loadListings(currentSort);
   }, 5000);
+
+  document.getElementById("add-listing-btn").addEventListener("click", function () {
+    document.getElementById("add-listing-form").style.display = "flex";
+    this.style.display = "none";
+  });
+
+  document.getElementById("cancel-listing-btn").addEventListener("click", function () {
+    document.getElementById("add-listing-form").style.display = "none";
+    document.getElementById("add-listing-btn").style.display = "";
+  });
+
+  document.getElementById("add-listing-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    await fetch("http://localhost:8080/add-listing", {
+      method: "POST",
+      body: new URLSearchParams({
+        name:        document.getElementById("new-name").value,
+        description: document.getElementById("new-desc").value,
+        startPrice:  document.getElementById("new-start").value,
+        buyoutPrice: document.getElementById("new-buyout").value,
+        sellTime:    document.getElementById("new-time").value,
+        user:        getActiveUser(),
+      }),
+    });
+    this.reset();
+    this.style.display = "none";
+    document.getElementById("add-listing-btn").style.display = "";
+    loadListings(currentSort);
+  });
 });

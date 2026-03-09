@@ -35,6 +35,7 @@
     <div id="dashboard-header">
       <h1>Dashboard</h1>
       <div id="sort-controls">
+        <button id="add-listing-btn">+ Add Listing</button>
         <label for="sort-select">Sort by:</label>
         <select id="sort-select">
           <option value="sortAlpha">Name (A to Z)</option>
@@ -48,6 +49,16 @@
         </select>
       </div>
     </div>
+    <form id="add-listing-form" style="display:none">
+      <input type="text" id="new-name" placeholder="Name" required>
+      <input type="text" id="new-desc" placeholder="Description">
+      <input type="number" id="new-start" placeholder="Starting price" step="0.01" min="0.01" required>
+      <input type="number" id="new-buyout" placeholder="Buy Now price" step="0.01" min="0.01" required>
+      <input type="number" id="new-time" placeholder="Duration (seconds)" min="1" required>
+      <button type="submit">Create</button>
+      <button type="button" id="cancel-listing-btn">Cancel</button>
+    </form>
+
     <div id="listings-grid"></div>
   </main>
 

@@ -22,8 +22,17 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   fillItemDetails(item);
-  if (getActiveUser() === item.seller)
+  if (getActiveUser() === item.seller) {
     document.getElementById("your-listing-banner").style.display = "block";
+    document.getElementById("remove-listing-btn").addEventListener("click", async function () {
+      if (!confirm("Remove this listing?")) return;
+      await fetch("http://localhost:8080/remove-listing", {
+        method: "POST",
+        body: new URLSearchParams({ name: item.name, user: getActiveUser() }),
+      });
+      window.location.href = "../index.html";
+    });
+  }
   setupBidButtons(item);
   startCountdown(item.timeLeft);
 });

@@ -194,6 +194,56 @@ int main()
 
         res.set_content(json, "application/json"); });
 
+    // Creates a new listing for the given user and adds it to the active listings.
+    svr.Post("/add-listing", [&](const Request &req, Response &res)
+             {
+        string name        = req.get_param_value("name");
+        string description = req.get_param_value("description");
+        string userName    = req.get_param_value("user");
+
+        double startPrice, buyoutPrice;
+        int sellTime;
+        try {
+            startPrice  = stod(req.get_param_value("startPrice"));
+            buyoutPrice = stod(req.get_param_value("buyoutPrice"));
+            sellTime    = stoi(req.get_param_value("sellTime"));
+        } catch (...) { res.status = 400; return; }
+
+        User *user = users.find(userName);
+        if (!user) { res.status = 404; return; }
+
+        user->makeListing(name, description, startPrice, buyoutPrice, sellTime);
+        allListings->addListing(user->getSelling()->back());
+        allListings->saveToFile();
+        res.set_content("ok", "text/plain"); });
+
+    // Removes a listing. Only the seller can remove their own listing.
+    svr.Post("/remove-listing", [&](const Request &req, Response &res)
+             {
+        string listingName = req.get_param_value("name");
+        string userName    = req.get_param_value("user");
+
+        Listing *listing = allListings->getListing(listingName);
+        User    *user    = users.find(userName);
+
+        if (!listing || !user)              { res.status = 404; return; }
+        if (listing->getSeller() != user)   { res.status = 403; return; }
+
+        allListings->removeListing(listing);
+
+        vector<Listing *> *selling = user->getSelling();
+        for (int i = 0; i < (int)selling->size(); i++)
+        {
+            if ((*selling)[i] == listing)
+            {
+                selling->erase(selling->begin() + i);
+                break;
+            }
+        }
+        delete listing;
+        allListings->saveToFile();
+        res.set_content("ok", "text/plain"); });
+
     // Runs a self-contained stress test for 3 seconds and returns timing stats.
     // Each iteration creates 1000 listings and places 2 bids on each (3000 ops).
     svr.Post("/stress-test", [](const Request &, Response &res)

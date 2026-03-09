@@ -30,6 +30,7 @@ namespace CSEN79
         ~Listings();
         void addListing(Listing *newListing);
         void sellListing(Listing *soldListing);
+        void removeListing(Listing *listing);
         int getNumListings();
         int getNumSoldListings();
         void setLog(vector<string> *newLog);

@@ -64,6 +64,24 @@ namespace CSEN79
         }
     }
 
+    void Listings::removeListing(Listing *listing)
+    {
+        lock_guard<mutex> lock(listMutex);
+        for (auto &[key, vec] : allListings)
+        {
+            for (auto it = vec.begin(); it != vec.end(); ++it)
+            {
+                if (*it == listing)
+                {
+                    vec.erase(it);
+                    if (vec.empty())
+                        allListings.erase(key);
+                    return;
+                }
+            }
+        }
+    }
+
     int Listings::getNumListings()
     {
         lock_guard<mutex> lock(listMutex);
