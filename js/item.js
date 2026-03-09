@@ -131,6 +131,8 @@ function setupBidButtons(item) {
           amount: state.minNextBid,
         }),
       });
+      var rect = document.getElementById("bid-increment-btn").getBoundingClientRect();
+      confetti({ particleCount: 120, spread: 70, origin: { x: (rect.left + rect.width / 2) / window.innerWidth, y: (rect.top + rect.height / 2) / window.innerHeight }, colors: ["#3665f3", "#ffd700", "#ffffff"] });
       await refreshBidUI();
     });
 
@@ -158,6 +160,8 @@ function setupBidButtons(item) {
           amount: bidAmount,
         }),
       });
+      var rect = document.getElementById("custom-bid-btn").getBoundingClientRect();
+      confetti({ particleCount: 120, spread: 70, origin: { x: (rect.left + rect.width / 2) / window.innerWidth, y: (rect.top + rect.height / 2) / window.innerHeight }, colors: ["#3665f3", "#ffd700", "#ffffff"] });
       await refreshBidUI();
     });
 
