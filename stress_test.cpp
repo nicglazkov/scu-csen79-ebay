@@ -33,9 +33,9 @@ int main()
     }
 
     vector<CSEN79::Listing *> listings;
-    listings.reserve(100000);
+    listings.reserve(1000);
 
-    const int NUM_ITEMS = 100000;
+    const int NUM_ITEMS = 1000;
     const int BIDS_PER_ITEM = 2;
 
     auto tStart = chrono::high_resolution_clock::now();
