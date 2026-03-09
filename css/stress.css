@@ -96,3 +96,50 @@
   color: #444;
   line-height: 1.4;
 }
+
+#storage-section {
+  margin-top: 3rem;
+  max-width: 900px;
+}
+
+#storage-section h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.storage-intro {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 1.25rem;
+}
+
+#storage-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#storage-table th,
+#storage-table td {
+  text-align: left;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 0.95rem;
+  vertical-align: top;
+}
+
+#storage-table th {
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+#storage-table code {
+  font-family: monospace;
+  font-size: 0.85rem;
+  background: #f4f4f4;
+  padding: 0 3px;
+  border-radius: 3px;
+}
