@@ -5,28 +5,47 @@
     "currentPrice": 50.00,
     "buyOutrightPrice": 200.00,
     "seller": "user3",
-    "timeLeft": 100.00,
-    "bids": [
-    ]
-  },
-  {
-    "name": "Gaming Chair",
-    "description": "Ergonomic chair with lumbar support.",
-    "currentPrice": 80.00,
-    "buyOutrightPrice": 350.00,
-    "seller": "user1",
-    "timeLeft": 200.00,
+    "timeLeft": 36.00,
     "bids": [
     ]
   },
   {
     "name": "Vintage Camera",
     "description": "A classic 35mm film camera in great condition.",
-    "currentPrice": 25.00,
+    "currentPrice": 25.29,
     "buyOutrightPrice": 120.00,
     "seller": "user0",
-    "timeLeft": 300.00,
+    "timeLeft": 236.00,
     "bids": [
+      { "amount": 25.01, "bidder": "user2" },
+      { "amount": 25.02, "bidder": "user2" },
+      { "amount": 25.03, "bidder": "user2" },
+      { "amount": 25.04, "bidder": "user2" },
+      { "amount": 25.05, "bidder": "user2" },
+      { "amount": 25.06, "bidder": "user2" },
+      { "amount": 25.07, "bidder": "user2" },
+      { "amount": 25.08, "bidder": "user2" },
+      { "amount": 25.09, "bidder": "user2" },
+      { "amount": 25.10, "bidder": "user2" },
+      { "amount": 25.11, "bidder": "user2" },
+      { "amount": 25.12, "bidder": "user2" },
+      { "amount": 25.13, "bidder": "user2" },
+      { "amount": 25.14, "bidder": "user2" },
+      { "amount": 25.15, "bidder": "user2" },
+      { "amount": 25.16, "bidder": "user2" },
+      { "amount": 25.17, "bidder": "user2" },
+      { "amount": 25.18, "bidder": "user2" },
+      { "amount": 25.19, "bidder": "user2" },
+      { "amount": 25.20, "bidder": "user2" },
+      { "amount": 25.21, "bidder": "user2" },
+      { "amount": 25.22, "bidder": "user2" },
+      { "amount": 25.23, "bidder": "user2" },
+      { "amount": 25.24, "bidder": "user2" },
+      { "amount": 25.25, "bidder": "user2" },
+      { "amount": 25.26, "bidder": "user2" },
+      { "amount": 25.27, "bidder": "user2" },
+      { "amount": 25.28, "bidder": "user2" },
+      { "amount": 25.29, "bidder": "user2" }
     ]
   },
   {
@@ -35,7 +54,7 @@
     "currentPrice": 8.00,
     "buyOutrightPrice": 35.00,
     "seller": "user4",
-    "timeLeft": 350.00,
+    "timeLeft": 286.00,
     "bids": [
     ]
   },
@@ -45,7 +64,7 @@
     "currentPrice": 40.00,
     "buyOutrightPrice": 180.00,
     "seller": "user2",
-    "timeLeft": 700.00,
+    "timeLeft": 636.00,
     "bids": [
     ]
   }
