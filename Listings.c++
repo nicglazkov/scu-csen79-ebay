@@ -43,7 +43,7 @@ namespace CSEN79
     */
     void Listings::sellListing(Listing *soldListing)
     {
-        if (!soldListing || !log)
+        if (!soldListing)
             return;
 
         lock_guard<mutex> lock(listMutex);
@@ -53,7 +53,7 @@ namespace CSEN79
             {
                 if (*it == soldListing)
                 {
-                    Listing::addLog((*it)->getName() + " has been sold by " + (*it)->getSeller()->getName());
+                    if (log) Listing::addLog((*it)->getName() + " has been sold by " + (*it)->getSeller()->getName());
                     sold.push_back(soldListing);
                     vec.erase(it);
                     if (vec.empty())
@@ -277,8 +277,9 @@ namespace CSEN79
     }
 
     /**
-    sortTimeLeft / sortTimeLeftRev use the map's natural expiry-time ordering
-    directly — no re-sort needed, just flatten in map order (or reverse).
+    The map iterates in ascending expiry order (earliest expiry = least time left first).
+    sortTimeLeft  → Most to Least: reverse the map order.
+    sortTimeLeftRev → Least to Most: use the map order directly, no sort needed.
     */
     void Listings::sortTimeLeft()
     {
@@ -289,8 +290,6 @@ namespace CSEN79
                 for (Listing *L : vec)
                     flat.push_back(L);
         }
-        // map iterates earliest-expiry first → least time left first
-        // "sortTimeLeft" means most time left first, so reverse
         reverse(flat.begin(), flat.end());
         writeJson(flat);
     }
