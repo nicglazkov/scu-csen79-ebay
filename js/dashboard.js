@@ -1,4 +1,4 @@
-// dashboard.js — Loads item listings and displays them as cards on the homepage
+// dashboard.js, Loads item listings and displays them as cards on the homepage
 
 async function loadListings(sort) {
   var url = "http://localhost:8080/listings";
@@ -26,33 +26,51 @@ async function loadListings(sort) {
     var bidCount = item.bids ? item.bids.length : 0;
     var bidWord = bidCount !== 1 ? "bids" : "bid";
     var timeLeft = Math.max(0, Math.floor(item.timeLeft));
-    var timeStr = timeLeft > 3600
-      ? Math.floor(timeLeft / 3600) + "h " + Math.floor((timeLeft % 3600) / 60) + "m"
-      : timeLeft > 60
-        ? Math.floor(timeLeft / 60) + "m " + (timeLeft % 60) + "s"
-        : timeLeft + "s";
+    var timeStr =
+      timeLeft > 3600
+        ? Math.floor(timeLeft / 3600) +
+          "h " +
+          Math.floor((timeLeft % 3600) / 60) +
+          "m"
+        : timeLeft > 60
+          ? Math.floor(timeLeft / 60) + "m " + (timeLeft % 60) + "s"
+          : timeLeft + "s";
     var isOwn = item.seller === activeUser;
 
     card.innerHTML =
       '<div class="item-image"></div>' +
       '<div class="item-info">' +
       (isOwn ? '<span class="item-own-badge">Your listing</span>' : "") +
-      "  <h2>" + item.name + "</h2>" +
+      "  <h2>" +
+      item.name +
+      "</h2>" +
       '  <div class="item-price-row">' +
-      '    <span class="item-price">$' + item.currentPrice.toFixed(2) + "</span>" +
-      '    <span class="item-bids">' + bidCount + " " + bidWord + "</span>" +
+      '    <span class="item-price">$' +
+      item.currentPrice.toFixed(2) +
+      "</span>" +
+      '    <span class="item-bids">' +
+      bidCount +
+      " " +
+      bidWord +
+      "</span>" +
       "  </div>" +
-      '  <p class="item-buyout">Buy Now: $' + item.buyOutrightPrice.toFixed(2) + "</p>" +
+      '  <p class="item-buyout">Buy Now: $' +
+      item.buyOutrightPrice.toFixed(2) +
+      "</p>" +
       '  <div class="item-meta">' +
-      '    <span class="item-seller">Seller: ' + item.seller + "</span>" +
-      '    <span class="item-time">' + timeStr + " left</span>" +
+      '    <span class="item-seller">Seller: ' +
+      item.seller +
+      "</span>" +
+      '    <span class="item-time">' +
+      timeStr +
+      " left</span>" +
       "  </div>" +
       "</div>";
 
     grid.appendChild(card);
   }
 
-  // Sold listings — greyed out at the bottom
+  // Sold listings, greyed out at the bottom
   for (var j = 0; j < soldListings.length; j++) {
     var sold = soldListings[j];
 
@@ -63,8 +81,12 @@ async function loadListings(sort) {
     soldCard.innerHTML =
       '<div class="item-image"></div>' +
       '<div class="item-info">' +
-      "  <h2>" + sold.name + "</h2>" +
-      '  <p class="item-price">$' + parseFloat(sold.currentPrice).toFixed(2) + "</p>" +
+      "  <h2>" +
+      sold.name +
+      "</h2>" +
+      '  <p class="item-price">$' +
+      parseFloat(sold.currentPrice).toFixed(2) +
+      "</p>" +
       '  <p class="item-sold-badge">SOLD</p>' +
       "</div>";
 
@@ -92,8 +114,16 @@ document.addEventListener("DOMContentLoaded", function () {
   var currentSort = null;
 
   setView(localStorage.getItem("listingsView") || "card");
-  document.getElementById("view-card-btn").addEventListener("click", function () { setView("card"); });
-  document.getElementById("view-list-btn").addEventListener("click", function () { setView("list"); });
+  document
+    .getElementById("view-card-btn")
+    .addEventListener("click", function () {
+      setView("card");
+    });
+  document
+    .getElementById("view-list-btn")
+    .addEventListener("click", function () {
+      setView("list");
+    });
 
   loadListings(currentSort);
 
@@ -108,32 +138,38 @@ document.addEventListener("DOMContentLoaded", function () {
     loadListings(currentSort);
   }, 5000);
 
-  document.getElementById("add-listing-btn").addEventListener("click", function () {
-    document.getElementById("add-listing-form").style.display = "flex";
-    this.style.display = "none";
-  });
-
-  document.getElementById("cancel-listing-btn").addEventListener("click", function () {
-    document.getElementById("add-listing-form").style.display = "none";
-    document.getElementById("add-listing-btn").style.display = "";
-  });
-
-  document.getElementById("add-listing-form").addEventListener("submit", async function (e) {
-    e.preventDefault();
-    await fetch("http://localhost:8080/add-listing", {
-      method: "POST",
-      body: new URLSearchParams({
-        name:        document.getElementById("new-name").value,
-        description: document.getElementById("new-desc").value,
-        startPrice:  document.getElementById("new-start").value,
-        buyoutPrice: document.getElementById("new-buyout").value,
-        sellTime:    document.getElementById("new-time").value,
-        user:        getActiveUser(),
-      }),
+  document
+    .getElementById("add-listing-btn")
+    .addEventListener("click", function () {
+      document.getElementById("add-listing-form").style.display = "flex";
+      this.style.display = "none";
     });
-    this.reset();
-    this.style.display = "none";
-    document.getElementById("add-listing-btn").style.display = "";
-    loadListings(currentSort);
-  });
+
+  document
+    .getElementById("cancel-listing-btn")
+    .addEventListener("click", function () {
+      document.getElementById("add-listing-form").style.display = "none";
+      document.getElementById("add-listing-btn").style.display = "";
+    });
+
+  document
+    .getElementById("add-listing-form")
+    .addEventListener("submit", async function (e) {
+      e.preventDefault();
+      await fetch("http://localhost:8080/add-listing", {
+        method: "POST",
+        body: new URLSearchParams({
+          name: document.getElementById("new-name").value,
+          description: document.getElementById("new-desc").value,
+          startPrice: document.getElementById("new-start").value,
+          buyoutPrice: document.getElementById("new-buyout").value,
+          sellTime: document.getElementById("new-time").value,
+          user: getActiveUser(),
+        }),
+      });
+      this.reset();
+      this.style.display = "none";
+      document.getElementById("add-listing-btn").style.display = "";
+      loadListings(currentSort);
+    });
 });

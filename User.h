@@ -8,7 +8,7 @@
 
 namespace CSEN79
 {
-    // Forward declaration — full definition is in Listing.h
+    // Forward declaration full definition is in Listing.h
     class Listing;
 
     class User

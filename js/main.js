@@ -1,4 +1,4 @@
-// main.js — loaded on every page. Manages the active user via localStorage.
+// main.js loaded on every page. Manages the active user via localStorage.
 
 function getActiveUser() {
   return localStorage.getItem("activeUser") || "user0";

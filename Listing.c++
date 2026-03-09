@@ -13,7 +13,8 @@ namespace CSEN79
 
     void Listing::addLog(const string &msg)
     {
-        if (!log) return;
+        if (!log)
+            return;
         lock_guard<mutex> lock(logMutex);
         log->push_back(msg);
     }
@@ -109,10 +110,11 @@ namespace CSEN79
     }
 
     // Bids are always strictly increasing (enforced by makeBid),
-    // so the last element is always the highest — O(1) access.
+    // so the last element is always the highest, O(1) access.
     Bid *Listing::getHighestBid()
     {
-        if (bids.empty()) return nullptr;
+        if (bids.empty())
+            return nullptr;
         return bids.back();
     }
 
@@ -149,12 +151,18 @@ namespace CSEN79
         for (int i = 0; i < bids.size(); i++)
         {
             User *bidder = bids[i]->getBidder();
-            if (bidder == winner) continue;
+            if (bidder == winner)
+                continue;
 
             bool alreadyDone = false;
             for (int k = 0; k < processed.size(); k++)
-                if (processed[k] == bidder) { alreadyDone = true; break; }
-            if (alreadyDone) continue;
+                if (processed[k] == bidder)
+                {
+                    alreadyDone = true;
+                    break;
+                }
+            if (alreadyDone)
+                continue;
 
             processed.push_back(bidder);
             lock_guard<mutex> lock(bidder->getMutex());
@@ -215,7 +223,7 @@ namespace CSEN79
         }
 
         addLog(name + " purchased outright by " + buyer->getName() +
-                       " for: $" + to_string(buyOutrightPrice));
+               " for: $" + to_string(buyOutrightPrice));
         listings->sellListing(this);
         {
             lock_guard<mutex> userLock(buyer->getMutex());
@@ -268,8 +276,8 @@ namespace CSEN79
             return;
 
         addLog(winner->getBidder()->getName() +
-                       " has won the auction for " + name + " at the price of: $" +
-                       to_string(currentPrice));
+               " has won the auction for " + name + " at the price of: $" +
+               to_string(currentPrice));
 
         {
             lock_guard<mutex> userLock(winner->getBidder()->getMutex());

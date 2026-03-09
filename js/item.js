@@ -1,4 +1,4 @@
-// item.js — Loads a single item's details and handles bidding actions
+// item.js, Loads a single item's details and handles bidding actions
 
 document.addEventListener("DOMContentLoaded", async function () {
   // Get the item name from the URL (e.g., ?name=Widget)
@@ -15,10 +15,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     var soldList = await soldRes.json();
     var soldItem = null;
     for (var s = 0; s < soldList.length; s++) {
-      if (soldList[s].name === itemName) { soldItem = soldList[s]; break; }
+      if (soldList[s].name === itemName) {
+        soldItem = soldList[s];
+        break;
+      }
     }
     if (!soldItem) {
-      document.getElementById("item-detail").innerHTML = "<p>Item not found.</p>";
+      document.getElementById("item-detail").innerHTML =
+        "<p>Item not found.</p>";
       return;
     }
     showSoldDetail(soldItem);
@@ -28,14 +32,16 @@ document.addEventListener("DOMContentLoaded", async function () {
   fillItemDetails(item);
   if (getActiveUser() === item.seller) {
     document.getElementById("your-listing-banner").style.display = "block";
-    document.getElementById("remove-listing-btn").addEventListener("click", async function () {
-      if (!confirm("Remove this listing?")) return;
-      await fetch("http://localhost:8080/remove-listing", {
-        method: "POST",
-        body: new URLSearchParams({ name: item.name, user: getActiveUser() }),
+    document
+      .getElementById("remove-listing-btn")
+      .addEventListener("click", async function () {
+        if (!confirm("Remove this listing?")) return;
+        await fetch("http://localhost:8080/remove-listing", {
+          method: "POST",
+          body: new URLSearchParams({ name: item.name, user: getActiveUser() }),
+        });
+        window.location.href = "../index.html";
       });
-      window.location.href = "../index.html";
-    });
   }
   setupBidButtons(item);
   startCountdown(item.timeLeft);
@@ -49,25 +55,46 @@ function showSoldDetail(sold) {
   var bidWord = sold.bidCount !== 1 ? "bids" : "bid";
 
   var outcome = "";
-  if (isWinner)       outcome = '<p class="sold-outcome sold-outcome--won">You won this auction!</p>';
-  else if (isSeller)  outcome = '<p class="sold-outcome sold-outcome--sold">You sold this item.</p>';
-  else if (sold.winner === "") outcome = '<p class="sold-outcome">No bids — item expired unsold.</p>';
-  else                outcome = '<p class="sold-outcome sold-outcome--lost">You did not win this auction.</p>';
+  if (isWinner)
+    outcome =
+      '<p class="sold-outcome sold-outcome--won">You won this auction!</p>';
+  else if (isSeller)
+    outcome =
+      '<p class="sold-outcome sold-outcome--sold">You sold this item.</p>';
+  else if (sold.winner === "")
+    outcome = '<p class="sold-outcome">No bids, item expired unsold.</p>';
+  else
+    outcome =
+      '<p class="sold-outcome sold-outcome--lost">You did not win this auction.</p>';
 
   document.getElementById("item-detail").innerHTML =
     '<div id="item-image-col"><div id="item-image"></div></div>' +
     '<div id="item-info-col">' +
     '  <p class="sold-badge-large">SOLD</p>' +
-    '  <h1>' + sold.name + '</h1>' +
+    "  <h1>" +
+    sold.name +
+    "</h1>" +
     outcome +
     '  <div class="sold-stats">' +
-    '    <div class="sold-stat"><span class="sold-stat-label">Final price</span><span class="sold-stat-value">$' + parseFloat(sold.finalPrice).toFixed(2) + '</span></div>' +
-    '    <div class="sold-stat"><span class="sold-stat-label">Total bids</span><span class="sold-stat-value">' + sold.bidCount + ' ' + bidWord + '</span></div>' +
-    '    <div class="sold-stat"><span class="sold-stat-label">Winner</span><span class="sold-stat-value">' + (sold.winner || '—') + '</span></div>' +
-    '    <div class="sold-stat"><span class="sold-stat-label">Seller</span><span class="sold-stat-value">' + sold.seller + '</span></div>' +
-    '  </div>' +
-    (sold.description ? '<p class="sold-description">' + sold.description + '</p>' : '') +
-    '</div>';
+    '    <div class="sold-stat"><span class="sold-stat-label">Final price</span><span class="sold-stat-value">$' +
+    parseFloat(sold.finalPrice).toFixed(2) +
+    "</span></div>" +
+    '    <div class="sold-stat"><span class="sold-stat-label">Total bids</span><span class="sold-stat-value">' +
+    sold.bidCount +
+    " " +
+    bidWord +
+    "</span></div>" +
+    '    <div class="sold-stat"><span class="sold-stat-label">Winner</span><span class="sold-stat-value">' +
+    (sold.winner || "—") +
+    "</span></div>" +
+    '    <div class="sold-stat"><span class="sold-stat-label">Seller</span><span class="sold-stat-value">' +
+    sold.seller +
+    "</span></div>" +
+    "  </div>" +
+    (sold.description
+      ? '<p class="sold-description">' + sold.description + "</p>"
+      : "") +
+    "</div>";
 }
 
 // Helper Functions
@@ -164,8 +191,18 @@ function setupBidButtons(item) {
           amount: state.minNextBid,
         }),
       });
-      var rect = document.getElementById("bid-increment-btn").getBoundingClientRect();
-      confetti({ particleCount: 120, spread: 70, origin: { x: (rect.left + rect.width / 2) / window.innerWidth, y: (rect.top + rect.height / 2) / window.innerHeight }, colors: ["#3665f3", "#ffd700", "#ffffff"] });
+      var rect = document
+        .getElementById("bid-increment-btn")
+        .getBoundingClientRect();
+      confetti({
+        particleCount: 120,
+        spread: 70,
+        origin: {
+          x: (rect.left + rect.width / 2) / window.innerWidth,
+          y: (rect.top + rect.height / 2) / window.innerHeight,
+        },
+        colors: ["#3665f3", "#ffd700", "#ffffff"],
+      });
       await refreshBidUI();
     });
 
@@ -193,12 +230,22 @@ function setupBidButtons(item) {
           amount: bidAmount,
         }),
       });
-      var rect = document.getElementById("custom-bid-btn").getBoundingClientRect();
-      confetti({ particleCount: 120, spread: 70, origin: { x: (rect.left + rect.width / 2) / window.innerWidth, y: (rect.top + rect.height / 2) / window.innerHeight }, colors: ["#3665f3", "#ffd700", "#ffffff"] });
+      var rect = document
+        .getElementById("custom-bid-btn")
+        .getBoundingClientRect();
+      confetti({
+        particleCount: 120,
+        spread: 70,
+        origin: {
+          x: (rect.left + rect.width / 2) / window.innerWidth,
+          y: (rect.top + rect.height / 2) / window.innerHeight,
+        },
+        colors: ["#3665f3", "#ffd700", "#ffffff"],
+      });
       await refreshBidUI();
     });
 
-  // "Buy It Now" — redirect to dashboard after purchase
+  // "Buy It Now" redirect to dashboard after purchase
   document
     .getElementById("buyout-btn")
     .addEventListener("click", async function () {

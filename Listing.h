@@ -10,7 +10,7 @@
 using namespace std;
 namespace CSEN79
 {
-    // Forward declarations — full definitions are in their respective .h files
+    // Forward declarations, full definitions are in their respective .h files
     class Bid;
     class User;
     class Listings;

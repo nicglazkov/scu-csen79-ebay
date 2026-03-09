@@ -37,13 +37,13 @@ File layout
 
 Data structures
 
-- Hash table (open addressing) — stores the 10 users. Used because user lookups happen on every bid and buyout, so O(1) average is better than searching a list.
+- Hash table, stores the 10 users. Used because user lookups happen on every bid and buyout, so O(1) average is better than searching a list.
 
-- map<time_t, vector<Listing\*>> — stores active listings, keyed by expiry time. The map keeps them sorted by when they expire, so checking for ended auctions is O(log n + k) instead of scanning everything.
+- map<time_t, vector<Listing\*>> stores active listings, keyed by expiry time. The map keeps them sorted by when they expire, so checking for ended auctions is O(log n + k) instead of scanning everything.
 
-- vector<Bid\*> — stores bids on a listing. Bids are always placed in increasing order (enforced by the bid validation), so the highest bid is always the last element. O(1) to read the winner, O(1) to add a bid.
+- vector<Bid\*> stores bids on a listing. Bids are always placed in increasing order (enforced by the bid validation), so the highest bid is always the last element. O(1) to read the winner, O(1) to add a bid.
 
-- Heap sort — used when the frontend requests sorted listings (by price, name, time, etc). Implemented by hand because the assignment requires it. O(n log n).
+- Heap sort used when the frontend requests sorted listings (by price, name, time, etc). Implemented by hand because the assignment requires it. O(n log n).
 
 notes:
 

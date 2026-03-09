@@ -1,4 +1,4 @@
-// HashTable.h — open addressing hash table with linear probing
+// HashTable.h, open addressing hash table with linear probing
 // Maps string keys to User* values. Designed for a fixed, small set of
 // users that are inserted once and never deleted.
 #ifndef HASHTABLE_H
@@ -36,8 +36,8 @@ namespace CSEN79
             int i = hash(key);
             while (occupied[i])
                 i = (i + 1) % SIZE;
-            keys[i]     = key;
-            values[i]   = value;
+            keys[i] = key;
+            values[i] = value;
             occupied[i] = true;
         }
 
@@ -47,20 +47,21 @@ namespace CSEN79
             int i = hash(key);
             while (occupied[i])
             {
-                if (keys[i] == key) return values[i];
+                if (keys[i] == key)
+                    return values[i];
                 i = (i + 1) % SIZE;
             }
             return nullptr;
         }
 
         // Iterate over all stored values
-        User *getValue(int i)   const { return values[i]; }
-        bool  isOccupied(int i) const { return occupied[i]; }
+        User *getValue(int i) const { return values[i]; }
+        bool isOccupied(int i) const { return occupied[i]; }
 
     private:
         std::string keys[SIZE];
-        User       *values[SIZE];
-        bool        occupied[SIZE];
+        User *values[SIZE];
+        bool occupied[SIZE];
     };
 }
 

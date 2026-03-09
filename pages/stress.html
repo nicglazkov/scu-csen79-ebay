@@ -70,25 +70,25 @@
           <td><strong>Hash Table</strong><br><span class="ds-detail">key → user lookup</span></td>
           <td>Find a user by username</td>
           <td class="bigo">O(1) avg</td>
-          <td class="ds-explain">Instant — no matter how many users exist, lookup takes the same amount of time</td>
+          <td class="ds-explain">Instant: no matter how many users exist, lookup takes the same amount of time</td>
         </tr>
         <tr>
           <td><strong>Sorted Map</strong><br><span class="ds-detail">keyed by expiry time</span></td>
           <td>Add a new listing</td>
           <td class="bigo">O(log n)</td>
-          <td class="ds-explain">Very fast — listings stay sorted by expiry time automatically as they're inserted</td>
+          <td class="ds-explain">Very fast: listings stay sorted by expiry time automatically as they're inserted</td>
         </tr>
         <tr>
           <td><strong>Dynamic Array</strong><br><span class="ds-detail">append-only bid history</span></td>
           <td>Place a bid</td>
           <td class="bigo">O(1)</td>
-          <td class="ds-explain">Instant — new bids are appended to the end; highest bid is always the last entry</td>
+          <td class="ds-explain">Instant: new bids are appended to the end; highest bid is always the last entry</td>
         </tr>
         <tr>
           <td><strong>Heap Sort</strong><br><span class="ds-detail">in-place comparison sort</span></td>
           <td>Sort all listings</td>
           <td class="bigo">O(n log n)</td>
-          <td class="ds-explain">Scales well — sorting 10,000 listings only takes ~133,000 steps instead of 100,000,000
+          <td class="ds-explain">Scales well: sorting 10,000 listings only takes ~133,000 steps instead of 100,000,000
           </td>
         </tr>
       </tbody>
@@ -110,7 +110,7 @@
           <tr>
             <td><strong>Users</strong><br><span class="ds-detail">HashTable (open addressing)</span></td>
             <td class="ds-explain">Fixed set of 10 users inserted once, never deleted. Keyed by username string.</td>
-            <td class="ds-explain">O(1) average lookup by username — the most frequent operation. Linear probing keeps
+            <td class="ds-explain">O(1) average lookup by username, the most frequent operation. Linear probing keeps
               cache locality and the load factor stays low (10/32 ≈ 31%), so collisions are rare.</td>
           </tr>
           <tr>
@@ -146,9 +146,10 @@
           <tr>
             <td><strong>Persistent State</strong><br><span class="ds-detail">data/listings.json (flat file)</span></td>
             <td class="ds-explain">All active listings are serialized to a single JSON file on disk via
-              <code>saveToFile()</code>.</td>
+              <code>saveToFile()</code>.
+            </td>
             <td class="ds-explain">The dataset is small and writes are infrequent (triggered by bids and buyouts), so a
-              flat JSON file is sufficient — no database overhead needed. On startup the server reads this file to
+              flat JSON file is sufficient, no database overhead needed. On startup the server reads this file to
               restore state, giving simple crash recovery.</td>
           </tr>
         </tbody>

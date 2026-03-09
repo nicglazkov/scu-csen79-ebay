@@ -1,7 +1,9 @@
-// profile.js — Loads the current user's profile data and displays it
+// profile.js, Loads the current user's profile data and displays it
 
 document.addEventListener("DOMContentLoaded", async function () {
-  var response = await fetch("http://localhost:8080/user?name=" + getActiveUser());
+  var response = await fetch(
+    "http://localhost:8080/user?name=" + getActiveUser(),
+  );
 
   if (!response.ok) {
     document.getElementById("profile-name").textContent = "not found";
@@ -12,10 +14,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   document.getElementById("profile-name").textContent = user.name;
 
-  fillList("list-selling",    user.selling,    "Nothing listed yet.");
+  fillList("list-selling", user.selling, "Nothing listed yet.");
   fillList("list-interested", user.interested, "No active bids.");
-  fillList("list-purchased",  user.purchased,  "Nothing purchased yet.");
-  fillList("list-lost",       user.lost,       "No lost auctions.");
+  fillList("list-purchased", user.purchased, "Nothing purchased yet.");
+  fillList("list-lost", user.lost, "No lost auctions.");
 });
 
 // Fills a <ul> with item names, or shows a fallback message if the list is empty
