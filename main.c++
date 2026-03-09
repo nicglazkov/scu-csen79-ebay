@@ -64,10 +64,10 @@ int main()
 
     // Seed Listings
     users.find("user0")->makeListing("Vintage Camera", "A classic 35mm film camera in great condition.", 25.00, 120.00, 300);
-    users.find("user1")->makeListing("Gaming Chair", "Ergonomic chair with lumbar support.", 80.00, 350.00, 300);
-    users.find("user2")->makeListing("Electric Keyboard", "61-key beginner keyboard with built-in sounds.", 40.00, 180.00, 300);
-    users.find("user3")->makeListing("Old Laptop", "Used but functional. Good for basic tasks.", 50.00, 200.00, 300);
-    users.find("user4")->makeListing("Desk Lamp", "Adjustable LED lamp, barely used.", 8.00, 35.00, 300);
+    users.find("user1")->makeListing("Gaming Chair", "Ergonomic chair with lumbar support.", 80.00, 350.00, 200);
+    users.find("user2")->makeListing("Electric Keyboard", "61-key beginner keyboard with built-in sounds.", 40.00, 180.00, 700);
+    users.find("user3")->makeListing("Old Laptop", "Used but functional. Good for basic tasks.", 50.00, 200.00, 100);
+    users.find("user4")->makeListing("Desk Lamp", "Adjustable LED lamp, barely used.", 8.00, 35.00, 350);
 
     for (int i = 0; i < 5; i++)
         allListings->addListing(users.find("user" + to_string(i))->getSelling()->back());
@@ -317,7 +317,8 @@ int main()
     keepRunning = false;
     auctionThread.join();
     for (int i = 0; i < HashTable::SIZE; i++)
-        if (users.isOccupied(i)) delete users.getValue(i);
+        if (users.isOccupied(i))
+            delete users.getValue(i);
     delete allListings;
     delete globalLog;
     return 0;
