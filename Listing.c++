@@ -131,6 +131,7 @@ namespace CSEN79
             if ((*(seller->getSelling()))[i] == this)
             {
                 seller->getSelling()->erase(seller->getSelling()->begin() + i);
+                break;
             }
         }
     }
@@ -140,18 +141,28 @@ namespace CSEN79
     */
     void Listing::losers(User *winner)
     {
+        // track which users we've already processed to avoid duplicates
+        // (a user may have placed multiple bids on the same item)
+        vector<User *> processed;
         for (int i = 0; i < bids.size(); i++)
         {
-            if (bids[i]->getBidder() != winner)
+            User *bidder = bids[i]->getBidder();
+            if (bidder == winner) continue;
+
+            bool alreadyDone = false;
+            for (int k = 0; k < processed.size(); k++)
+                if (processed[k] == bidder) { alreadyDone = true; break; }
+            if (alreadyDone) continue;
+
+            processed.push_back(bidder);
+            lock_guard<mutex> lock(bidder->getMutex());
+            bidder->getLost()->push_back(this);
+            for (int j = 0; j < bidder->getInterested()->size(); j++)
             {
-                lock_guard<mutex> lock(bids[i]->getBidder()->getMutex());
-                bids[i]->getBidder()->getLost()->push_back(this);
-                for (int j = 0; j < bids[i]->getBidder()->getInterested()->size(); j++)
+                if ((*(bidder->getInterested()))[j] == this)
                 {
-                    if ((*(bids[i]->getBidder()->getInterested()))[j] == this)
-                    {
-                        bids[i]->getBidder()->getInterested()->erase(bids[i]->getBidder()->getInterested()->begin() + j);
-                    }
+                    bidder->getInterested()->erase(bidder->getInterested()->begin() + j);
+                    break;
                 }
             }
         }
