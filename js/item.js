@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   fillItemDetails(item);
+  if (getActiveUser() === item.seller)
+    document.getElementById("your-listing-banner").style.display = "block";
   setupBidButtons(item);
   startCountdown(item.timeLeft);
 });
@@ -78,6 +80,15 @@ function startCountdown(seconds) {
   }, 1000);
 }
 
+function showToast(message) {
+  var toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("toast--visible");
+  setTimeout(function () {
+    toast.classList.remove("toast--visible");
+  }, 3000);
+}
+
 function setupBidButtons(item) {
   var minNextBid = item.currentPrice + 0.01;
 
@@ -85,6 +96,10 @@ function setupBidButtons(item) {
   document
     .getElementById("bid-increment-btn")
     .addEventListener("click", async function () {
+      if (getActiveUser() === item.seller) {
+        showToast("You can't bid on your own listing.");
+        return;
+      }
       await fetch("http://localhost:8080/bid", {
         method: "POST",
         body: new URLSearchParams({
@@ -100,6 +115,10 @@ function setupBidButtons(item) {
   document
     .getElementById("custom-bid-btn")
     .addEventListener("click", async function () {
+      if (getActiveUser() === item.seller) {
+        showToast("You can't bid on your own listing.");
+        return;
+      }
       var input = document.getElementById("custom-bid-input");
       var bidAmount = parseFloat(input.value);
 
@@ -123,6 +142,10 @@ function setupBidButtons(item) {
   document
     .getElementById("buyout-btn")
     .addEventListener("click", async function () {
+      if (getActiveUser() === item.seller) {
+        showToast("You can't buy your own listing.");
+        return;
+      }
       await fetch("http://localhost:8080/buyout", {
         method: "POST",
         body: new URLSearchParams({ name: item.name, user: getActiveUser() }),

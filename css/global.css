@@ -18,6 +18,7 @@ body {
 
 #main-nav {
   display: flex;
+  align-items: center;
   gap: 1rem;
   padding: 1rem;
   background: var(--color-primary);
@@ -26,4 +27,24 @@ body {
 #main-nav a {
   color: #fff;
   text-decoration: none;
+}
+
+#user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+#logged-in-label {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+}
+
+#user-select {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
 }

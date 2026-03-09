@@ -13,6 +13,8 @@ async function loadListings(sort) {
   var grid = document.getElementById("listings-grid");
   grid.innerHTML = "";
 
+  var activeUser = getActiveUser();
+
   // Active listings
   for (var i = 0; i < listings.length; i++) {
     var item = listings[i];
@@ -23,12 +25,28 @@ async function loadListings(sort) {
 
     var bidCount = item.bids ? item.bids.length : 0;
     var bidWord = bidCount !== 1 ? "bids" : "bid";
+    var timeLeft = Math.max(0, Math.floor(item.timeLeft));
+    var timeStr = timeLeft > 3600
+      ? Math.floor(timeLeft / 3600) + "h " + Math.floor((timeLeft % 3600) / 60) + "m"
+      : timeLeft > 60
+        ? Math.floor(timeLeft / 60) + "m " + (timeLeft % 60) + "s"
+        : timeLeft + "s";
+    var isOwn = item.seller === activeUser;
+
     card.innerHTML =
       '<div class="item-image"></div>' +
       '<div class="item-info">' +
+      (isOwn ? '<span class="item-own-badge">Your listing</span>' : "") +
       "  <h2>" + item.name + "</h2>" +
-      '  <p class="item-price">$' + item.currentPrice.toFixed(2) + "</p>" +
-      '  <p class="item-bids">' + bidCount + " " + bidWord + "</p>" +
+      '  <div class="item-price-row">' +
+      '    <span class="item-price">$' + item.currentPrice.toFixed(2) + "</span>" +
+      '    <span class="item-bids">' + bidCount + " " + bidWord + "</span>" +
+      "  </div>" +
+      '  <p class="item-buyout">Buy Now: $' + item.buyOutrightPrice.toFixed(2) + "</p>" +
+      '  <div class="item-meta">' +
+      '    <span class="item-seller">Seller: ' + item.seller + "</span>" +
+      '    <span class="item-time">' + timeStr + " left</span>" +
+      "  </div>" +
       "</div>";
 
     grid.appendChild(card);
