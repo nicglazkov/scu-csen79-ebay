@@ -18,6 +18,11 @@ namespace CSEN79
         log->push_back(msg);
     }
 
+    mutex &Listing::getLogMutex()
+    {
+        return logMutex;
+    }
+
     Listing::Listing()
     {
         name = "";

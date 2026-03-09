@@ -244,6 +244,25 @@ int main()
         allListings->saveToFile();
         res.set_content("ok", "text/plain"); });
 
+    // Returns the transaction log as a JSON array of strings.
+    svr.Get("/logs", [&](const Request &, Response &res)
+            {
+        string json = "[";
+        lock_guard<mutex> lock(Listing::getLogMutex());
+        for (int i = 0; i < (int)globalLog->size(); i++) {
+            // Escape quotes in log messages
+            string msg = (*globalLog)[i];
+            string escaped;
+            for (char c : msg) {
+                if (c == '"') escaped += "\\\"";
+                else escaped += c;
+            }
+            json += "\"" + escaped + "\"";
+            if (i < (int)globalLog->size() - 1) json += ",";
+        }
+        json += "]";
+        res.set_content(json, "application/json"); });
+
     // Runs a self-contained stress test for 3 seconds and returns timing stats.
     // Each iteration creates 1000 listings and places 2 bids on each (3000 ops).
     svr.Post("/stress-test", [](const Request &, Response &res)

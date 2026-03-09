@@ -48,6 +48,7 @@ namespace CSEN79
         static void setLog(vector<string> *newLog);
         static void setListings(Listings *newListings);
         static void addLog(const string &msg);
+        static mutex &getLogMutex();
         int getSellTime();
         time_t getExpiryTime();
         Bid *getHighestBid();
