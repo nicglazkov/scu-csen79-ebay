@@ -8,7 +8,7 @@
 #include <atomic>
 #include <thread>
 #include <chrono>
-#include <map>
+#include "HashTable.h"
 
 using namespace std;
 using namespace httplib;
@@ -49,7 +49,7 @@ int main()
     // Setup
     const int NUM_USERS = 10;
     vector<string> *globalLog = new vector<string>;
-    map<string, User *> users;
+    HashTable users;
     Listings *allListings = new Listings();
 
     Listing::setLog(globalLog);
@@ -59,18 +59,18 @@ int main()
     for (int i = 0; i < NUM_USERS; i++)
     {
         string name = "user" + to_string(i);
-        users[name] = new User(name);
+        users.insert(name, new User(name));
     }
 
     // Seed Listings
-    users["user0"]->makeListing("Vintage Camera", "A classic 35mm film camera in great condition.", 25.00, 120.00, 300);
-    users["user1"]->makeListing("Gaming Chair", "Ergonomic chair with lumbar support.", 80.00, 350.00, 300);
-    users["user2"]->makeListing("Electric Keyboard", "61-key beginner keyboard with built-in sounds.", 40.00, 180.00, 300);
-    users["user3"]->makeListing("Old Laptop", "Used but functional. Good for basic tasks.", 50.00, 200.00, 300);
-    users["user4"]->makeListing("Desk Lamp", "Adjustable LED lamp, barely used.", 8.00, 35.00, 300);
+    users.find("user0")->makeListing("Vintage Camera", "A classic 35mm film camera in great condition.", 25.00, 120.00, 300);
+    users.find("user1")->makeListing("Gaming Chair", "Ergonomic chair with lumbar support.", 80.00, 350.00, 300);
+    users.find("user2")->makeListing("Electric Keyboard", "61-key beginner keyboard with built-in sounds.", 40.00, 180.00, 300);
+    users.find("user3")->makeListing("Old Laptop", "Used but functional. Good for basic tasks.", 50.00, 200.00, 300);
+    users.find("user4")->makeListing("Desk Lamp", "Adjustable LED lamp, barely used.", 8.00, 35.00, 300);
 
     for (int i = 0; i < 5; i++)
-        allListings->addListing(users["user" + to_string(i)]->getSelling()->back());
+        allListings->addListing(users.find("user" + to_string(i))->getSelling()->back());
 
     allListings->saveToFile();
 
@@ -115,7 +115,7 @@ int main()
         catch (...) { res.status = 400; return; }
 
         Listing *listing = allListings->getListing(listingName);
-        User *user = users.count(userName) ? users[userName] : nullptr;
+        User *user = users.find(userName);
 
         if (!listing || !user) { res.status = 404; return; }
 
@@ -131,7 +131,7 @@ int main()
         string userName    = req.get_param_value("user");
 
         Listing *listing = allListings->getListing(listingName);
-        User *user = users.count(userName) ? users[userName] : nullptr;
+        User *user = users.find(userName);
 
         if (!listing || !user) { res.status = 404; return; }
 
@@ -170,7 +170,7 @@ int main()
     svr.Get("/user", [&](const Request &req, Response &res)
             {
         string userName = req.get_param_value("name");
-        User *user = users.count(userName) ? users[userName] : nullptr;
+        User *user = users.find(userName);
         if (!user) { res.status = 404; return; }
 
         // Helper that turns a vector of Listing pointers into a JSON array of names
@@ -204,8 +204,8 @@ int main()
     // Cleanup when the server stops
     keepRunning = false;
     auctionThread.join();
-    for (auto &[name, u] : users)
-        delete u;
+    for (int i = 0; i < HashTable::SIZE; i++)
+        if (users.isOccupied(i)) delete users.getValue(i);
     delete allListings;
     delete globalLog;
     return 0;

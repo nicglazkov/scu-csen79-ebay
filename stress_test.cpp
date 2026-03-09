@@ -14,11 +14,11 @@
 #include "Listings.h"
 #include "User.h"
 #include "Bid.h"
+#include "HashTable.h"
 #include <chrono>
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
-#include <map>
 #include <string>
 #include <vector>
 
@@ -35,12 +35,12 @@ int main()
     CSEN79::Listing::setListings(allListings);
     allListings->setLog(globalLog);
 
-    map<string, CSEN79::User *> users;
+    CSEN79::HashTable users;
     vector<string> userNames;
     for (int i = 0; i < 10; i++)
     {
         string name = "user" + to_string(i);
-        users[name] = new CSEN79::User(name);
+        users.insert(name, new CSEN79::User(name));
         userNames.push_back(name);
     }
 
@@ -60,7 +60,7 @@ int main()
         double startPrice = 5.0 + (rand() % 950) / 10.0;           // 5.0–99.5
         double buyout = startPrice * (1.5 + (rand() % 50) / 50.0); // 1.5x–2.5x
         int sellTime = 3600 + (rand() % 86400);
-        CSEN79::User *seller = users[userNames[i % 10]];
+        CSEN79::User *seller = users.find(userNames[i % 10]);
         seller->makeListing(name, desc, startPrice, buyout, sellTime);
         CSEN79::Listing *L = seller->getSelling()->back();
         allListings->addListing(L);
@@ -78,7 +78,7 @@ int main()
         {
             u1 = userNames[rand() % 10];
         } while (u1 == sellerName);
-        users[u1]->placeBid(L, curr + 1.0);
+        users.find(u1)->placeBid(L, curr + 1.0);
         curr = L->getPrice();
         // Second bid: pick another non-seller, non-u1 user
         string u2;
@@ -86,7 +86,7 @@ int main()
         {
             u2 = userNames[rand() % 10];
         } while (u2 == sellerName || u2 == u1);
-        users[u2]->placeBid(L, curr + 1.0);
+        users.find(u2)->placeBid(L, curr + 1.0);
     }
 
     auto tEnd = chrono::high_resolution_clock::now();
@@ -105,8 +105,8 @@ int main()
 
     delete allListings;
     delete globalLog;
-    for (auto &[name, u] : users)
-        delete u;
+    for (int i = 0; i < CSEN79::HashTable::SIZE; i++)
+        if (users.isOccupied(i)) delete users.getValue(i);
 
     return 0;
 }
