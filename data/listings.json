@@ -2,19 +2,11 @@
   {
     "name": "Vintage Camera",
     "description": "A classic 35mm film camera in great condition.",
-    "currentPrice": 25.08,
+    "currentPrice": 25.00,
     "buyOutrightPrice": 120.00,
     "seller": "user0",
-    "timeLeft": 243.00,
+    "timeLeft": 174.00,
     "bids": [
-      { "amount": 25.01, "bidder": "user1" },
-      { "amount": 25.02, "bidder": "user1" },
-      { "amount": 25.03, "bidder": "user1" },
-      { "amount": 25.04, "bidder": "user1" },
-      { "amount": 25.05, "bidder": "user1" },
-      { "amount": 25.06, "bidder": "user1" },
-      { "amount": 25.07, "bidder": "user1" },
-      { "amount": 25.08, "bidder": "user1" }
     ]
   },
   {
@@ -23,7 +15,7 @@
     "currentPrice": 80.00,
     "buyOutrightPrice": 350.00,
     "seller": "user1",
-    "timeLeft": 243.00,
+    "timeLeft": 174.00,
     "bids": [
     ]
   },
@@ -33,7 +25,7 @@
     "currentPrice": 40.00,
     "buyOutrightPrice": 180.00,
     "seller": "user2",
-    "timeLeft": 243.00,
+    "timeLeft": 174.00,
     "bids": [
     ]
   },
@@ -43,7 +35,17 @@
     "currentPrice": 50.00,
     "buyOutrightPrice": 200.00,
     "seller": "user3",
-    "timeLeft": 243.00,
+    "timeLeft": 174.00,
+    "bids": [
+    ]
+  },
+  {
+    "name": "Desk Lamp",
+    "description": "Adjustable LED lamp, barely used.",
+    "currentPrice": 8.00,
+    "buyOutrightPrice": 35.00,
+    "seller": "user4",
+    "timeLeft": 174.00,
     "bids": [
     ]
   }

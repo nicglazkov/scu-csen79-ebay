@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eBay Lite - Stress Test</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/stress.css">
+</head>
+<body>
+  <nav id="main-nav">
+    <a href="../index.html">Dashboard</a>
+    <a href="profile.html">My Profile</a>
+    <a href="stress.html">Stress Test</a>
+    <div id="user-info">
+      <span id="logged-in-label">Logged in as:</span>
+      <select id="user-select">
+        <option value="user0">user0</option>
+        <option value="user1">user1</option>
+        <option value="user2">user2</option>
+        <option value="user3">user3</option>
+        <option value="user4">user4</option>
+        <option value="user5">user5</option>
+        <option value="user6">user6</option>
+        <option value="user7">user7</option>
+        <option value="user8">user8</option>
+        <option value="user9">user9</option>
+      </select>
+    </div>
+  </nav>
+
+  <main id="stress-page">
+    <h1>Stress Test</h1>
+    <p id="stress-desc">Runs 1,000 listings + 2,000 bids per cycle for 3 seconds. Reports total throughput.</p>
+    <button id="run-btn">Run Stress Test</button>
+
+    <div id="stats-section" style="display:none">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-ops"></div>
+        <div class="stat-label">Total Operations</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-time"></div>
+        <div class="stat-label">Elapsed Time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-throughput"></div>
+        <div class="stat-label">Operations / Second</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-avg"></div>
+        <div class="stat-label">Avg Time per Op</div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/stress.js"></script>
+</body>
+</html>

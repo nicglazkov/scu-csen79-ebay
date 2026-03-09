@@ -194,6 +194,68 @@ int main()
 
         res.set_content(json, "application/json"); });
 
+    // Runs a self-contained stress test for 3 seconds and returns timing stats.
+    // Each iteration creates 1000 listings and places 2 bids on each (3000 ops).
+    svr.Post("/stress-test", [](const Request &, Response &res)
+             {
+        srand(static_cast<unsigned>(time(nullptr)));
+
+        vector<string> userNames;
+        for (int i = 0; i < 10; i++)
+            userNames.push_back("user" + to_string(i));
+
+        int totalOps = 0;
+        auto tStart = chrono::high_resolution_clock::now();
+
+        while (chrono::duration<double>(chrono::high_resolution_clock::now() - tStart).count() < 3.0)
+        {
+            CSEN79::HashTable stressUsers;
+            for (int i = 0; i < 10; i++)
+                stressUsers.insert(userNames[i], new CSEN79::User(userNames[i]));
+
+            CSEN79::Listings *stressListings = new CSEN79::Listings();
+            vector<CSEN79::Listing *> items;
+
+            for (int i = 0; i < 1000; i++) {
+                double startPrice = 5.0 + (rand() % 950) / 10.0;
+                double buyout = startPrice * (1.5 + (rand() % 50) / 50.0);
+                CSEN79::User *seller = stressUsers.find(userNames[i % 10]);
+                seller->makeListing("Item_" + to_string(i), "", startPrice, buyout, 3600);
+                CSEN79::Listing *L = seller->getSelling()->back();
+                stressListings->addListing(L);
+                items.push_back(L);
+            }
+
+            for (CSEN79::Listing *L : items) {
+                string sel = L->getSeller()->getName();
+                double curr = L->getPrice();
+                string u1;
+                do { u1 = userNames[rand() % 10]; } while (u1 == sel);
+                stressUsers.find(u1)->placeBid(L, curr + 1.0);
+                curr = L->getPrice();
+                string u2;
+                do { u2 = userNames[rand() % 10]; } while (u2 == sel || u2 == u1);
+                stressUsers.find(u2)->placeBid(L, curr + 1.0);
+            }
+
+            totalOps += 3000;
+
+            for (int i = 0; i < CSEN79::HashTable::SIZE; i++)
+                if (stressUsers.isOccupied(i)) delete stressUsers.getValue(i);
+            delete stressListings;
+        }
+
+        double elapsed = chrono::duration<double>(chrono::high_resolution_clock::now() - tStart).count();
+        double throughput = totalOps / elapsed;
+        double avgMs = (elapsed / totalOps) * 1000;
+
+        char buf[256];
+        snprintf(buf, sizeof(buf),
+            "{\"totalOps\":%d,\"elapsedMs\":%.0f,\"throughput\":%d,\"avgMsPerOp\":%.4f}",
+            totalOps, elapsed * 1000, (int)throughput, avgMs);
+
+        res.set_content(buf, "application/json"); });
+
     // Serve the frontend files (HTML, CSS, JS) from the project folder.
     // Opening http://localhost:8080 in a browser will load index.html.
     svr.set_mount_point("/", ".");

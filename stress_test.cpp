@@ -1,15 +1,3 @@
-/**
- * Stress test for eBay-Lite backend (Success Criteria §4).
- * - Generates 1000 random items (listings).
- * - Adds a couple of bids to each item.
- * - Measures throughput (operations per second) and reports.
- *
- * Build (same sources as auction_app; run from project root):
- *   g++ -std=c++17 stress_test.cpp User.cpp Listing.c++ Listings.c++ Bid.cpp -pthread -o stress_test
- * Run:
- *   ./stress_test
- */
-
 #include "Listing.h"
 #include "Listings.h"
 #include "User.h"
@@ -45,14 +33,13 @@ int main()
     }
 
     vector<CSEN79::Listing *> listings;
-    listings.reserve(1000);
+    listings.reserve(1000000);
 
-    const int NUM_ITEMS = 1000;
+    const int NUM_ITEMS = 1000000;
     const int BIDS_PER_ITEM = 2;
 
     auto tStart = chrono::high_resolution_clock::now();
 
-    // 1. Generate 1000 random items
     for (int i = 0; i < NUM_ITEMS; i++)
     {
         string name = "StressItem_" + to_string(i);
@@ -92,7 +79,7 @@ int main()
     auto tEnd = chrono::high_resolution_clock::now();
     chrono::duration<double> elapsed = tEnd - tStart;
 
-    int totalOps = NUM_ITEMS + NUM_ITEMS * BIDS_PER_ITEM; // 1000 + 2000 = 3000
+    int totalOps = NUM_ITEMS + NUM_ITEMS * BIDS_PER_ITEM;
     double throughput = totalOps / elapsed.count();
 
     cout << " Stress Test Results " << endl;
@@ -106,7 +93,8 @@ int main()
     delete allListings;
     delete globalLog;
     for (int i = 0; i < CSEN79::HashTable::SIZE; i++)
-        if (users.isOccupied(i)) delete users.getValue(i);
+        if (users.isOccupied(i))
+            delete users.getValue(i);
 
     return 0;
 }
