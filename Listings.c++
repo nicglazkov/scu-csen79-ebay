@@ -167,7 +167,42 @@ namespace CSEN79
         writeJson(flat);
     }
 
-    // Sort helpers: collect flat vector, sort, write JSON
+    // --- Heap sort implementation (O(n log n)) ---
+    // cmp(a, b) returns true if a should come BEFORE b in the final output.
+    // The heap is a max-heap where "max" means "should come last."
+
+    template <typename Cmp>
+    static void heapify(vector<Listing *> &arr, int n, int i, Cmp cmp)
+    {
+        int root = i;
+        int left  = 2 * i + 1;
+        int right = 2 * i + 2;
+        // if child should come after current root, child is the new root
+        if (left  < n && cmp(arr[root], arr[left]))  root = left;
+        if (right < n && cmp(arr[root], arr[right])) root = right;
+        if (root != i)
+        {
+            swap(arr[i], arr[root]);
+            heapify(arr, n, root, cmp);
+        }
+    }
+
+    template <typename Cmp>
+    static void heapSort(vector<Listing *> &arr, Cmp cmp)
+    {
+        int n = arr.size();
+        // build max-heap
+        for (int i = n / 2 - 1; i >= 0; i--)
+            heapify(arr, n, i, cmp);
+        // repeatedly move the max (last in sort order) to the end
+        for (int i = n - 1; i > 0; i--)
+        {
+            swap(arr[0], arr[i]);
+            heapify(arr, i, 0, cmp);
+        }
+    }
+
+    // --- Sort functions ---
 
     void Listings::sortAlpha()
     {
@@ -175,11 +210,9 @@ namespace CSEN79
         {
             lock_guard<mutex> lock(listMutex);
             for (auto &[key, vec] : allListings)
-                for (Listing *L : vec)
-                    flat.push_back(L);
+                for (Listing *L : vec) flat.push_back(L);
         }
-        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b)
-             { return a->getName() < b->getName(); });
+        heapSort(flat, [](Listing *a, Listing *b) { return a->getName() < b->getName(); });
         writeJson(flat);
     }
 
@@ -189,11 +222,9 @@ namespace CSEN79
         {
             lock_guard<mutex> lock(listMutex);
             for (auto &[key, vec] : allListings)
-                for (Listing *L : vec)
-                    flat.push_back(L);
+                for (Listing *L : vec) flat.push_back(L);
         }
-        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b)
-             { return a->getName() > b->getName(); });
+        heapSort(flat, [](Listing *a, Listing *b) { return a->getName() > b->getName(); });
         writeJson(flat);
     }
 
@@ -203,11 +234,9 @@ namespace CSEN79
         {
             lock_guard<mutex> lock(listMutex);
             for (auto &[key, vec] : allListings)
-                for (Listing *L : vec)
-                    flat.push_back(L);
+                for (Listing *L : vec) flat.push_back(L);
         }
-        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b)
-             { return a->getPrice() > b->getPrice(); });
+        heapSort(flat, [](Listing *a, Listing *b) { return a->getPrice() > b->getPrice(); });
         writeJson(flat);
     }
 
@@ -217,11 +246,9 @@ namespace CSEN79
         {
             lock_guard<mutex> lock(listMutex);
             for (auto &[key, vec] : allListings)
-                for (Listing *L : vec)
-                    flat.push_back(L);
+                for (Listing *L : vec) flat.push_back(L);
         }
-        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b)
-             { return a->getPrice() < b->getPrice(); });
+        heapSort(flat, [](Listing *a, Listing *b) { return a->getPrice() < b->getPrice(); });
         writeJson(flat);
     }
 
@@ -231,11 +258,9 @@ namespace CSEN79
         {
             lock_guard<mutex> lock(listMutex);
             for (auto &[key, vec] : allListings)
-                for (Listing *L : vec)
-                    flat.push_back(L);
+                for (Listing *L : vec) flat.push_back(L);
         }
-        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b)
-             { return a->getBuyOutrightPrice() > b->getBuyOutrightPrice(); });
+        heapSort(flat, [](Listing *a, Listing *b) { return a->getBuyOutrightPrice() > b->getBuyOutrightPrice(); });
         writeJson(flat);
     }
 
@@ -245,11 +270,9 @@ namespace CSEN79
         {
             lock_guard<mutex> lock(listMutex);
             for (auto &[key, vec] : allListings)
-                for (Listing *L : vec)
-                    flat.push_back(L);
+                for (Listing *L : vec) flat.push_back(L);
         }
-        sort(flat.begin(), flat.end(), [](Listing *a, Listing *b)
-             { return a->getBuyOutrightPrice() < b->getBuyOutrightPrice(); });
+        heapSort(flat, [](Listing *a, Listing *b) { return a->getBuyOutrightPrice() < b->getBuyOutrightPrice(); });
         writeJson(flat);
     }
 
