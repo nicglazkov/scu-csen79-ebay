@@ -22,6 +22,7 @@ namespace CSEN79 {
     */
     void User::makeListing(string name, string description, double startingPrice, double buyOutrightPrice, int sellTime) {
         Listing* newListing = new Listing(name, description, startingPrice, buyOutrightPrice, sellTime, this);
+        lock_guard<mutex> lock(userMutex);
         selling.push_back(newListing);
     }
 

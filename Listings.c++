@@ -66,6 +66,7 @@ namespace CSEN79
 
     int Listings::getNumListings()
     {
+        lock_guard<mutex> lock(listMutex);
         int count = 0;
         for (auto &[key, vec] : allListings)
             count += vec.size();
@@ -74,6 +75,7 @@ namespace CSEN79
 
     int Listings::getNumSoldListings()
     {
+        lock_guard<mutex> lock(listMutex);
         return sold.size();
     }
 
