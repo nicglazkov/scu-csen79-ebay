@@ -40,6 +40,10 @@ function updatePagination() {
 }
 
 async function loadLogs() {
+  var list = document.getElementById("log-list");
+  list.innerHTML = "<p id='loading-logs'>Loading...</p>";
+  document.getElementById("pagination").style.display = "none";
+
   var res = await fetch("http://localhost:8080/logs");
   var data = await res.json();
 

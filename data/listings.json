@@ -1,21 +1,11 @@
 [
   {
-    "name": "Old Laptop",
-    "description": "Used but functional. Good for basic tasks.",
-    "currentPrice": 50.00,
-    "buyOutrightPrice": 200.00,
-    "seller": "user3",
-    "timeLeft": 36.00,
-    "bids": [
-    ]
-  },
-  {
     "name": "Vintage Camera",
     "description": "A classic 35mm film camera in great condition.",
     "currentPrice": 25.29,
     "buyOutrightPrice": 120.00,
     "seller": "user0",
-    "timeLeft": 236.00,
+    "timeLeft": 187.00,
     "bids": [
       { "amount": 25.01, "bidder": "user2" },
       { "amount": 25.02, "bidder": "user2" },
@@ -51,11 +41,15 @@
   {
     "name": "Desk Lamp",
     "description": "Adjustable LED lamp, barely used.",
-    "currentPrice": 8.00,
+    "currentPrice": 8.04,
     "buyOutrightPrice": 35.00,
     "seller": "user4",
-    "timeLeft": 286.00,
+    "timeLeft": 237.00,
     "bids": [
+      { "amount": 8.01, "bidder": "user2" },
+      { "amount": 8.02, "bidder": "user2" },
+      { "amount": 8.03, "bidder": "user2" },
+      { "amount": 8.04, "bidder": "user2" }
     ]
   },
   {
@@ -64,7 +58,7 @@
     "currentPrice": 40.00,
     "buyOutrightPrice": 180.00,
     "seller": "user2",
-    "timeLeft": 636.00,
+    "timeLeft": 587.00,
     "bids": [
     ]
   }

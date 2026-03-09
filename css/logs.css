@@ -51,7 +51,8 @@
   font-family: monospace;
 }
 
-#no-logs {
+#no-logs,
+#loading-logs {
   color: #888;
   font-style: italic;
 }
