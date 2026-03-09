@@ -80,24 +80,38 @@ function startCountdown(seconds) {
   }, 1000);
 }
 
-function showToast(message) {
-  var toast = document.getElementById("toast");
-  toast.textContent = message;
-  toast.classList.add("toast--visible");
-  setTimeout(function () {
-    toast.classList.remove("toast--visible");
-  }, 3000);
-}
-
 function setupBidButtons(item) {
-  var minNextBid = item.currentPrice + 0.01;
+  // state.minNextBid is updated in-place after each bid so spam-clicking
+  // always sends the correct next amount without a page reload
+  var state = { minNextBid: item.currentPrice + 0.01 };
+
+  async function refreshBidUI() {
+    var res = await fetch("http://localhost:8080/listings");
+    var listings = await res.json();
+    var updated = findItemByName(listings, item.name);
+    if (!updated) return;
+
+    var bidCount = updated.bids ? updated.bids.length : 0;
+    var bidWord = bidCount !== 1 ? "bids" : "bid";
+    state.minNextBid = updated.currentPrice + 0.01;
+
+    document.getElementById("current-bid").textContent =
+      "$" + updated.currentPrice.toFixed(2);
+    document.getElementById("bid-count").textContent = bidCount + " " + bidWord;
+    document.getElementById("bid-increment-btn").textContent =
+      "Bid $" + state.minNextBid.toFixed(2);
+    document.getElementById("custom-bid-input").min =
+      state.minNextBid.toFixed(2);
+    document.getElementById("custom-bid-input").placeholder =
+      "$" + state.minNextBid.toFixed(2) + " or more";
+  }
 
   // "Bid +minimum" button
   document
     .getElementById("bid-increment-btn")
     .addEventListener("click", async function () {
       if (getActiveUser() === item.seller) {
-        showToast("You can't bid on your own listing.");
+        alert("You can't bid on your own listing.");
         return;
       }
       await fetch("http://localhost:8080/bid", {
@@ -105,10 +119,10 @@ function setupBidButtons(item) {
         body: new URLSearchParams({
           name: item.name,
           user: getActiveUser(),
-          amount: minNextBid,
+          amount: state.minNextBid,
         }),
       });
-      location.reload();
+      await refreshBidUI();
     });
 
   // "Place Bid" button
@@ -116,14 +130,14 @@ function setupBidButtons(item) {
     .getElementById("custom-bid-btn")
     .addEventListener("click", async function () {
       if (getActiveUser() === item.seller) {
-        showToast("You can't bid on your own listing.");
+        alert("You can't bid on your own listing.");
         return;
       }
       var input = document.getElementById("custom-bid-input");
       var bidAmount = parseFloat(input.value);
 
-      if (isNaN(bidAmount) || bidAmount < minNextBid) {
-        alert("Bid must be at least $" + minNextBid.toFixed(2));
+      if (isNaN(bidAmount) || bidAmount < state.minNextBid) {
+        alert("Bid must be at least $" + state.minNextBid.toFixed(2));
         return;
       }
 
@@ -135,15 +149,15 @@ function setupBidButtons(item) {
           amount: bidAmount,
         }),
       });
-      location.reload();
+      await refreshBidUI();
     });
 
-  // "Buy It Now" button — redirect to dashboard since the listing is now sold
+  // "Buy It Now" — redirect to dashboard after purchase
   document
     .getElementById("buyout-btn")
     .addEventListener("click", async function () {
       if (getActiveUser() === item.seller) {
-        showToast("You can't buy your own listing.");
+        alert("You can't buy your own listing.");
         return;
       }
       await fetch("http://localhost:8080/buyout", {
