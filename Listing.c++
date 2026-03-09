@@ -208,7 +208,7 @@ namespace CSEN79
     {
         {
             lock_guard<mutex> lock(entryMutex);
-            if (buyOutrightPrice <= currentPrice)
+            if (buyOutrightPrice < currentPrice)
                 return;
             currentPrice = buyOutrightPrice;
         }
