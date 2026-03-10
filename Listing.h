@@ -24,14 +24,14 @@ namespace CSEN79
         double startingPrice;
         double buyOutrightPrice;
         double currentPrice;
-        vector<Bid *> bids;  // sorted in ascending order, highest bid is always last
-        int sellTime;        // auction duration in seconds
+        vector<Bid *> bids; // sorted in ascending order, highest bid is always last
+        int sellTime;       // auction duration in seconds
         time_t startTime;
         User *seller;
-        static vector<string> *log;      // shared across all listings, set once at startup
-        static Listings *listings;       // shared bag, used to trigger auction close
-        static mutex logMutex;           // guards concurrent writes to the shared log
-        mutex entryMutex;                // guards per-listing state during bids and close
+        static vector<string> *log; // shared across all listings, set once at startup
+        static Listings *listings;  // shared bag, used to trigger auction close
+        static mutex logMutex;      // guards concurrent writes to the shared log
+        mutex entryMutex;           // guards per-listing state during bids and close
 
     public:
         Listing();
