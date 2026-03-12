@@ -3,6 +3,7 @@
 #include "Listings.h"
 #include "Bid.h"
 #include "User.h"
+#include <algorithm>
 
 using namespace std;
 
